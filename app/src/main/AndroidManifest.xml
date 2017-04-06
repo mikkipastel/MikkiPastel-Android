@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="co.meappdev.mikkipastel"
+    android:installLocation="preferExternal">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!--Handing app link-->
+            <!--<intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                    android:host="mikkipastel.blogspot.com" />
+            </intent-filter>-->
+        </activity>
+        <activity android:name="ContentActivity" />
+        <activity android:name="SettingActivity" android:label="@string/action_settings">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.meappdev.mikkipastel.MainActivity" />
+        </activity>
+        <activity android:name="AboutMeActivity" android:label="@string/about_me">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.meappdev.mikkipastel.MainActivity" />
+        </activity>
+
+        <!--add firebase messaging service for push notification-->
+        <!--<service
+            android:name="co.meappdev.mikkipastel.service.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name="co.meappdev.mikkipastel.service.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>-->
+    </application>
+
+    <!--config glide to high def photo-->
+    <meta-data
+        android:name="co.meappdev.mikkipastel.configuration.GlideConfiguration"
+        android:value="GlideModule" />
+</manifest>

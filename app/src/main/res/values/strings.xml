@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">MikkiPastel</string>
+    <string name="action_settings">Setting</string>
+    <string name="notification">Notification</string>
+    <string name="push_notification">Push Notification</string>
+    <string name="other">Other</string>
+    <string name="about_app">About app</string>
+    <string name="versions">V1.1</string>
+    <string name="header_versions">About Version 1.1</string>
+    <string name="content_version">
+        - <a href="http://mikkipastel.blogspot.com">read my blog\n</a>
+        - show all content by custom listview that call blogger API 3, Retrofit, and Gilde\n
+        - read blog content by chrome custom tab\n
+        <!--- save cache for offline mode\n -->
+        - push notification by firebase\n
+        - add admob\n
+        - fixed bug from V1.0\n
+    </string>
+    <string name="btn_ok">OK</string>
+    <string name="about_me">About Me</string>
+    <string name="offline1">Internet unavailable.</string>
+    <string name="offline2">Please connect internet for see more content</string>
+    <string name="offline3">Click to refresh</string>
+
+    <string name="banner_ad_unit_id">ca-app-pub-0901553226036625/9176642912</string>
+</resources>
