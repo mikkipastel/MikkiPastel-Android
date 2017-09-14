@@ -25,14 +25,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!--Handing app link-->
-            <!--<intent-filter android:label="@string/app_name">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https"
-                    android:host="mikkipastel.blogspot.com" />
-            </intent-filter>-->
         </activity>
         <activity android:name="ContentActivity" />
         <activity android:name="SettingActivity" android:label="@string/action_settings">
@@ -44,6 +36,18 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="co.meappdev.mikkipastel.MainActivity" />
+        </activity>
+        <!--Handing app link-->
+        <activity android:name=".SchemaActivity">
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                    android:host="mikkipastel.blogspot.com" />
+                <data android:scheme="https"
+                    android:host="mikkipastel.firebaseapp.com" />
+            </intent-filter>
         </activity>
 
         <!--add firebase messaging service for push notification-->
