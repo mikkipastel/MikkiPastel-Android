@@ -49,7 +49,6 @@
                     android:host="mikkipastel.firebaseapp.com" />
             </intent-filter>
         </activity>
-
         <!--add firebase messaging service for push notification-->
         <!--<service
             android:name="co.meappdev.mikkipastel.service.MyFirebaseMessagingService">
