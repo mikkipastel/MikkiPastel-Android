@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="co.meappdev.mikkipastel"
+    package="com.mikkipastel.blog"
     android:installLocation="preferExternal">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -18,7 +18,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.mikkipastel.blog.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
                 <action android:name="android.intent.action.MAIN" />
@@ -26,19 +26,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="ContentActivity" />
-        <activity android:name="SettingActivity" android:label="@string/action_settings">
+        <activity android:name="com.mikkipastel.blog.ContentActivity" />
+        <activity android:name="com.mikkipastel.blog.SettingActivity" android:label="@string/action_settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="co.meappdev.mikkipastel.MainActivity" />
+                android:value="com.mikkipastel.blog.MainActivity" />
         </activity>
-        <activity android:name="AboutMeActivity" android:label="@string/about_me">
+        <activity android:name="com.mikkipastel.blog.AboutMeActivity" android:label="@string/about_me">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="co.meappdev.mikkipastel.MainActivity" />
+                android:value="com.mikkipastel.blog.MainActivity" />
         </activity>
         <!--Handing app link-->
-        <activity android:name=".SchemaActivity">
+        <activity android:name="com.mikkipastel.blog.SchemaActivity">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -66,6 +66,6 @@
 
     <!--config glide to high def photo-->
     <meta-data
-        android:name="co.meappdev.mikkipastel.configuration.GlideConfiguration"
+        android:name="com.mikkipastel.blog.configuration.GlideConfiguration"
         android:value="GlideModule" />
 </manifest>
