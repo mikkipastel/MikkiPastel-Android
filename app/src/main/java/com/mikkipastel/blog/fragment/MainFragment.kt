@@ -12,14 +12,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.mikkipastel.blog.R
 import com.mikkipastel.blog.adapter.PostListAdapter
-import com.mikkipastel.blog.manager.BlogPostListner
+import com.mikkipastel.blog.manager.BlogPostListener
 import com.mikkipastel.blog.manager.BlogPostPresenter
 import com.mikkipastel.blog.model.Item
 import com.mikkipastel.blog.utils.CustomChromeUtils
 import kotlinx.android.synthetic.main.fragment_main.*
 
 
-class MainFragment : Fragment(), BlogPostListner, PostListAdapter.PostItemListener {
+class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListener {
 
     private lateinit var mCustomTabsServiceConnection: CustomTabsServiceConnection
     internal lateinit var mCustomTabsClient: CustomTabsClient
