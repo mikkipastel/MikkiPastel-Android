@@ -19,8 +19,7 @@
     <string name="btn_ok">OK</string>
     <string name="about_me">About Me</string>
     <string name="offline1">Internet unavailable.</string>
-    <string name="offline2">Please connect internet for see more content</string>
-    <string name="offline3">Click to refresh</string>
+    <string name="action_try_again">Try Again</string>
 
     <string name="banner_ad_unit_id">ca-app-pub-0901553226036625/9176642912</string>
 </resources>
