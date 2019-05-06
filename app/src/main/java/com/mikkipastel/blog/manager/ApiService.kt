@@ -11,6 +11,6 @@ interface ApiService {
     @GET("posts?fetchImages=true&maxResults=20&orderBy=published&key=AIzaSyBHCzo2LyvwWc4utLoONgiuDCO96yMFF2U")
     fun getAllBlogPost(): Call<MikkiBlog>
 
-    @GET("post/{blogId}?key=AIzaSyBHCzo2LyvwWc4utLoONgiuDCO96yMFF2U")
+    @GET("posts/{blogId}?key=AIzaSyBHCzo2LyvwWc4utLoONgiuDCO96yMFF2U")
     fun getBlogById(@Path("blogId") blogId: String): Call<Item>
 }

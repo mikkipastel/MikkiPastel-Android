@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mikkipastel.blog.R
+import com.mikkipastel.blog.activity.ContentActivity
 import com.mikkipastel.blog.adapter.PostListAdapter
 import com.mikkipastel.blog.manager.BlogPostListener
 import com.mikkipastel.blog.manager.BlogPostPresenter
@@ -36,6 +37,8 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        loadPostData()
+
         swipeRefreshLayout.setOnRefreshListener {
             loadPostData()
         }
@@ -56,11 +59,6 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        loadPostData()
-    }
-
     private fun loadPostData() {
         BlogPostPresenter().getAllPost(this)
     }
@@ -71,7 +69,7 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
     }
 
     override fun onClick(item: Item, position: Int) {
-        CustomChromeUtils().setBlogWebpage(context!!, item.url!!, item.title!!)
+        ContentActivity.newIntent(context!!, item.id!!)
     }
 
     override fun onGetAllPostFailure() {

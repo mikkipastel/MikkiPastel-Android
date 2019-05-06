@@ -9,4 +9,5 @@
     <dimen name="date_font">16sp</dimen>
     <dimen name="header_font">20sp</dimen>
     <dimen name="dialog_margin">10dp</dimen>
+    <dimen name="webview_text">18sp</dimen>
 </resources>
