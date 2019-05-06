@@ -1,15 +1,18 @@
 package com.mikkipastel.blog.adapter
 
+import android.os.Build
+import android.support.design.chip.Chip
 import android.support.v7.widget.RecyclerView
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.mikkipastel.blog.R
 import com.mikkipastel.blog.model.Item
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_content.*
+import com.mikkipastel.blog.R.*
 
 
 class PostListAdapter(private val dataItems: List<Item>,
@@ -17,7 +20,7 @@ class PostListAdapter(private val dataItems: List<Item>,
     : RecyclerView.Adapter<PostListItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostListItemViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_content, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(layout.item_content, parent, false)
         return PostListItemViewHolder(view)
     }
 
@@ -41,8 +44,8 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
     fun bind(item: Item) {
         Glide.with(containerView.context)
                 .load(item.images[0].url)
-                .placeholder(R.drawable.loading)
-                .error(R.drawable.image_cover)
+                .placeholder(drawable.loading)
+                .error(drawable.image_cover)
                 .centerCrop()
                 .fitCenter()
                 .crossFade()
@@ -55,8 +58,25 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
 //        cover_pic.layoutParams.height = height
 
         textPrimaryTopic.text = item.title
-        textSecondary.text = item.content
-        tag.text = item.labels.toString()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            textSecondary.text = Html.fromHtml(item.content, Html.FROM_HTML_MODE_LEGACY)
+                    .toString().replace("\n", "")
+        } else {
+            textSecondary.text = Html.fromHtml(item.content).
+                    toString().replace("\n", "")
+        }
+
+        for (i in item.labels!!) {
+            val chip = Chip(containerView.context)
+            chip.apply {
+                layoutParams = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT)
+                text = i
+            }
+            chipGroup.addView(chip)
+        }
 
     }
 
