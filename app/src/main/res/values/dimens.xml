@@ -7,6 +7,6 @@
     <dimen name="card_font">18sp</dimen>
     <dimen name="topic_font">18sp</dimen>
     <dimen name="date_font">16sp</dimen>
-    <dimen name="header_font">24sp</dimen>
+    <dimen name="header_font">20sp</dimen>
     <dimen name="dialog_margin">10dp</dimen>
 </resources>
