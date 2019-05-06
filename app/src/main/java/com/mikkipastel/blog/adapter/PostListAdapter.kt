@@ -54,8 +54,8 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
 //        val height = (width * 2) / 3
 //        cover_pic.layoutParams.height = height
 
-        topic_name.text = item.title
-        publish_date.text = item.published
+        textPrimaryTopic.text = item.title
+        textSecondary.text = item.content
         tag.text = item.labels.toString()
 
     }
