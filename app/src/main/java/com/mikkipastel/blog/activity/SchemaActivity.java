@@ -1,4 +1,4 @@
-package com.mikkipastel.blog;
+package com.mikkipastel.blog.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,6 +6,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.webkit.WebView;
+
+import com.mikkipastel.blog.MainActivity;
+import com.mikkipastel.blog.R;
 
 public class SchemaActivity extends Activity {
     WebView mWebView;

@@ -1,8 +1,9 @@
-package com.mikkipastel.blog;
+package com.mikkipastel.blog.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.mikkipastel.blog.R;
 import com.mikkipastel.blog.fragment.AboutMeFragment;
 
 /**
