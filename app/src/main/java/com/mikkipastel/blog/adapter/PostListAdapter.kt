@@ -2,6 +2,7 @@ package com.mikkipastel.blog.adapter
 
 import android.os.Build
 import android.support.design.chip.Chip
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.view.LayoutInflater
@@ -40,7 +41,11 @@ class PostListAdapter(private val dataItems: List<Item>,
     }
 }
 
-class PostListItemViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class PostListItemViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer, HashtagChipAdapter.HashtagListener {
+    override fun onClick(hashtag: String, position: Int) {
+        //TODO
+    }
+
     fun bind(item: Item) {
         Glide.with(containerView.context)
                 .load(item.images[0].url)
@@ -59,21 +64,31 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
 
         textPrimaryTopic.text = item.title
 
-        for (i in item.labels!!) {
-            val chip = Chip(containerView.context)
-            chip.apply {
-                layoutParams = ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT)
-                text = i
-            }
-            chipGroup.addView(chip)
+        showSecondaryText(false, item)
+
+        recyclerViewHashtag.apply {
+            layoutManager = LinearLayoutManager(containerView.context, LinearLayoutManager.HORIZONTAL, false)
+            this.adapter = HashtagChipAdapter(item.labels, this@PostListItemViewHolder)
         }
+
+//        if (item.labels!!.isNotEmpty()) {
+//            item.labels.forEach {
+//                val chip = Chip(containerView.context)
+//                chip.apply {
+//                    layoutParams = ViewGroup.LayoutParams(
+//                            ViewGroup.LayoutParams.WRAP_CONTENT,
+//                            ViewGroup.LayoutParams.WRAP_CONTENT)
+//                    text = it
+//                }
+//                chipGroup.addView(chip)
+//            }
+//        }
 
     }
 
     private fun showSecondaryText(isShow: Boolean, item: Item) {
         if (isShow) {
+            textSecondary.visibility = View.VISIBLE
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 textSecondary.text = Html.fromHtml(item.content, Html.FROM_HTML_MODE_LEGACY)
                         .toString().replace("\n", "")
@@ -81,6 +96,8 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
                 textSecondary.text = Html.fromHtml(item.content).
                         toString().replace("\n", "")
             }
+        } else {
+            textSecondary.visibility = View.GONE
         }
     }
 
