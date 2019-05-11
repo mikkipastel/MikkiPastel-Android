@@ -50,22 +50,14 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
                 .fitCenter()
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(cover_pic)
+                .into(imageCover)
 
-//        cover_pic.maxHeight = (cover_pic.measuredWidth * 2) / 3
-//        val width = containerView.resources.displayMetrics.widthPixels
-//        val height = (width * 2) / 3
-//        cover_pic.layoutParams.height = height
+        val params = imageCover.layoutParams
+        val width = imageCover.resources.displayMetrics.widthPixels
+        params.height = (width * 2) / 3
+        imageCover.layoutParams = params
 
         textPrimaryTopic.text = item.title
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            textSecondary.text = Html.fromHtml(item.content, Html.FROM_HTML_MODE_LEGACY)
-                    .toString().replace("\n", "")
-        } else {
-            textSecondary.text = Html.fromHtml(item.content).
-                    toString().replace("\n", "")
-        }
 
         for (i in item.labels!!) {
             val chip = Chip(containerView.context)
@@ -78,6 +70,18 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
             chipGroup.addView(chip)
         }
 
+    }
+
+    private fun showSecondaryText(isShow: Boolean, item: Item) {
+        if (isShow) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                textSecondary.text = Html.fromHtml(item.content, Html.FROM_HTML_MODE_LEGACY)
+                        .toString().replace("\n", "")
+            } else {
+                textSecondary.text = Html.fromHtml(item.content).
+                        toString().replace("\n", "")
+            }
+        }
     }
 
 }
