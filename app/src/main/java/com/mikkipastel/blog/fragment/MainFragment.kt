@@ -20,7 +20,7 @@ import com.mikkipastel.blog.utils.CustomChromeUtils
 import kotlinx.android.synthetic.main.fragment_main.*
 
 
-class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListener {
+class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListener, PostListAdapter.HashtagListener {
 
     private lateinit var mCustomTabsServiceConnection: CustomTabsServiceConnection
     internal lateinit var mCustomTabsClient: CustomTabsClient
@@ -65,7 +65,7 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
 
     override fun onGetAllPostSuccess(list: List<Item>) {
         swipeRefreshLayout.isRefreshing = false
-        recyclerView.adapter = PostListAdapter(list, this)
+        recyclerView.adapter = PostListAdapter(list, this, this)
     }
 
     override fun onClick(item: Item, position: Int) {
@@ -76,5 +76,8 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
         //TODO
     }
 
+    override fun onHashtagClick(hashtag: String) {
+        //TODO
+    }
 
 }

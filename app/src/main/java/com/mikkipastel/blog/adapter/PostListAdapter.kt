@@ -14,10 +14,12 @@ import com.mikkipastel.blog.model.Item
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_content.*
 import com.mikkipastel.blog.R.*
+import kotlinx.android.synthetic.main.item_content.view.*
 
 
 class PostListAdapter(private val dataItems: List<Item>,
-                      private val listener: PostItemListener)
+                      private val listener: PostItemListener,
+                      private val hashtagListener: HashtagListener)
     : RecyclerView.Adapter<PostListItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostListItemViewHolder {
@@ -27,7 +29,7 @@ class PostListAdapter(private val dataItems: List<Item>,
 
     override fun onBindViewHolder(holder: PostListItemViewHolder, position: Int) {
         holder.apply {
-            bind(dataItems[position])
+            bind(dataItems[position], hashtagListener)
             itemView.setOnClickListener {
                 listener.onClick(dataItems[position], position)
             }
@@ -39,14 +41,14 @@ class PostListAdapter(private val dataItems: List<Item>,
     interface PostItemListener {
         fun onClick(item: Item, position: Int)
     }
+
+    interface HashtagListener {
+        fun onHashtagClick(hashtag: String)
+    }
 }
 
-class PostListItemViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer, HashtagChipAdapter.HashtagListener {
-    override fun onClick(hashtag: String, position: Int) {
-        //TODO
-    }
-
-    fun bind(item: Item) {
+class PostListItemViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    fun bind(item: Item, hashtagListener: PostListAdapter.HashtagListener) {
         Glide.with(containerView.context)
                 .load(item.images[0].url)
                 .placeholder(drawable.loading)
@@ -64,25 +66,25 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
 
         textPrimaryTopic.text = item.title
 
-        showSecondaryText(false, item)
+        showSecondaryText(!item.content.isNullOrEmpty(), item)
 
-        recyclerViewHashtag.apply {
-            layoutManager = LinearLayoutManager(containerView.context, LinearLayoutManager.HORIZONTAL, false)
-            this.adapter = HashtagChipAdapter(item.labels, this@PostListItemViewHolder)
+        chipGroup.removeAllViews()
+        if (item.labels!!.isNotEmpty()) {
+            item.labels.forEach {
+                val chip = Chip(containerView.context)
+                chip.apply {
+                    val label = it
+                    layoutParams = ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT)
+                    text = label
+                    setOnClickListener {
+                        hashtagListener.onHashtagClick(label)
+                    }
+                }
+                chipGroup.addView(chip)
+            }
         }
-
-//        if (item.labels!!.isNotEmpty()) {
-//            item.labels.forEach {
-//                val chip = Chip(containerView.context)
-//                chip.apply {
-//                    layoutParams = ViewGroup.LayoutParams(
-//                            ViewGroup.LayoutParams.WRAP_CONTENT,
-//                            ViewGroup.LayoutParams.WRAP_CONTENT)
-//                    text = it
-//                }
-//                chipGroup.addView(chip)
-//            }
-//        }
 
     }
 
