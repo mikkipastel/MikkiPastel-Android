@@ -14,7 +14,7 @@ class BlogPostPresenter: BlogPostInterface {
             override fun onResponse(call: Call<MikkiBlog>, response: Response<MikkiBlog>) {
                 if (response.isSuccessful && response.body() != null) {
                     val list = response.body()
-                    listener.onGetAllPostSuccess(list.items)
+                    listener.onGetAllPostSuccess(list?.items!!)
                 } else {
                     listener.onGetAllPostFailure()
                 }
@@ -33,7 +33,7 @@ class BlogPostPresenter: BlogPostInterface {
             override fun onResponse(call: Call<Item>, response: Response<Item>) {
                 if (response.isSuccessful && response.body() != null) {
                     val list = response.body()
-                    listener.onGetBlogByIdSuccess(list)
+                    listener.onGetBlogByIdSuccess(list!!)
                 } else {
                     listener.onGetBlogByIdFailure()
                 }
