@@ -79,6 +79,10 @@ class ContentFragment : Fragment(), BlogIdListener {
     override fun onGetBlogByIdSuccess(item: Item) {
         layoutError.visibility = View.GONE
 
+        if (blogTitle.isEmpty()) {
+            textToolbar.text = item.title
+        }
+
         //?view=text
         webViewContent.loadDataWithBaseURL(
                 null,
