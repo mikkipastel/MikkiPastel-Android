@@ -16,7 +16,6 @@ import com.mikkipastel.blog.adapter.PostListAdapter
 import com.mikkipastel.blog.manager.BlogPostListener
 import com.mikkipastel.blog.manager.BlogPostPresenter
 import com.mikkipastel.blog.model.Item
-import com.mikkipastel.blog.utils.CustomChromeUtils
 import kotlinx.android.synthetic.main.fragment_main.*
 
 

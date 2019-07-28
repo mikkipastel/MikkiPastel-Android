@@ -18,7 +18,7 @@ class CustomChromeUtils {
 
         builder.setShowTitle(true)
         builder.setCloseButtonIcon(BitmapFactory.decodeResource(
-                context.resources, R.drawable.ic_arrow_back))
+                context.resources, R.drawable.ic_action_arrow_left))
 
         val shareIntent = Intent(Intent.ACTION_SEND)
         shareIntent.type = "text/plain"

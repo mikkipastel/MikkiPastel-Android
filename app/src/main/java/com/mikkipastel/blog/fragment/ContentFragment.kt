@@ -2,6 +2,9 @@ package com.mikkipastel.blog.fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,24 +37,50 @@ class ContentFragment : Fragment(), BlogIdListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setToolbar()
+
         val fontsize = resources.getDimension(R.dimen.webview_text)
 
-        webViewContent.setInitialScale(1)
-        webViewContent.settings.apply {
-            loadWithOverviewMode = true
-            useWideViewPort = true
-            defaultFontSize = fontsize.toInt()
+        webViewContent.apply {
+            setInitialScale(1)
+            settings.apply {
+                loadWithOverviewMode = true
+                useWideViewPort = true
+                defaultFontSize = fontsize.toInt()
+            }
         }
 
         BlogPostPresenter().getBlogById(blogId, this)
     }
 
     override fun onGetBlogByIdSuccess(item: Item) {
-        webViewContent.loadDataWithBaseURL(null, item.content, "text/html", "utf-8", null)
+        textToolbar.text = item.title
+        //?view=text
+        webViewContent.loadDataWithBaseURL(
+                null,
+                item.content,
+                "text/html",
+                "utf-8",
+                null
+        )
     }
 
     override fun onGetBlogByIdFailure() {
-        //
+        //TODO
+    }
+
+    private fun setToolbar() {
+        val supportToolbar = toolbar as Toolbar
+        (activity as AppCompatActivity).setSupportActionBar(supportToolbar)
+
+        supportToolbar.apply {
+            navigationIcon = ContextCompat.getDrawable(context!!, R.drawable.ic_action_arrow_left)
+            setNavigationOnClickListener {
+                activity?.onBackPressed()
+            }
+        }
+
+        activity?.title = ""
     }
 
 }

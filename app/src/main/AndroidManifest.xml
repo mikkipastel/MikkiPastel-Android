@@ -45,7 +45,8 @@
                     android:host="mikkipastel.firebaseapp.com" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ContentActivity" />
+        <activity android:name=".activity.ContentActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>
 
