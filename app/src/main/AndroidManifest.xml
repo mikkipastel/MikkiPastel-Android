@@ -27,7 +27,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.mikkipastel.blog.activity.AboutMeActivity" android:label="@string/about_me">
+
+        <activity android:name=".activity.ContentActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mikkipastel.blog.MainActivity" />
@@ -45,8 +47,6 @@
                     android:host="mikkipastel.firebaseapp.com" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ContentActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>
 
