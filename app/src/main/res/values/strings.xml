@@ -18,7 +18,7 @@
     </string>
     <string name="btn_ok">OK</string>
     <string name="about_me">About Me</string>
-    <string name="offline1">Internet unavailable.</string>
+    <string name="msg_offline">Internet unavailable.</string>
     <string name="action_try_again">Try Again</string>
 
     <string name="banner_ad_unit_id">ca-app-pub-0901553226036625/9176642912</string>

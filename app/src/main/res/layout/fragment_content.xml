@@ -31,8 +31,28 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <WebView
+    <ProgressBar
+        android:id="@+id/progressLoading"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/webViewContent" />
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <WebView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/webViewContent" />
+
+        <include
+            android:id="@+id/layoutError"
+            layout="@layout/layout_loading_error"
+            android:visibility="gone"/>
+
+    </FrameLayout>
+
 </LinearLayout>

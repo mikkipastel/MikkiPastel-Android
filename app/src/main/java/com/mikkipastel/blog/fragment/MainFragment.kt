@@ -17,6 +17,7 @@ import com.mikkipastel.blog.manager.BlogPostListener
 import com.mikkipastel.blog.manager.BlogPostPresenter
 import com.mikkipastel.blog.model.Item
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.layout_loading_error.*
 
 
 class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListener, PostListAdapter.HashtagListener {
@@ -63,16 +64,22 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
     }
 
     override fun onGetAllPostSuccess(list: List<Item>) {
+        layoutError.visibility = View.GONE
+        lottieLoading.visibility = View.GONE
         swipeRefreshLayout.isRefreshing = false
         recyclerView.adapter = PostListAdapter(list, this, this)
     }
 
     override fun onClick(item: Item, position: Int) {
-        ContentActivity.newIntent(context!!, item.id!!)
+        ContentActivity.newIntent(context!!, item.id!!, item.title!!)
     }
 
     override fun onGetAllPostFailure() {
-        //TODO
+        layoutError.visibility = View.VISIBLE
+        lottieLoading.visibility = View.GONE
+        buttonTryAgain.setOnClickListener {
+            loadPostData()
+        }
     }
 
     override fun onHashtagClick(hashtag: String) {

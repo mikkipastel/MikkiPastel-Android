@@ -45,6 +45,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.8'
     implementation 'com.google.firebase:firebase-crash:16.2.1'
 
+    implementation 'com.airbnb.android:lottie:2.7.0'
+
     testImplementation 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'
