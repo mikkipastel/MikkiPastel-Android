@@ -1,9 +1,8 @@
 package com.mikkipastel.blog.adapter
 
 import android.os.Build
-import android.support.design.chip.Chip
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import com.google.android.material.chip.Chip
+import androidx.recyclerview.widget.RecyclerView
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +13,6 @@ import com.mikkipastel.blog.model.Item
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_content.*
 import com.mikkipastel.blog.R.*
-import kotlinx.android.synthetic.main.item_content.view.*
 
 
 class PostListAdapter(private val dataItems: List<Item>,

@@ -14,7 +14,7 @@
         app:lottie_loop="true"
         app:lottie_autoPlay="true" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -22,7 +22,7 @@
         android:textSize="20sp"
         android:textColor="@android:color/black"/>
 
-    <android.support.design.button.MaterialButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonTryAgain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

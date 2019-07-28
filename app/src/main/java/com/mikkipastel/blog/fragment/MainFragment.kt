@@ -2,14 +2,15 @@ package com.mikkipastel.blog.fragment
 
 import android.content.ComponentName
 import android.os.Bundle
-import android.support.customtabs.CustomTabsClient
-import android.support.customtabs.CustomTabsServiceConnection
-import android.support.customtabs.CustomTabsSession
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
+import androidx.browser.customtabs.CustomTabsClient
+import androidx.browser.customtabs.CustomTabsServiceConnection
+import androidx.browser.customtabs.CustomTabsSession
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.mikkipastel.blog.R
 import com.mikkipastel.blog.activity.ContentActivity
 import com.mikkipastel.blog.adapter.PostListAdapter
@@ -43,7 +44,7 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
             loadPostData()
         }
 
-        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
         mCustomTabsServiceConnection = object : CustomTabsServiceConnection() {
             override fun onCustomTabsServiceConnected(componentName: ComponentName, customTabsClient: CustomTabsClient) {
