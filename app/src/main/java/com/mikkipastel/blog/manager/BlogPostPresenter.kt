@@ -2,6 +2,7 @@ package com.mikkipastel.blog.manager
 
 import com.mikkipastel.blog.model.Item
 import com.mikkipastel.blog.model.MikkiBlog
+import com.mikkipastel.blog.utils.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -9,7 +10,7 @@ import retrofit2.Response
 class BlogPostPresenter: BlogPostInterface {
 
     override fun getAllPost(listener: BlogPostListener) {
-        val call = HttpManager().getApiService().getAllBlogPost()
+        val call = HttpManager().getApiService().getAllBlogPost(myBlogId, maxResults, orderBy, fetchImages)
         call.enqueue(object : Callback<MikkiBlog> {
             override fun onResponse(call: Call<MikkiBlog>, response: Response<MikkiBlog>) {
                 if (response.isSuccessful && response.body() != null) {
@@ -28,7 +29,7 @@ class BlogPostPresenter: BlogPostInterface {
     }
 
     override fun getBlogById(blogId: String, listener: BlogIdListener) {
-        val call = HttpManager().getApiService().getBlogById(blogId)
+        val call = HttpManager().getApiService().getBlogById(blogId, myBlogId)
         call.enqueue(object : Callback<Item> {
             override fun onResponse(call: Call<Item>, response: Response<Item>) {
                 if (response.isSuccessful && response.body() != null) {

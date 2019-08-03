@@ -5,12 +5,17 @@ import com.mikkipastel.blog.model.MikkiBlog
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
-//    @GET("posts?fetchImages=true&maxResults=20&orderBy=published&key=AIzaSyBHCzo2LyvwWc4utLoONgiuDCO96yMFF2U&fetchBodies=false")
-    @GET("posts?fetchImages=true&maxResults=20&orderBy=published&key=AIzaSyBHCzo2LyvwWc4utLoONgiuDCO96yMFF2U")
-    fun getAllBlogPost(): Call<MikkiBlog>
+//    @GET("posts?fetchImages=true&maxResults=20&orderBy=published&fetchBodies=false")
+    @GET("posts")
+    fun getAllBlogPost(@Query("key") id: String,
+                       @Query("maxResults") maxResults: Int,
+                       @Query("orderBy") orderBy: String,
+                       @Query("fetchImages") fetchImages: Boolean): Call<MikkiBlog>
 
-    @GET("posts/{blogId}?key=AIzaSyBHCzo2LyvwWc4utLoONgiuDCO96yMFF2U")
-    fun getBlogById(@Path("blogId") blogId: String): Call<Item>
+    @GET("posts/{blogId}")
+    fun getBlogById(@Path("blogId") blogId: String,
+                    @Query("key") id: String): Call<Item>
 }
