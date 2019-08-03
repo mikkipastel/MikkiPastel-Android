@@ -16,13 +16,21 @@ import com.mikkipastel.blog.activity.ContentActivity
 import com.mikkipastel.blog.adapter.PostListAdapter
 import com.mikkipastel.blog.manager.BlogPostListener
 import com.mikkipastel.blog.manager.BlogPostPresenter
+import com.mikkipastel.blog.manager.BlogSearchListener
 import com.mikkipastel.blog.model.Item
 import com.mikkipastel.blog.utils.CustomChromeUtils
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.layout_loading_error.*
 
 
-class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListener, PostListAdapter.HashtagListener {
+class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListener, PostListAdapter.HashtagListener, BlogSearchListener {
+    override fun onGetBlogSearchSuccess(list: List<Item>) {
+        //
+    }
+
+    override fun onGetBlogSearchFailure() {
+        //
+    }
 
     private lateinit var mCustomTabsServiceConnection: CustomTabsServiceConnection
     internal lateinit var mCustomTabsClient: CustomTabsClient
@@ -90,7 +98,7 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
     }
 
     override fun onHashtagClick(hashtag: String) {
-        //TODO
+        //TODO BlogPostPresenter().getBlogBySearch(hashtag, this)
     }
 
 }

@@ -46,11 +46,30 @@ class BlogPostPresenter: BlogPostInterface {
         })
     }
 
+    override fun getBlogBySearch(query: String, listener: BlogSearchListener) {
+        val call = HttpManager().getApiService().getBlogFromSearch(query)
+        call.enqueue(object : Callback<MikkiBlog> {
+            override fun onResponse(call: Call<MikkiBlog>, response: Response<MikkiBlog>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val list = response.body()
+                    listener.onGetBlogSearchSuccess(list?.items!!)
+                } else {
+                    listener.onGetBlogSearchFailure()
+                }
+            }
+
+            override fun onFailure(call: Call<MikkiBlog>?, t: Throwable?) {
+                listener.onGetBlogSearchFailure()
+            }
+        })
+    }
+
 }
 
 interface BlogPostInterface {
     fun getAllPost(listener: BlogPostListener)
     fun getBlogById(blogId: String, listener: BlogIdListener)
+    fun getBlogBySearch(query: String, listener: BlogSearchListener)
 }
 
 interface BlogPostListener {
@@ -61,4 +80,9 @@ interface BlogPostListener {
 interface BlogIdListener {
     fun onGetBlogByIdSuccess(item: Item)
     fun onGetBlogByIdFailure()
+}
+
+interface BlogSearchListener {
+    fun onGetBlogSearchSuccess(list: List<Item>)
+    fun onGetBlogSearchFailure()
 }

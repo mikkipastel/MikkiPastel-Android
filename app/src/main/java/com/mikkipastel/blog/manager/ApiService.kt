@@ -18,4 +18,7 @@ interface ApiService {
     @GET("posts/{blogId}")
     fun getBlogById(@Path("blogId") blogId: String,
                     @Query("key") id: String): Call<Item>
+
+    @GET("posts/search")
+    fun getBlogFromSearch(@Query("q") q: String): Call<MikkiBlog>
 }
