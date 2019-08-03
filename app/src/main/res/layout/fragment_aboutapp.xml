@@ -16,7 +16,6 @@
         android:paddingBottom="@dimen/card_dimen"
         android:text="@string/header_versions"
         android:textStyle="bold"
-        android:gravity="left"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -24,21 +23,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:paddingLeft="@dimen/card_dimen"
+        android:paddingStart="@dimen/card_dimen"
+        android:paddingEnd="@dimen/card_dimen"
         android:text="@string/content_version"
-        android:gravity="left"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <!-- <Button
-        android:id="@+id/button_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:layout_gravity="right"
-        android:textStyle="bold"
-        android:textColor="@android:color/holo_red_light"
-        android:background="@android:color/white"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/btn_ok" /> -->
 
 </LinearLayout>

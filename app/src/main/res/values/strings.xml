@@ -5,16 +5,14 @@
     <string name="push_notification">Push Notification</string>
     <string name="other">Other</string>
     <string name="about_app">About app</string>
-    <string name="versions">V1.1</string>
-    <string name="header_versions">About Version 1.1</string>
+    <string name="versions">V1.0b</string>
+    <string name="header_versions">About Version 1.0b</string>
     <string name="content_version">
-        - <a href="http://mikkipastel.blogspot.com">read my blog\n</a>
-        - show all content by custom listview that call blogger API 3, Retrofit, and Gilde\n
+        - read blog from https://mikkipastel.blogspot.com by this application
+        (call data with blogger API 3, Retrofit and Gilde to show by RecyclerView)\n
         - read blog content by chrome custom tab\n
-        <!--- save cache for offline mode\n -->
-        - push notification by firebase\n
-        - add admob\n
-        - fixed bug from V1.0\n
+        - update or refresh new content by pull to refresh\n
+        - share content to social network
     </string>
     <string name="btn_ok">OK</string>
     <string name="about_me">About Me</string>
