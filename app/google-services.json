@@ -8,26 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:198842931148:android:11219752d33cadfd",
+        "mobilesdk_app_id": "1:198842931148:android:dc1812c8a1c6e127",
         "android_client_info": {
-          "package_name": "co.meappdev.mikkipastel"
+          "package_name": "com.mikkipastel.blog"
         }
       },
       "oauth_client": [
         {
-          "client_id": "198842931148-m6ht0pqt29h1attnpnqlctca0m8rto98.apps.googleusercontent.com",
+          "client_id": "198842931148-8ttv6pb1aj84ckv47spqodu2pm5i5pa4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "co.meappdev.mikkipastel",
-            "certificate_hash": "2D991D573138DA2C4AC8D8B680BE803B727DD813"
-          }
-        },
-        {
-          "client_id": "198842931148-4acr8nijuooe6ucucpcin7isj4ktukap.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "co.meappdev.mikkipastel",
-            "certificate_hash": "56E4C573B189CDAF19EA06DA9CC695263163EBB5"
+            "package_name": "com.mikkipastel.blog",
+            "certificate_hash": "92f3e6362b63784dcec533ebf18130a155fcc066"
           }
         },
         {
@@ -41,20 +33,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "198842931148-mfhm8iffr6ot6j6irn0uviaqkseg0190.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }
