@@ -8,12 +8,12 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
-//    @GET("posts?fetchImages=true&maxResults=20&orderBy=published&fetchBodies=false")
     @GET("posts")
     fun getAllBlogPost(@Query("key") id: String,
                        @Query("maxResults") maxResults: Int,
                        @Query("orderBy") orderBy: String,
-                       @Query("fetchImages") fetchImages: Boolean): Call<MikkiBlog>
+                       @Query("fetchImages") fetchImages: Boolean,
+                       @Query("fetchBodies") fetchBodies: Boolean): Call<MikkiBlog>
 
     @GET("posts/{blogId}")
     fun getBlogById(@Path("blogId") blogId: String,

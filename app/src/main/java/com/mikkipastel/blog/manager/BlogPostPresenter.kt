@@ -10,7 +10,7 @@ import retrofit2.Response
 class BlogPostPresenter: BlogPostInterface {
 
     override fun getAllPost(listener: BlogPostListener) {
-        val call = HttpManager().getApiService().getAllBlogPost(myBlogId, maxResults, orderBy, fetchImages)
+        val call = HttpManager().getApiService().getAllBlogPost(myBlogId, maxResults, orderBy, fetchImages, fetchBodies)
         call.enqueue(object : Callback<MikkiBlog> {
             override fun onResponse(call: Call<MikkiBlog>, response: Response<MikkiBlog>) {
                 if (response.isSuccessful && response.body() != null) {
