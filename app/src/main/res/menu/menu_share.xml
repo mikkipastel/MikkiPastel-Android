@@ -6,10 +6,4 @@
         android:title="Share"
         android:icon="@drawable/ic_share"
         app:showAsAction="always" />
-
-    <!-- <item
-        android:id="@+id/action_share"
-        android:title="Share"
-        app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
-        app:showAsAction="always" />-->
 </menu>

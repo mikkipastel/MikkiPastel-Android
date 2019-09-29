@@ -35,6 +35,13 @@
                 android:value="com.mikkipastel.blog.MainActivity" />
         </activity>
 
+        <activity android:name=".activity.HashtagActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mikkipastel.blog.MainActivity" />
+        </activity>
+
         <!--Handing app link-->
         <activity android:name="com.mikkipastel.blog.activity.SchemaActivity">
             <intent-filter android:label="@string/app_name">

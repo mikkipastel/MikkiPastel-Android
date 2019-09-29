@@ -32,6 +32,7 @@
                 android:textSize="@dimen/header_font"
                 android:maxLines="2"
                 android:ellipsize="end"
+                android:textStyle="bold"
                 android:text="topic" />
 
             <TextView
@@ -40,9 +41,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textSize="14sp"
-                android:maxLines="3"
+                android:maxLines="2"
                 android:ellipsize="end"
-                android:visibility="gone"
                 android:text="date"/>
 
             <View

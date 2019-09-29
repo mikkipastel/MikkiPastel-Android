@@ -1,16 +1,32 @@
 package com.mikkipastel.blog
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallState
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.ActivityResult
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.mikkipastel.blog.fragment.AboutAppFragment
+import com.mikkipastel.blog.fragment.HashtagFragment
 import com.mikkipastel.blog.fragment.MainFragment
 import com.mikkipastel.blog.utils.CustomChromeUtils
 
-class MainActivity: AppCompatActivity() {
+const val MY_REQUEST_CODE = 101
+
+class MainActivity: AppCompatActivity(), InstallStateUpdatedListener {
+
+    private val appUpdateManager by lazy {
+        AppUpdateManagerFactory.create(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +43,87 @@ class MainActivity: AppCompatActivity() {
         if (insertBranch) {
             addShortcut()
         }
+
+        getInAppUpdateWithPlayStore()
+    }
+
+    private fun getInAppUpdateWithPlayStore() {
+        appUpdateManager.registerListener(this)
+
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                    appUpdateManager.startUpdateFlowForResult(
+                            appUpdateInfo,
+                            AppUpdateType.FLEXIBLE,
+                            this,
+                            MY_REQUEST_CODE)
+                } else if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                    appUpdateManager.startUpdateFlowForResult(
+                            appUpdateInfo,
+                            AppUpdateType.IMMEDIATE,
+                            this,
+                            MY_REQUEST_CODE)
+                }
+            }
+
+            if (appUpdateInfo.installStatus() == InstallStatus.INSTALLED) {
+                popupSnackbarForState("An update has just been downloaded.", Snackbar.LENGTH_LONG)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == MY_REQUEST_CODE) {
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    popupSnackbarForState("App is uploading", Snackbar.LENGTH_INDEFINITE)
+                }
+                Activity.RESULT_CANCELED -> {
+                    popupSnackbarForState("You cancel for update new version.", Snackbar.LENGTH_SHORT)
+                }
+                ActivityResult.RESULT_IN_APP_UPDATE_FAILED -> {
+                    popupSnackbarForState("App download failed.", Snackbar.LENGTH_SHORT)
+                }
+            }
+        }
+    }
+
+    override fun onStateUpdate(state: InstallState) {
+        if (state.installStatus() == InstallStatus.DOWNLOADED) {
+            popupSnackbarForCompleteUpdate()
+        } else if (state.installStatus() == InstallStatus.INSTALLED) {
+            popupSnackbarForState("An update has just been downloaded.", Snackbar.LENGTH_LONG)
+            appUpdateManager.unregisterListener(this@MainActivity)
+        }
+    }
+
+    private fun popupSnackbarForState(text: String, length: Int) {
+        Snackbar.make(
+                findViewById(R.id.rootview),
+                text,
+                length
+        ).show()
+    }
+
+    private fun popupSnackbarForCompleteUpdate() {
+        Snackbar.make(
+                findViewById(R.id.rootview),
+                "An update has just been downloaded from Play Store.",
+                Snackbar.LENGTH_INDEFINITE
+        ).apply {
+            setAction("RESTART") {
+                appUpdateManager.completeUpdate()
+                appUpdateManager.unregisterListener(this@MainActivity)
+            }
+            show()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        appUpdateManager.unregisterListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -75,5 +172,4 @@ class MainActivity: AppCompatActivity() {
         addIntent.action = "com.android.launcher.action.INSTALL_SHORTCUT"
         applicationContext.sendBroadcast(addIntent)
     }
-
 }

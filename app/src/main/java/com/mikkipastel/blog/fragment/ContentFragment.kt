@@ -2,21 +2,20 @@ package com.mikkipastel.blog.fragment
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.mikkipastel.blog.R
 import com.mikkipastel.blog.manager.BlogIdListener
 import com.mikkipastel.blog.manager.BlogPostPresenter
-import com.mikkipastel.blog.model.Item
+import com.mikkipastel.blog.model.BlogItem
 import kotlinx.android.synthetic.main.fragment_content.*
 import kotlinx.android.synthetic.main.layout_loading_error.*
+import android.content.Intent
 
 class ContentFragment : Fragment(), BlogIdListener {
 
@@ -25,6 +24,8 @@ class ContentFragment : Fragment(), BlogIdListener {
 
     private val blogTitle: String
         get() = arguments?.getString(BUNDLE_BLOG_TITLE) ?: ""
+
+    private var blogUrl = ""
 
     companion object {
 
@@ -47,9 +48,10 @@ class ContentFragment : Fragment(), BlogIdListener {
         super.onViewCreated(view, savedInstanceState)
 
         setToolbar()
+        setHasOptionsMenu(true)
         textToolbar.text = blogTitle
 
-        val fontsize = resources.getDimension(R.dimen.webview_text)
+        val fontsize = resources.getDimension(com.mikkipastel.blog.R.dimen.webview_text)
 
         webViewContent.apply {
             setInitialScale(1)
@@ -76,8 +78,11 @@ class ContentFragment : Fragment(), BlogIdListener {
         BlogPostPresenter().getBlogById(blogId, this)
     }
 
-    override fun onGetBlogByIdSuccess(item: Item) {
+    override fun onGetBlogByIdSuccess(item: BlogItem) {
         layoutError.visibility = View.GONE
+
+        blogUrl = getString(R.string.template_web_blog_url, item.url)
+        textLinkUrl.text = blogUrl
 
         if (blogTitle.isEmpty()) {
             textToolbar.text = item.title
@@ -98,6 +103,22 @@ class ContentFragment : Fragment(), BlogIdListener {
         buttonTryAgain.setOnClickListener {
             getBlogContent()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_share, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.action_share) {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_SUBJECT, "$blogTitle $blogUrl")
+            }
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.title_share_blog)))
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setToolbar() {

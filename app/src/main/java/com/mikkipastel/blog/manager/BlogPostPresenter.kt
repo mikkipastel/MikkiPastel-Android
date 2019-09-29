@@ -1,8 +1,6 @@
 package com.mikkipastel.blog.manager
 
-import com.mikkipastel.blog.model.Item
-import com.mikkipastel.blog.model.MikkiBlog
-import com.mikkipastel.blog.utils.*
+import com.mikkipastel.blog.model.BlogItem
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -10,56 +8,55 @@ import retrofit2.Response
 class BlogPostPresenter: BlogPostInterface {
 
     override fun getAllPost(listener: BlogPostListener) {
-        val call = HttpManager().getApiService().getAllBlogPost(myBlogId, maxResults, orderBy, fetchImages, fetchBodies)
-        call.enqueue(object : Callback<MikkiBlog> {
-            override fun onResponse(call: Call<MikkiBlog>, response: Response<MikkiBlog>) {
+        val call = HttpManager().getApiService().getAllPost()
+        call.enqueue(object : Callback<List<BlogItem>> {
+            override fun onResponse(call: Call<List<BlogItem>>, response: Response<List<BlogItem>>) {
                 if (response.isSuccessful && response.body() != null) {
                     val list = response.body()
-                    listener.onGetAllPostSuccess(list?.items!!)
+                    listener.onGetAllPostSuccess(list!!)
                 } else {
                     listener.onGetAllPostFailure()
                 }
             }
 
-            override fun onFailure(call: Call<MikkiBlog>?, t: Throwable?) {
+            override fun onFailure(call: Call<List<BlogItem>>?, t: Throwable?) {
                 listener.onGetAllPostFailure()
             }
+        })
+    }
 
+    override fun getPostByTag(hashtag: String, listener: BlogPostListener) {
+        val call = HttpManager().getApiService().getPostByTag(hashtag)
+        call.enqueue(object : Callback<List<BlogItem>> {
+            override fun onResponse(call: Call<List<BlogItem>>, response: Response<List<BlogItem>>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val list = response.body()
+                    listener.onGetAllPostSuccess(list!!)
+                } else {
+                    listener.onGetAllPostFailure()
+                }
+            }
+
+            override fun onFailure(call: Call<List<BlogItem>>?, t: Throwable?) {
+                listener.onGetAllPostFailure()
+            }
         })
     }
 
     override fun getBlogById(blogId: String, listener: BlogIdListener) {
-        val call = HttpManager().getApiService().getBlogById(blogId, myBlogId)
-        call.enqueue(object : Callback<Item> {
-            override fun onResponse(call: Call<Item>, response: Response<Item>) {
+        val call = HttpManager().getApiService().getBlogById(blogId)
+        call.enqueue(object : Callback<List<BlogItem>> {
+            override fun onResponse(call: Call<List<BlogItem>>, response: Response<List<BlogItem>>) {
                 if (response.isSuccessful && response.body() != null) {
-                    val list = response.body()
-                    listener.onGetBlogByIdSuccess(list!!)
+                    val item = response.body()
+                    listener.onGetBlogByIdSuccess(item!![0])
                 } else {
                     listener.onGetBlogByIdFailure()
                 }
             }
 
-            override fun onFailure(call: Call<Item>?, t: Throwable?) {
+            override fun onFailure(call: Call<List<BlogItem>>?, t: Throwable?) {
                 listener.onGetBlogByIdFailure()
-            }
-        })
-    }
-
-    override fun getBlogBySearch(query: String, listener: BlogSearchListener) {
-        val call = HttpManager().getApiService().getBlogFromSearch(query)
-        call.enqueue(object : Callback<MikkiBlog> {
-            override fun onResponse(call: Call<MikkiBlog>, response: Response<MikkiBlog>) {
-                if (response.isSuccessful && response.body() != null) {
-                    val list = response.body()
-                    listener.onGetBlogSearchSuccess(list?.items!!)
-                } else {
-                    listener.onGetBlogSearchFailure()
-                }
-            }
-
-            override fun onFailure(call: Call<MikkiBlog>?, t: Throwable?) {
-                listener.onGetBlogSearchFailure()
             }
         })
     }
@@ -68,21 +65,16 @@ class BlogPostPresenter: BlogPostInterface {
 
 interface BlogPostInterface {
     fun getAllPost(listener: BlogPostListener)
+    fun getPostByTag(hashtag: String, listener: BlogPostListener)
     fun getBlogById(blogId: String, listener: BlogIdListener)
-    fun getBlogBySearch(query: String, listener: BlogSearchListener)
 }
 
 interface BlogPostListener {
-    fun onGetAllPostSuccess(list: List<Item>)
+    fun onGetAllPostSuccess(list: List<BlogItem>)
     fun onGetAllPostFailure()
 }
 
 interface BlogIdListener {
-    fun onGetBlogByIdSuccess(item: Item)
+    fun onGetBlogByIdSuccess(item: BlogItem)
     fun onGetBlogByIdFailure()
-}
-
-interface BlogSearchListener {
-    fun onGetBlogSearchSuccess(list: List<Item>)
-    fun onGetBlogSearchFailure()
 }

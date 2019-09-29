@@ -17,15 +17,37 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary">
 
-            <TextView
-                android:id="@+id/textToolbar"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textToolbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    tools:text="เพิ่มแจ้งเตือนการ push code ของคนในทีมจาก gitlab ไปยัง stack"/>
+
+                <TextView
+                    android:id="@+id/textLinkUrl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    tools:text="https://mikkipastel.web.app/2019/04/notification-for-push-code-gitlab-with-slack.html"/>
+
+            </LinearLayout>
+
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                tools:text="เพิ่มแจ้งเตือนการ push code ของคนในทีมจาก gitlab ไปยัง stack"/>
+                android:src="@drawable/ic_share"/>
 
         </androidx.appcompat.widget.Toolbar>
 

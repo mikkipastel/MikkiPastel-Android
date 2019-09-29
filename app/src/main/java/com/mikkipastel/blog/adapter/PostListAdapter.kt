@@ -1,23 +1,20 @@
 package com.mikkipastel.blog.adapter
 
-import android.os.Build
 import com.google.android.material.chip.Chip
 import androidx.recyclerview.widget.RecyclerView
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.mikkipastel.blog.model.Item
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_content.*
 import com.mikkipastel.blog.R.*
+import com.mikkipastel.blog.model.BlogItem
 
 
-class PostListAdapter(private val dataItems: List<Item>,
-                      private val listener: PostItemListener,
-                      private val hashtagListener: HashtagListener)
+class PostListAdapter(private val dataItems: List<BlogItem>,
+                      private val listener: PostItemListener)
     : RecyclerView.Adapter<PostListItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostListItemViewHolder {
@@ -27,7 +24,7 @@ class PostListAdapter(private val dataItems: List<Item>,
 
     override fun onBindViewHolder(holder: PostListItemViewHolder, position: Int) {
         holder.apply {
-            bind(dataItems[position], hashtagListener)
+            bind(dataItems[position], listener)
             itemView.setOnClickListener {
                 listener.onClick(dataItems[position], position)
             }
@@ -37,18 +34,15 @@ class PostListAdapter(private val dataItems: List<Item>,
     override fun getItemCount() = dataItems.size
 
     interface PostItemListener {
-        fun onClick(item: Item, position: Int)
-    }
-
-    interface HashtagListener {
+        fun onClick(item: BlogItem, position: Int)
         fun onHashtagClick(hashtag: String)
     }
 }
 
 class PostListItemViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-    fun bind(item: Item, hashtagListener: PostListAdapter.HashtagListener) {
+    fun bind(item: BlogItem, hashtagListener: PostListAdapter.PostItemListener) {
         Glide.with(containerView.context)
-                .load(item.images[0].url)
+                .load(item.coverUrl)
                 .placeholder(drawable.loading)
                 .error(drawable.image_cover)
                 .centerCrop()
@@ -64,11 +58,13 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
 
         textPrimaryTopic.text = item.title
 
-        showSecondaryText(!item.content.isNullOrEmpty(), item)
+        textSecondary.text = item.shortDescription!!
+                .replace("\n", "")
+                .replace("￼", "")
 
         chipGroup.removeAllViews()
-        if (item.labels!!.isNotEmpty()) {
-            item.labels.forEach {
+        if (item.label!!.isNotEmpty()) {
+            item.label.forEach {
                 val chip = Chip(containerView.context)
                 chip.apply {
                     val label = it
@@ -83,22 +79,5 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
                 chipGroup.addView(chip)
             }
         }
-
     }
-
-    private fun showSecondaryText(isShow: Boolean, item: Item) {
-        if (isShow) {
-            textSecondary.visibility = View.VISIBLE
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                textSecondary.text = Html.fromHtml(item.content, Html.FROM_HTML_MODE_LEGACY)
-                        .toString().replace("\n", "")
-            } else {
-                textSecondary.text = Html.fromHtml(item.content).
-                        toString().replace("\n", "")
-            }
-        } else {
-            textSecondary.visibility = View.GONE
-        }
-    }
-
 }
