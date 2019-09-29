@@ -59,8 +59,6 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
         textPrimaryTopic.text = item.title
 
         textSecondary.text = item.shortDescription!!
-                .replace("\n", "")
-                .replace("￼", "")
 
         chipGroup.removeAllViews()
         if (item.label!!.isNotEmpty()) {
