@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 internal class HttpManager {
 
-    val url = "https://us-central1-mikkipastel.cloudfunctions.net/"
+    val url = "https://asia-east2-mikkipastel.cloudfunctions.net/"
 
     val gson = GsonBuilder()
             .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
