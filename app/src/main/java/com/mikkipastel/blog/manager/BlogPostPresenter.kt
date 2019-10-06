@@ -1,5 +1,6 @@
 package com.mikkipastel.blog.manager
 
+import com.mikkipastel.blog.model.BlogData
 import com.mikkipastel.blog.model.BlogItem
 import retrofit2.Call
 import retrofit2.Callback
@@ -9,17 +10,17 @@ class BlogPostPresenter: BlogPostInterface {
 
     override fun getAllPost(listener: BlogPostListener) {
         val call = HttpManager().getApiService().getAllPost()
-        call.enqueue(object : Callback<List<BlogItem>> {
-            override fun onResponse(call: Call<List<BlogItem>>, response: Response<List<BlogItem>>) {
+        call.enqueue(object : Callback<BlogData> {
+            override fun onResponse(call: Call<BlogData>, response: Response<BlogData>) {
                 if (response.isSuccessful && response.body() != null) {
-                    val list = response.body()
-                    listener.onGetAllPostSuccess(list!!)
+                    val items = response.body()
+                    listener.onGetAllPostSuccess(items!!.items)
                 } else {
                     listener.onGetAllPostFailure()
                 }
             }
 
-            override fun onFailure(call: Call<List<BlogItem>>?, t: Throwable?) {
+            override fun onFailure(call: Call<BlogData>?, t: Throwable?) {
                 listener.onGetAllPostFailure()
             }
         })
@@ -27,17 +28,17 @@ class BlogPostPresenter: BlogPostInterface {
 
     override fun getPostByTag(hashtag: String, listener: BlogPostListener) {
         val call = HttpManager().getApiService().getPostByTag(hashtag)
-        call.enqueue(object : Callback<List<BlogItem>> {
-            override fun onResponse(call: Call<List<BlogItem>>, response: Response<List<BlogItem>>) {
+        call.enqueue(object : Callback<BlogData> {
+            override fun onResponse(call: Call<BlogData>, response: Response<BlogData>) {
                 if (response.isSuccessful && response.body() != null) {
-                    val list = response.body()
-                    listener.onGetAllPostSuccess(list!!)
+                    val items = response.body()
+                    listener.onGetAllPostSuccess(items!!.items)
                 } else {
                     listener.onGetAllPostFailure()
                 }
             }
 
-            override fun onFailure(call: Call<List<BlogItem>>?, t: Throwable?) {
+            override fun onFailure(call: Call<BlogData>?, t: Throwable?) {
                 listener.onGetAllPostFailure()
             }
         })
@@ -45,17 +46,17 @@ class BlogPostPresenter: BlogPostInterface {
 
     override fun getBlogById(blogId: String, listener: BlogIdListener) {
         val call = HttpManager().getApiService().getBlogById(blogId)
-        call.enqueue(object : Callback<List<BlogItem>> {
-            override fun onResponse(call: Call<List<BlogItem>>, response: Response<List<BlogItem>>) {
+        call.enqueue(object : Callback<BlogItem> {
+            override fun onResponse(call: Call<BlogItem>, response: Response<BlogItem>) {
                 if (response.isSuccessful && response.body() != null) {
-                    val item = response.body()
-                    listener.onGetBlogByIdSuccess(item!![0])
+                    val data = response.body()
+                    listener.onGetBlogByIdSuccess(data!!)
                 } else {
                     listener.onGetBlogByIdFailure()
                 }
             }
 
-            override fun onFailure(call: Call<List<BlogItem>>?, t: Throwable?) {
+            override fun onFailure(call: Call<BlogItem>?, t: Throwable?) {
                 listener.onGetBlogByIdFailure()
             }
         })

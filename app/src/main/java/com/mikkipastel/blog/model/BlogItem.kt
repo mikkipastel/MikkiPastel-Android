@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
+data class BlogData(@SerializedName("items") val items: List<BlogItem>): Parcelable
+
+@Parcelize
 data class BlogItem(@SerializedName("id") val id: String?,
                     @SerializedName("url") val url: String?,
                     @SerializedName("title") val title: String?,
