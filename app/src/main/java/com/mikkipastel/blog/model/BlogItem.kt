@@ -9,7 +9,7 @@ data class BlogData(@SerializedName("items") val items: List<BlogItem>,
                     @SerializedName("lastPublished") val lastPublished: String?): Parcelable
 
 @Parcelize
-data class BlogContent(@SerializedName("data") val data: List<BlogItem>): Parcelable
+data class BlogContent(@SerializedName("data") val data: BlogItem): Parcelable
 
 @Parcelize
 data class BlogItem(@SerializedName("id") val id: String?,

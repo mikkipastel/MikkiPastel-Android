@@ -51,7 +51,7 @@ class BlogPostPresenter: BlogPostInterface {
             override fun onResponse(call: Call<BlogContent>, response: Response<BlogContent>) {
                 if (response.isSuccessful && response.body() != null) {
                     val data = response.body()
-                    listener.onGetBlogByIdSuccess(data!!.data[0])
+                    listener.onGetBlogByIdSuccess(data!!.data)
                 } else {
                     listener.onGetBlogByIdFailure()
                 }
