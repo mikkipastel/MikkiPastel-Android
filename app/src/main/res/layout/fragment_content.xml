@@ -36,6 +36,7 @@
                     android:id="@+id/textLinkUrl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:textColor="@android:color/white"
@@ -43,11 +44,6 @@
                     tools:text="https://mikkipastel.web.app/2019/04/notification-for-push-code-gitlab-with-slack.html"/>
 
             </LinearLayout>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_share"/>
 
         </androidx.appcompat.widget.Toolbar>
 

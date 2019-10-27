@@ -105,21 +105,21 @@ class ContentFragment : Fragment(), BlogIdListener {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.menu_share, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == R.id.action_share) {
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.apply {
-                type = "text/plain"
-                putExtra(Intent.EXTRA_SUBJECT, "$blogTitle $blogUrl")
-            }
-            startActivity(Intent.createChooser(shareIntent, getString(R.string.title_share_blog)))
-        }
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+//        inflater?.inflate(R.menu.menu_share, menu)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+//        if (item?.itemId == R.id.action_share) {
+//            val shareIntent = Intent(Intent.ACTION_SEND)
+//            shareIntent.apply {
+//                type = "text/plain"
+//                putExtra(Intent.EXTRA_SUBJECT, "$blogTitle $blogUrl")
+//            }
+//            startActivity(Intent.createChooser(shareIntent, getString(R.string.title_share_blog)))
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 
     private fun setToolbar() {
         val supportToolbar = toolbar as Toolbar

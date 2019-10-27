@@ -9,8 +9,8 @@ android {
         applicationId "com.mikkipastel.blog"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 3
-        versionName '1.0.2'
+        versionCode 4
+        versionName '1.0.3'
         multiDexEnabled true
     }
     buildTypes {
@@ -30,7 +30,7 @@ androidExtensions {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.browser:browser:1.0.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.google.android.material:material:1.0.0'
@@ -51,6 +51,6 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
 
-    implementation 'com.google.android.play:core:1.6.1'
+    implementation 'com.google.android.play:core:1.6.4'
 }
 apply plugin: 'com.google.gms.google-services'

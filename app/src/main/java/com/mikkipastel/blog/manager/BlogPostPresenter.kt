@@ -1,5 +1,6 @@
 package com.mikkipastel.blog.manager
 
+import com.mikkipastel.blog.model.BlogContent
 import com.mikkipastel.blog.model.BlogData
 import com.mikkipastel.blog.model.BlogItem
 import retrofit2.Call
@@ -46,17 +47,17 @@ class BlogPostPresenter: BlogPostInterface {
 
     override fun getBlogById(blogId: String, listener: BlogIdListener) {
         val call = HttpManager().getApiService().getBlogById(blogId)
-        call.enqueue(object : Callback<BlogItem> {
-            override fun onResponse(call: Call<BlogItem>, response: Response<BlogItem>) {
+        call.enqueue(object : Callback<BlogContent> {
+            override fun onResponse(call: Call<BlogContent>, response: Response<BlogContent>) {
                 if (response.isSuccessful && response.body() != null) {
                     val data = response.body()
-                    listener.onGetBlogByIdSuccess(data!!)
+                    listener.onGetBlogByIdSuccess(data!!.data[0])
                 } else {
                     listener.onGetBlogByIdFailure()
                 }
             }
 
-            override fun onFailure(call: Call<BlogItem>?, t: Throwable?) {
+            override fun onFailure(call: Call<BlogContent>?, t: Throwable?) {
                 listener.onGetBlogByIdFailure()
             }
         })
