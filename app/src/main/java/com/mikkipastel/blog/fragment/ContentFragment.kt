@@ -15,7 +15,6 @@ import com.mikkipastel.blog.manager.BlogPostPresenter
 import com.mikkipastel.blog.model.BlogItem
 import kotlinx.android.synthetic.main.fragment_content.*
 import kotlinx.android.synthetic.main.layout_loading_error.*
-import android.content.Intent
 
 class ContentFragment : Fragment(), BlogIdListener {
 
@@ -51,14 +50,14 @@ class ContentFragment : Fragment(), BlogIdListener {
         setHasOptionsMenu(true)
         textToolbar.text = blogTitle
 
-        val fontsize = resources.getDimension(com.mikkipastel.blog.R.dimen.webview_text)
+        val fontSize = resources.getDimension(com.mikkipastel.blog.R.dimen.webview_text)
 
         webViewContent.apply {
             setInitialScale(1)
             settings.apply {
                 loadWithOverviewMode = true
                 useWideViewPort = true
-                defaultFontSize = fontsize.toInt()
+                defaultFontSize = fontSize.toInt()
             }
             webViewClient = object : WebViewClient() {
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
@@ -88,10 +87,15 @@ class ContentFragment : Fragment(), BlogIdListener {
             textToolbar.text = item.title
         }
 
-        //?view=text
+        val stringBuilder = StringBuilder().apply {
+            append("<HTML><HEAD><LINK href=\"styles.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body>")
+            append(item.content)
+            append("</body></HTML>")
+        }
+
         webViewContent.loadDataWithBaseURL(
-                null,
-                item.content,
+                "file:///android_asset/",
+                stringBuilder.toString(),
                 "text/html",
                 "utf-8",
                 null

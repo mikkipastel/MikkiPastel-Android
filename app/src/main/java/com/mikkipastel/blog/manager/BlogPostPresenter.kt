@@ -9,38 +9,38 @@ import retrofit2.Response
 
 class BlogPostPresenter: BlogPostInterface {
 
-    override fun getAllPost(listener: BlogPostListener) {
-        val call = HttpManager().getApiService().getAllPost()
+    override fun getAllPost(lastPublished: String?, listener: BlogPostListener) {
+        val call = HttpManager().getApiService().getAllPost(lastPublished)
         call.enqueue(object : Callback<BlogData> {
             override fun onResponse(call: Call<BlogData>, response: Response<BlogData>) {
                 if (response.isSuccessful && response.body() != null) {
                     val items = response.body()
-                    listener.onGetAllPostSuccess(items!!.items)
+                    listener.onGetPostSuccess(items!!)
                 } else {
-                    listener.onGetAllPostFailure()
+                    listener.onGetPostFailure()
                 }
             }
 
             override fun onFailure(call: Call<BlogData>?, t: Throwable?) {
-                listener.onGetAllPostFailure()
+                listener.onGetPostFailure()
             }
         })
     }
 
-    override fun getPostByTag(hashtag: String, listener: BlogPostListener) {
-        val call = HttpManager().getApiService().getPostByTag(hashtag)
+    override fun getPostByTag(hashtag: String, lastPublished: String?, listener: BlogPostListener) {
+        val call = HttpManager().getApiService().getPostByTag(hashtag, lastPublished)
         call.enqueue(object : Callback<BlogData> {
             override fun onResponse(call: Call<BlogData>, response: Response<BlogData>) {
                 if (response.isSuccessful && response.body() != null) {
                     val items = response.body()
-                    listener.onGetAllPostSuccess(items!!.items)
+                    listener.onGetPostSuccess(items!!)
                 } else {
-                    listener.onGetAllPostFailure()
+                    listener.onGetPostFailure()
                 }
             }
 
             override fun onFailure(call: Call<BlogData>?, t: Throwable?) {
-                listener.onGetAllPostFailure()
+                listener.onGetPostFailure()
             }
         })
     }
@@ -66,14 +66,14 @@ class BlogPostPresenter: BlogPostInterface {
 }
 
 interface BlogPostInterface {
-    fun getAllPost(listener: BlogPostListener)
-    fun getPostByTag(hashtag: String, listener: BlogPostListener)
+    fun getAllPost(lastPublished: String?, listener: BlogPostListener)
+    fun getPostByTag(hashtag: String, lastPublished: String?, listener: BlogPostListener)
     fun getBlogById(blogId: String, listener: BlogIdListener)
 }
 
 interface BlogPostListener {
-    fun onGetAllPostSuccess(list: List<BlogItem>)
-    fun onGetAllPostFailure()
+    fun onGetPostSuccess(data: BlogData)
+    fun onGetPostFailure()
 }
 
 interface BlogIdListener {

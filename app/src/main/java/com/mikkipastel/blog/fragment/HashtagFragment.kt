@@ -10,20 +10,15 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.mikkipastel.blog.MainActivity
 import com.mikkipastel.blog.R
 import com.mikkipastel.blog.activity.ContentActivity
 import com.mikkipastel.blog.activity.HashtagActivity
 import com.mikkipastel.blog.adapter.PostListAdapter
 import com.mikkipastel.blog.manager.BlogPostListener
 import com.mikkipastel.blog.manager.BlogPostPresenter
+import com.mikkipastel.blog.model.BlogData
 import com.mikkipastel.blog.model.BlogItem
 import kotlinx.android.synthetic.main.fragment_hashtag.*
-import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.android.synthetic.main.fragment_main.layoutError
-import kotlinx.android.synthetic.main.fragment_main.lottieLoading
-import kotlinx.android.synthetic.main.fragment_main.recyclerView
-import kotlinx.android.synthetic.main.fragment_main.swipeRefreshLayout
 import kotlinx.android.synthetic.main.layout_loading_error.*
 
 class HashtagFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListener {
@@ -35,6 +30,12 @@ class HashtagFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemLi
     private val mAdapter by lazy {
         PostListAdapter(mBlogList, this)
     }
+
+    private var isLoading = false
+    private var mPage = 0
+
+    private var lastPublished = ""
+    private var isReloadData = false
 
     companion object {
 
@@ -60,37 +61,63 @@ class HashtagFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemLi
         textToolbar.text = hashtag
 
         swipeRefreshLayout.setOnRefreshListener {
+            isReloadData = true
             loadHashtagPostData()
         }
 
         recyclerView.apply {
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            layoutManager = linearLayoutManager
             adapter = mAdapter
+            addOnScrollListener(object: RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+
+                    val totalItemCount = linearLayoutManager.itemCount
+                    val lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
+                    if (!isLoading && totalItemCount <= (lastVisibleItem + 1)) {
+                        isLoading = true
+                        mPage++
+                        loadHashtagPostData()
+                        lottieProgress.visibility = View.VISIBLE
+                    }
+                }
+            })
         }
 
     }
 
     private fun loadHashtagPostData() {
-        BlogPostPresenter().getPostByTag(hashtag, this)
+        BlogPostPresenter().getPostByTag(hashtag, lastPublished, this)
     }
 
-    override fun onGetAllPostSuccess(list: List<BlogItem>) {
+    override fun onGetPostSuccess(data: BlogData) {
+        lastPublished = data.lastPublished ?: ""
+
         layoutError.visibility = View.GONE
         lottieLoading.visibility = View.GONE
+        lottieProgress.visibility = View.GONE
         swipeRefreshLayout.isRefreshing = false
+        isLoading = false
 
-        if (mBlogList.size == 0) {
-            mBlogList.addAll(list)
-            mAdapter.notifyDataSetChanged()
+        if (isReloadData) {
+            mBlogList.clear()
+            isReloadData = false
         }
+
+        mBlogList.addAll(data.items)
+        mAdapter.notifyDataSetChanged()
     }
 
-    override fun onGetAllPostFailure() {
-        layoutError.visibility = View.VISIBLE
-        lottieLoading.visibility = View.GONE
-        buttonTryAgain.setOnClickListener {
-            loadHashtagPostData()
+    override fun onGetPostFailure() {
+        if (mBlogList.isEmpty()) {
+            layoutError.visibility = View.VISIBLE
+            lottieLoading.visibility = View.GONE
+            buttonTryAgain.setOnClickListener {
+                loadHashtagPostData()
+            }
         }
+        lottieProgress.visibility = View.GONE
     }
 
     override fun onClick(item: BlogItem, position: Int) {

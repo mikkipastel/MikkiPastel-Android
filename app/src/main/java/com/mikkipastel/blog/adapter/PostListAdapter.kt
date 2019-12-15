@@ -58,24 +58,28 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
 
         textPrimaryTopic.text = item.title
 
-        textSecondary.text = item.shortDescription!!
+        textSecondary.text = item.shortDescription ?: ""
 
         chipGroup.removeAllViews()
-        if (item.label!!.isNotEmpty()) {
-            item.label.forEach {
-                val chip = Chip(containerView.context)
-                chip.apply {
-                    val label = it
-                    layoutParams = ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT)
-                    text = label
-                    setOnClickListener {
-                        hashtagListener.onHashtagClick(label)
+
+        item.label?.let {
+            if (it.isNotEmpty()) {
+                it.forEach {
+                    val chip = Chip(containerView.context)
+                    chip.apply {
+                        val label = it
+                        layoutParams = ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT)
+                        text = label
+                        setOnClickListener {
+                            hashtagListener.onHashtagClick(label)
+                        }
                     }
+                    chipGroup.addView(chip)
                 }
-                chipGroup.addView(chip)
             }
         }
+
     }
 }

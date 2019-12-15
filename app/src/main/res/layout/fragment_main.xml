@@ -15,11 +15,29 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:overScrollMode="never"/>
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@id/lottieProgress"
+                    android:overScrollMode="never"/>
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottieProgress"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:adjustViewBounds="true"
+                    android:layout_alignParentBottom="true"
+                    app:lottie_fileName="progress-loading.json"
+                    app:lottie_loop="true"
+                    app:lottie_autoPlay="true"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/lottieLoading"

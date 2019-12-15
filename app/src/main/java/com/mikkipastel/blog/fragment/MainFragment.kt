@@ -14,6 +14,7 @@ import com.mikkipastel.blog.activity.HashtagActivity
 import com.mikkipastel.blog.adapter.PostListAdapter
 import com.mikkipastel.blog.manager.BlogPostListener
 import com.mikkipastel.blog.manager.BlogPostPresenter
+import com.mikkipastel.blog.model.BlogData
 import com.mikkipastel.blog.model.BlogItem
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.layout_loading_error.*
@@ -25,6 +26,12 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
     private val mAdapter by lazy {
         PostListAdapter(mBlogList, this)
     }
+
+    private var isLoading = false
+    private var mPage = 0
+
+    private var lastPublished = ""
+    private var isReloadData = false
 
     companion object {
         fun newInstance() = MainFragment()
@@ -40,36 +47,62 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
         loadPostData()
 
         swipeRefreshLayout.setOnRefreshListener {
+            isReloadData = true
             loadPostData()
         }
 
         recyclerView.apply {
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            layoutManager = linearLayoutManager
             adapter = mAdapter
+            addOnScrollListener(object: RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+
+                    val totalItemCount = linearLayoutManager.itemCount
+                    val lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
+                    if (!isLoading && totalItemCount <= (lastVisibleItem + 1)) {
+                        isLoading = true
+                        mPage++
+                        loadPostData()
+                        lottieProgress.visibility = View.VISIBLE
+                    }
+                }
+            })
         }
     }
 
     private fun loadPostData() {
-        BlogPostPresenter().getAllPost(this)
+        BlogPostPresenter().getAllPost(lastPublished, this)
     }
 
-    override fun onGetAllPostSuccess(list: List<BlogItem>) {
+    override fun onGetPostSuccess(data: BlogData) {
+        lastPublished = data.lastPublished ?: ""
+
         layoutError.visibility = View.GONE
         lottieLoading.visibility = View.GONE
+        lottieProgress.visibility = View.GONE
         swipeRefreshLayout.isRefreshing = false
+        isLoading = false
 
-        if (mBlogList.size == 0) {
-            mBlogList.addAll(list)
-            mAdapter.notifyDataSetChanged()
+        if (isReloadData) {
+            mBlogList.clear()
+            isReloadData = false
         }
+
+        mBlogList.addAll(data.items)
+        mAdapter.notifyDataSetChanged()
     }
 
-    override fun onGetAllPostFailure() {
-        layoutError.visibility = View.VISIBLE
-        lottieLoading.visibility = View.GONE
-        buttonTryAgain.setOnClickListener {
-            loadPostData()
+    override fun onGetPostFailure() {
+        if (mBlogList.isEmpty()) {
+            layoutError.visibility = View.VISIBLE
+            lottieLoading.visibility = View.GONE
+            buttonTryAgain.setOnClickListener {
+                loadPostData()
+            }
         }
+        lottieProgress.visibility = View.GONE
     }
 
     override fun onClick(item: BlogItem, position: Int) {
