@@ -18,6 +18,8 @@ import com.mikkipastel.blog.manager.BlogPostListener
 import com.mikkipastel.blog.manager.BlogPostPresenter
 import com.mikkipastel.blog.model.BlogData
 import com.mikkipastel.blog.model.BlogItem
+import com.mikkipastel.blog.model.GhostBlogModel
+import com.mikkipastel.blog.model.PostBlog
 import kotlinx.android.synthetic.main.fragment_hashtag.*
 import kotlinx.android.synthetic.main.layout_loading_error.*
 
@@ -26,16 +28,16 @@ class HashtagFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemLi
     private val hashtag: String
         get() = arguments?.getString(BUNDLE_BLOG_HASHTAG) ?: ""
 
-    private val mBlogList = arrayListOf<BlogItem>()
+    private val mBlogList = mutableListOf<PostBlog>()
     private val mAdapter by lazy {
         PostListAdapter(mBlogList, this)
     }
 
     private var isLoading = false
-    private var mPage = 0
+    private var mPage = 1
 
-    private var lastPublished = ""
     private var isReloadData = false
+    private var canLazyLoading = true
 
     companion object {
 
@@ -73,13 +75,15 @@ class HashtagFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemLi
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
 
-                    val totalItemCount = linearLayoutManager.itemCount
-                    val lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
-                    if (!isLoading && totalItemCount <= (lastVisibleItem + 1)) {
-                        isLoading = true
-                        mPage++
-                        loadHashtagPostData()
-                        lottieProgress.visibility = View.VISIBLE
+                    if (canLazyLoading) {
+                        val totalItemCount = linearLayoutManager.itemCount
+                        val lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
+                        if (!isLoading && totalItemCount <= (lastVisibleItem + 1)) {
+                            isLoading = true
+                            mPage++
+                            loadHashtagPostData()
+                            lottieProgress.visibility = View.VISIBLE
+                        }
                     }
                 }
             })
@@ -88,12 +92,10 @@ class HashtagFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemLi
     }
 
     private fun loadHashtagPostData() {
-        BlogPostPresenter().getPostByTag(hashtag, lastPublished, this)
+        BlogPostPresenter().getAllPost(mPage, hashtag, this)
     }
 
-    override fun onGetPostSuccess(data: BlogData) {
-        lastPublished = data.lastPublished ?: ""
-
+    override fun onGetPostSuccess(data: GhostBlogModel) {
         layoutError.visibility = View.GONE
         lottieLoading.visibility = View.GONE
         lottieProgress.visibility = View.GONE
@@ -105,8 +107,10 @@ class HashtagFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemLi
             isReloadData = false
         }
 
-        mBlogList.addAll(data.items)
+        mBlogList.addAll(data.posts!!)
         mAdapter.notifyDataSetChanged()
+
+        canLazyLoading = data.meta?.pagination?.next != null
     }
 
     override fun onGetPostFailure() {
@@ -120,8 +124,8 @@ class HashtagFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemLi
         lottieProgress.visibility = View.GONE
     }
 
-    override fun onClick(item: BlogItem, position: Int) {
-        ContentActivity.newIntent(context!!, item.id!!, item.title!!)
+    override fun onClick(item: PostBlog, position: Int) {
+//        ContentActivity.newIntent(context!!, item.id!!, item.title!!)
     }
 
     override fun onHashtagClick(hashtag: String) {

@@ -6,9 +6,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 internal class HttpManager {
 
-    val url = "https://asia-east2-mikkipastel.cloudfunctions.net/"
+    private val url = "https://www.mikkipastel.com/ghost/api/v3/content/"
 
-    val gson = GsonBuilder()
+    private val gson = GsonBuilder()
             .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
             .create()
 

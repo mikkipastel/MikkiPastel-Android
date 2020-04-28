@@ -3,16 +3,18 @@ package com.mikkipastel.blog.manager
 import com.mikkipastel.blog.model.BlogContent
 import com.mikkipastel.blog.model.BlogData
 import com.mikkipastel.blog.model.BlogItem
+import com.mikkipastel.blog.model.GhostBlogModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class BlogPostPresenter: BlogPostInterface {
 
-    override fun getAllPost(lastPublished: String?, listener: BlogPostListener) {
-        val call = HttpManager().getApiService().getAllPost(lastPublished)
-        call.enqueue(object : Callback<BlogData> {
-            override fun onResponse(call: Call<BlogData>, response: Response<BlogData>) {
+    override fun getAllPost(page: Int, hashtag: String?, listener: BlogPostListener) {
+        val tag = if (hashtag == null) "" else "tag:$hashtag"
+        val call = HttpManager().getApiService().getAllPost(page, tag)
+        call.enqueue(object : Callback<GhostBlogModel> {
+            override fun onResponse(call: Call<GhostBlogModel>, response: Response<GhostBlogModel>) {
                 if (response.isSuccessful && response.body() != null) {
                     val items = response.body()
                     listener.onGetPostSuccess(items!!)
@@ -21,25 +23,7 @@ class BlogPostPresenter: BlogPostInterface {
                 }
             }
 
-            override fun onFailure(call: Call<BlogData>?, t: Throwable?) {
-                listener.onGetPostFailure()
-            }
-        })
-    }
-
-    override fun getPostByTag(hashtag: String, lastPublished: String?, listener: BlogPostListener) {
-        val call = HttpManager().getApiService().getPostByTag(hashtag, lastPublished)
-        call.enqueue(object : Callback<BlogData> {
-            override fun onResponse(call: Call<BlogData>, response: Response<BlogData>) {
-                if (response.isSuccessful && response.body() != null) {
-                    val items = response.body()
-                    listener.onGetPostSuccess(items!!)
-                } else {
-                    listener.onGetPostFailure()
-                }
-            }
-
-            override fun onFailure(call: Call<BlogData>?, t: Throwable?) {
+            override fun onFailure(call: Call<GhostBlogModel>?, t: Throwable?) {
                 listener.onGetPostFailure()
             }
         })
@@ -66,13 +50,12 @@ class BlogPostPresenter: BlogPostInterface {
 }
 
 interface BlogPostInterface {
-    fun getAllPost(lastPublished: String?, listener: BlogPostListener)
-    fun getPostByTag(hashtag: String, lastPublished: String?, listener: BlogPostListener)
+    fun getAllPost(page: Int, hashtag: String?, listener: BlogPostListener)
     fun getBlogById(blogId: String, listener: BlogIdListener)
 }
 
 interface BlogPostListener {
-    fun onGetPostSuccess(data: BlogData)
+    fun onGetPostSuccess(data: GhostBlogModel)
     fun onGetPostFailure()
 }
 

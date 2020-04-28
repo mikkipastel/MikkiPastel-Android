@@ -10,7 +10,7 @@ import com.mikkipastel.blog.fragment.HashtagFragment
 class HashtagActivity : AppCompatActivity() {
 
     private val hashtag: String
-        get() = intent.extras.getString(BUNDLE_BLOG_HASHTAG) ?: ""
+        get() = intent.extras?.getString(BUNDLE_BLOG_HASHTAG) ?: ""
 
     companion object {
         private const val BUNDLE_BLOG_HASHTAG = "HashtagActivity.BUNDLE_BLOG_HASHTAG"

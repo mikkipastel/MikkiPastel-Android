@@ -11,9 +11,10 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_content.*
 import com.mikkipastel.blog.R.*
 import com.mikkipastel.blog.model.BlogItem
+import com.mikkipastel.blog.model.PostBlog
 
 
-class PostListAdapter(private val dataItems: List<BlogItem>,
+class PostListAdapter(private val dataItems: MutableList<PostBlog>,
                       private val listener: PostItemListener)
     : RecyclerView.Adapter<PostListItemViewHolder>() {
 
@@ -34,15 +35,15 @@ class PostListAdapter(private val dataItems: List<BlogItem>,
     override fun getItemCount() = dataItems.size
 
     interface PostItemListener {
-        fun onClick(item: BlogItem, position: Int)
+        fun onClick(item: PostBlog, position: Int)
         fun onHashtagClick(hashtag: String)
     }
 }
 
 class PostListItemViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-    fun bind(item: BlogItem, hashtagListener: PostListAdapter.PostItemListener) {
+    fun bind(item: PostBlog, hashtagListener: PostListAdapter.PostItemListener) {
         Glide.with(containerView.context)
-                .load(item.coverUrl)
+                .load(item.feature_image)
                 .placeholder(drawable.loading)
                 .error(drawable.image_cover)
                 .centerCrop()
@@ -58,11 +59,11 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
 
         textPrimaryTopic.text = item.title
 
-        textSecondary.text = item.shortDescription ?: ""
+        textSecondary.text = item.custom_excerpt?.replace("\n", "") ?: ""
 
         chipGroup.removeAllViews()
 
-        item.label?.let {
+        item.tags?.let {
             if (it.isNotEmpty()) {
                 it.forEach {
                     val chip = Chip(containerView.context)
@@ -71,9 +72,9 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
                         layoutParams = ViewGroup.LayoutParams(
                                 ViewGroup.LayoutParams.WRAP_CONTENT,
                                 ViewGroup.LayoutParams.WRAP_CONTENT)
-                        text = label
+                        text = label.name
                         setOnClickListener {
-                            hashtagListener.onHashtagClick(label)
+                            hashtagListener.onHashtagClick(label.slug!!)
                         }
                     }
                     chipGroup.addView(chip)

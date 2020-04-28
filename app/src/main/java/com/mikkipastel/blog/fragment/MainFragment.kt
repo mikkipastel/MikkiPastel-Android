@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.mikkipastel.blog.MainActivity
 import com.mikkipastel.blog.R
 import com.mikkipastel.blog.activity.ContentActivity
 import com.mikkipastel.blog.activity.HashtagActivity
@@ -16,22 +15,24 @@ import com.mikkipastel.blog.manager.BlogPostListener
 import com.mikkipastel.blog.manager.BlogPostPresenter
 import com.mikkipastel.blog.model.BlogData
 import com.mikkipastel.blog.model.BlogItem
+import com.mikkipastel.blog.model.GhostBlogModel
+import com.mikkipastel.blog.model.PostBlog
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.layout_loading_error.*
 
 
 class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListener {
 
-    private val mBlogList = arrayListOf<BlogItem>()
+    private val mBlogList = mutableListOf<PostBlog>()
     private val mAdapter by lazy {
         PostListAdapter(mBlogList, this)
     }
 
     private var isLoading = false
-    private var mPage = 0
+    private var mPage = 1
 
-    private var lastPublished = ""
     private var isReloadData = false
+    private var canLazyLoading = true
 
     companion object {
         fun newInstance() = MainFragment()
@@ -59,13 +60,15 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
 
-                    val totalItemCount = linearLayoutManager.itemCount
-                    val lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
-                    if (!isLoading && totalItemCount <= (lastVisibleItem + 1)) {
-                        isLoading = true
-                        mPage++
-                        loadPostData()
-                        lottieProgress.visibility = View.VISIBLE
+                    if (canLazyLoading) {
+                        val totalItemCount = linearLayoutManager.itemCount
+                        val lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
+                        if (!isLoading && totalItemCount <= (lastVisibleItem + 1)) {
+                            isLoading = true
+                            mPage++
+                            loadPostData()
+                            lottieProgress.visibility = View.VISIBLE
+                        }
                     }
                 }
             })
@@ -73,12 +76,10 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
     }
 
     private fun loadPostData() {
-        BlogPostPresenter().getAllPost(lastPublished, this)
+        BlogPostPresenter().getAllPost(mPage, null, this)
     }
 
-    override fun onGetPostSuccess(data: BlogData) {
-        lastPublished = data.lastPublished ?: ""
-
+    override fun onGetPostSuccess(data: GhostBlogModel) {
         layoutError.visibility = View.GONE
         lottieLoading.visibility = View.GONE
         lottieProgress.visibility = View.GONE
@@ -90,8 +91,10 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
             isReloadData = false
         }
 
-        mBlogList.addAll(data.items)
+        mBlogList.addAll(data.posts!!)
         mAdapter.notifyDataSetChanged()
+
+        canLazyLoading = data.meta?.pagination?.next != null
     }
 
     override fun onGetPostFailure() {
@@ -105,8 +108,8 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
         lottieProgress.visibility = View.GONE
     }
 
-    override fun onClick(item: BlogItem, position: Int) {
-        ContentActivity.newIntent(context!!, item.id!!, item.title!!)
+    override fun onClick(item: PostBlog, position: Int) {
+//        ContentActivity.newIntent(context!!, item.id!!, item.title!!)
     }
 
     override fun onHashtagClick(hashtag: String) {
