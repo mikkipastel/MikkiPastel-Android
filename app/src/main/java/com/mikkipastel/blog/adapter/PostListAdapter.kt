@@ -10,8 +10,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_content.*
 import com.mikkipastel.blog.R.*
-import com.mikkipastel.blog.model.BlogItem
 import com.mikkipastel.blog.model.PostBlog
+import com.mikkipastel.blog.model.TagBlog
 
 
 class PostListAdapter(private val dataItems: MutableList<PostBlog>,
@@ -36,7 +36,7 @@ class PostListAdapter(private val dataItems: MutableList<PostBlog>,
 
     interface PostItemListener {
         fun onClick(item: PostBlog, position: Int)
-        fun onHashtagClick(hashtag: String)
+        fun onHashtagClick(hashtag: TagBlog)
     }
 }
 
@@ -48,13 +48,12 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
                 .error(drawable.image_cover)
                 .centerCrop()
                 .fitCenter()
-                .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imageCover)
 
         val params = imageCover.layoutParams
         val width = imageCover.resources.displayMetrics.widthPixels
-        params.height = (width * 2) / 3
+        params.height = (width * 3) / 5
         imageCover.layoutParams = params
 
         textPrimaryTopic.text = item.title
@@ -68,13 +67,13 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
                 it.forEach {
                     val chip = Chip(containerView.context)
                     chip.apply {
-                        val label = it
+                        val tag = it
                         layoutParams = ViewGroup.LayoutParams(
                                 ViewGroup.LayoutParams.WRAP_CONTENT,
                                 ViewGroup.LayoutParams.WRAP_CONTENT)
-                        text = label.name
+                        text = tag.name
                         setOnClickListener {
-                            hashtagListener.onHashtagClick(label.slug!!)
+                            hashtagListener.onHashtagClick(tag)
                         }
                     }
                     chipGroup.addView(chip)

@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
+data class GhostTagsModel(@SerializedName("tags") val tags: MutableList<TagBlog>): Parcelable
+
+@Parcelize
 data class GhostBlogModel(@SerializedName("posts") val posts: MutableList<PostBlog>?,
                           @SerializedName("meta") val meta: Meta?): Parcelable
 

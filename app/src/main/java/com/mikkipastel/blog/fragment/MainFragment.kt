@@ -1,32 +1,38 @@
 package com.mikkipastel.blog.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mikkipastel.blog.R
-import com.mikkipastel.blog.activity.ContentActivity
-import com.mikkipastel.blog.activity.HashtagActivity
 import com.mikkipastel.blog.adapter.PostListAdapter
 import com.mikkipastel.blog.manager.BlogPostListener
 import com.mikkipastel.blog.manager.BlogPostPresenter
-import com.mikkipastel.blog.model.BlogData
-import com.mikkipastel.blog.model.BlogItem
+import com.mikkipastel.blog.manager.BlogTagListener
 import com.mikkipastel.blog.model.GhostBlogModel
 import com.mikkipastel.blog.model.PostBlog
+import com.mikkipastel.blog.model.TagBlog
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.layout_loading_error.*
 
 
-class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListener {
+class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListener, BlogTagListener {
 
     private val mBlogList = mutableListOf<PostBlog>()
     private val mAdapter by lazy {
         PostListAdapter(mBlogList, this)
     }
+
+    private val mTagItemList = mutableListOf<TagBlog>()
+    private val mTagNameList = mutableListOf<String>()
+    private lateinit var mTagAdapter : ArrayAdapter<String>
+    private var mCurrentTagSlug: String? = null
 
     private var isLoading = false
     private var mPage = 1
@@ -45,11 +51,12 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loadPostData()
+        loadPostData(null)
+        loadHashtagData()
 
         swipeRefreshLayout.setOnRefreshListener {
             isReloadData = true
-            loadPostData()
+            loadPostData(mCurrentTagSlug)
         }
 
         recyclerView.apply {
@@ -66,7 +73,7 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
                         if (!isLoading && totalItemCount <= (lastVisibleItem + 1)) {
                             isLoading = true
                             mPage++
-                            loadPostData()
+                            loadPostData(mCurrentTagSlug)
                             lottieProgress.visibility = View.VISIBLE
                         }
                     }
@@ -75,14 +82,19 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
         }
     }
 
-    private fun loadPostData() {
-        BlogPostPresenter().getAllPost(mPage, null, this)
+    private fun loadPostData(hashtag: String?) {
+        BlogPostPresenter().getBlogPost(mPage, hashtag, this)
+    }
+
+    private fun loadHashtagData() {
+        BlogPostPresenter().getBlogTag(this)
     }
 
     override fun onGetPostSuccess(data: GhostBlogModel) {
         layoutError.visibility = View.GONE
         lottieLoading.visibility = View.GONE
         lottieProgress.visibility = View.GONE
+        recyclerView.visibility = View.VISIBLE
         swipeRefreshLayout.isRefreshing = false
         isLoading = false
 
@@ -102,18 +114,65 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
             layoutError.visibility = View.VISIBLE
             lottieLoading.visibility = View.GONE
             buttonTryAgain.setOnClickListener {
-                loadPostData()
+                loadPostData(mCurrentTagSlug)
             }
         }
         lottieProgress.visibility = View.GONE
     }
 
-    override fun onClick(item: PostBlog, position: Int) {
-//        ContentActivity.newIntent(context!!, item.id!!, item.title!!)
+    override fun onGetTagSuccess(data: MutableList<TagBlog>) {
+        layoutDropdownList.visibility = View.VISIBLE
+
+        mTagItemList.addAll(data)
+        mTagNameList.add("All")
+
+        mTagItemList.forEach {
+            mTagNameList.add((it.name!!))
+        }
+
+        mTagAdapter = ArrayAdapter(requireContext(), R.layout.item_hashtag, mTagNameList)
+        dropdownList.apply {
+            setAdapter(mTagAdapter)
+            setOnItemClickListener { adapterView, view, position, id ->
+                when (mTagNameList[position] == getString(R.string.default_tag_text)) {
+                    true -> setDropdownTextAndReloadData(
+                            getString(R.string.default_tag_text),
+                            null
+                    )
+                    false -> setDropdownTextAndReloadData(
+                            mTagItemList[position-1].name,
+                            mTagItemList[position-1].slug
+                    )
+                }
+            }
+        }
     }
 
-    override fun onHashtagClick(hashtag: String) {
-        HashtagActivity.newIntent(context!!, hashtag)
+    override fun onGetTagFailure() {
+        layoutDropdownList.visibility = View.GONE
+    }
+
+    override fun onClick(item: PostBlog, position: Int) {
+        //TODO: chrome custom tab
+    }
+
+    override fun onHashtagClick(hashtag: TagBlog) {
+        mTagItemList.forEach {
+            if (it.name == hashtag.name) {
+                setDropdownTextAndReloadData(it.name, it.slug)
+            }
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private fun setDropdownTextAndReloadData(hashtag: String?, slug: String?) {
+        isReloadData = true
+        mCurrentTagSlug = slug
+
+        dropdownList.setText(hashtag, false)
+        loadPostData(slug)
+        lottieLoading.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
     }
 
 }

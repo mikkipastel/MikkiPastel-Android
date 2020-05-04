@@ -23,4 +23,7 @@
 
     <string name="template_web_blog_url">https://mikkipastel.web.app/%1$s</string>
     <string name="title_share_blog">แชร์บทความให้เพื่อนๆของคุณกันเถอะ</string>
+
+    <string name="header_tag_text">tag</string>
+    <string name="default_tag_text">All</string>
 </resources>

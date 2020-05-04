@@ -16,7 +16,6 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.mikkipastel.blog.fragment.AboutAppFragment
-import com.mikkipastel.blog.fragment.HashtagFragment
 import com.mikkipastel.blog.fragment.MainFragment
 import com.mikkipastel.blog.utils.CustomChromeUtils
 
