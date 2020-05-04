@@ -13,26 +13,28 @@ class CustomChromeUtils {
 
     fun setBlogWebpage(context: Context, url: String, shareMessage: String) {
 
-        val builder = CustomTabsIntent.Builder()
-        builder.setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
+        CustomTabsIntent.Builder().apply {
+            //Setting a custom toolbar color, show title, back button
+            setCloseButtonIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_action_arrow_left))
+            setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
+            setShowTitle(true)
 
-        builder.setShowTitle(true)
-        builder.setCloseButtonIcon(BitmapFactory.decodeResource(
-                context.resources, R.drawable.ic_action_arrow_left))
+            //Sharing content from CustomTabs
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, "$shareMessage $url")
+                putExtra(Intent.EXTRA_REFERRER, Uri.parse("android-app://" + context.packageName))
+            }
+            val pendingIntent = PendingIntent.getActivity(context, 0, shareIntent, 0)
+            addMenuItem("Share", pendingIntent)
 
-        val shareIntent = Intent(Intent.ACTION_SEND)
-        shareIntent.type = "text/plain"
-        shareIntent.putExtra(Intent.EXTRA_TEXT, "$shareMessage $url")
+            //Setting custom enter/exit animations
+            setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
+            setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
 
-        val pi = PendingIntent.getActivity(context, 0, shareIntent, 0)
-        builder.addMenuItem("Share", pi)
-
-        builder.setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
-        builder.setExitAnimations(context, android.R.anim.slide_in_left,
-                android.R.anim.slide_out_right)
-
-        val customTabsIntent = builder.build()
-        customTabsIntent.launchUrl(context, Uri.parse(url))
+            //Open the Custom Tab
+            build().launchUrl(context, Uri.parse(url))
+        }
     }
 
 }

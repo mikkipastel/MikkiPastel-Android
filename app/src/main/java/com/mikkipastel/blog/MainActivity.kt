@@ -1,12 +1,16 @@
 package com.mikkipastel.blog
 
 import android.app.Activity
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.browser.customtabs.CustomTabsClient
+import androidx.browser.customtabs.CustomTabsServiceConnection
+import androidx.browser.customtabs.CustomTabsSession
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.InstallState
@@ -44,6 +48,7 @@ class MainActivity: AppCompatActivity(), InstallStateUpdatedListener {
         }
 
         getInAppUpdateWithPlayStore()
+        initChromeCustomTabService()
     }
 
     private fun getInAppUpdateWithPlayStore() {
@@ -73,7 +78,25 @@ class MainActivity: AppCompatActivity(), InstallStateUpdatedListener {
         }
     }
 
+    private fun initChromeCustomTabService() {
+        var mCustomTabsClient: CustomTabsClient?
+        var mCustomTabsSession: CustomTabsSession
+
+        object : CustomTabsServiceConnection() {
+            override fun onCustomTabsServiceConnected(componentName: ComponentName, customTabsClient: CustomTabsClient) {
+                mCustomTabsClient = customTabsClient
+                mCustomTabsClient?.warmup(0L)
+                mCustomTabsSession = mCustomTabsClient?.newSession(null)!!
+            }
+
+            override fun onServiceDisconnected(name: ComponentName) {
+                 mCustomTabsClient = null
+            }
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == MY_REQUEST_CODE) {
             when (resultCode) {
                 Activity.RESULT_OK -> {
