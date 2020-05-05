@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.item_content.*
 import com.mikkipastel.blog.R.*
 import com.mikkipastel.blog.model.PostBlog
 import com.mikkipastel.blog.model.TagBlog
+import com.mikkipastel.blog.utils.ImageLoader
 
 
 class PostListAdapter(private val dataItems: MutableList<PostBlog>,
@@ -42,22 +43,14 @@ class PostListAdapter(private val dataItems: MutableList<PostBlog>,
 
 class PostListItemViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
     fun bind(item: PostBlog, hashtagListener: PostListAdapter.PostItemListener) {
-        Glide.with(containerView.context)
-                .load(item.feature_image)
-                .placeholder(drawable.loading)
-                .error(drawable.image_cover)
-                .centerCrop()
-                .fitCenter()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imageCover)
-
         val params = imageCover.layoutParams
         val width = imageCover.resources.displayMetrics.widthPixels
         params.height = (width * 3) / 5
         imageCover.layoutParams = params
 
-        textPrimaryTopic.text = item.title
+        ImageLoader().setCover(containerView.context, item.feature_image, imageCover)
 
+        textPrimaryTopic.text = item.title
         textSecondary.text = item.custom_excerpt?.replace("\n", "") ?: ""
 
         chipGroup.removeAllViews()
@@ -80,6 +73,5 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
                 }
             }
         }
-
     }
 }

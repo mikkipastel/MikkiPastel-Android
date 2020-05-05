@@ -29,9 +29,4 @@
         </activity>
 
     </application>
-
-    <!--config glide to high def photo-->
-    <meta-data
-        android:name="com.mikkipastel.blog.configuration.GlideConfiguration"
-        android:value="GlideModule" />
 </manifest>
