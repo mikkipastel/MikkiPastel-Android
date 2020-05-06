@@ -48,7 +48,7 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
         params.height = (width * 3) / 5
         imageCover.layoutParams = params
 
-        ImageLoader().setCover(containerView.context, item.feature_image, imageCover)
+        ImageLoader().setBlogCover(containerView.context, item.feature_image, imageCover)
 
         textPrimaryTopic.text = item.title
         textSecondary.text = item.custom_excerpt?.replace("\n", "") ?: ""

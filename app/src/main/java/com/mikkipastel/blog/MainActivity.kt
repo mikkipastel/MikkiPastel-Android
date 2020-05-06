@@ -148,35 +148,6 @@ class MainActivity: AppCompatActivity(), InstallStateUpdatedListener {
         appUpdateManager.unregisterListener(this)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_aboutapp) {
-            showDialog()
-        } else if (item.itemId == R.id.action_aboutme) {
-            aboutMe()
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun showDialog() {
-        // Create and show the dialog.
-        val newFragment = AboutAppFragment.newInstance()
-        newFragment.show(supportFragmentManager.beginTransaction(), "dialog")
-    }
-
-    private fun aboutMe() {
-        CustomChromeUtils().setBlogWebpage(
-                this,
-                "https://mikkipastel.firebaseapp.com/",
-                "About Mikkipastel"
-        )
-    }
-
     private fun addShortcut() {
         //Adding shortcut for MainActivity
         //on Home screen

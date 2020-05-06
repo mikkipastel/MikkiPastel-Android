@@ -1,80 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorGreyBackground">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutDropdownList"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:hint="@string/header_tag_text"
-        android:visibility="gone"
-        app:startIconDrawable="@drawable/ic_filter_tag"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        android:layout_height="@dimen/shrine_tall_toolbar_height">
 
-        <AutoCompleteTextView
-            android:id="@+id/dropdownList"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/default_tag_text"
-            android:inputType="none"
-            android:focusable="false"/>
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleGravity="center_horizontal"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:title="@string/app_name"
+            app:expandedTitleTextAppearance="@style/collapsingToolbarLayoutExpandedTitle">
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-	    android:id="@+id/swipeRefreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <RelativeLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageTagCover"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_above="@id/lottieProgress"
-                    android:overScrollMode="never"/>
+                    android:src="@drawable/placeholder_cover"
+                    android:scaleType="centerCrop"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0.5"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#80000000"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:textColor="@color/whitegray2"
+                    android:textAlignment="center"
+                    tools:text="@string/app_name"/>
+
+            </FrameLayout>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:titleTextColor="@android:color/white"/>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutDropdownList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:hint="@string/header_tag_text"
+            android:visibility="gone"
+            app:startIconDrawable="@drawable/ic_filter_tag"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+            <AutoCompleteTextView
+                android:id="@+id/dropdownList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/default_tag_text"
+                android:inputType="none"
+                android:focusable="false"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_above="@id/lottieProgress"
+                        android:overScrollMode="never"/>
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/lottieProgress"
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        android:adjustViewBounds="true"
+                        android:layout_alignParentBottom="true"
+                        app:lottie_fileName="progress-loading.json"
+                        app:lottie_loop="true"
+                        app:lottie_autoPlay="true"
+                        android:visibility="gone"/>
+
+                </RelativeLayout>
 
                 <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/lottieProgress"
+                    android:id="@+id/lottieLoading"
                     android:layout_width="match_parent"
-                    android:layout_height="64dp"
+                    android:layout_height="match_parent"
                     android:adjustViewBounds="true"
-                    android:layout_alignParentBottom="true"
-                    app:lottie_fileName="progress-loading.json"
+                    app:lottie_fileName="dino-loading.json"
                     app:lottie_loop="true"
-                    app:lottie_autoPlay="true"
+                    app:lottie_autoPlay="true"/>
+
+                <include
+                    android:id="@+id/layoutError"
+                    layout="@layout/layout_loading_error"
                     android:visibility="gone"/>
 
-            </RelativeLayout>
+            </FrameLayout>
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/lottieLoading"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                app:lottie_fileName="dino-loading.json"
-                app:lottie_loop="true"
-                app:lottie_autoPlay="true"/>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-            <include
-                android:id="@+id/layoutError"
-                layout="@layout/layout_loading_error"
-                android:visibility="gone"/>
+    </LinearLayout>
 
-        </FrameLayout>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -2,13 +2,15 @@ package com.mikkipastel.blog.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
+import androidx.core.text.bold
+import androidx.core.text.color
+import androidx.core.text.scale
 import androidx.recyclerview.widget.RecyclerView
 import com.mikkipastel.blog.R
 import com.mikkipastel.blog.adapter.PostListAdapter
@@ -18,6 +20,8 @@ import com.mikkipastel.blog.manager.BlogTagListener
 import com.mikkipastel.blog.model.GhostBlogModel
 import com.mikkipastel.blog.model.PostBlog
 import com.mikkipastel.blog.model.TagBlog
+import com.mikkipastel.blog.utils.CustomChromeUtils
+import com.mikkipastel.blog.utils.ImageLoader
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.layout_loading_error.*
 
@@ -54,8 +58,13 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
         loadPostData(null)
         loadHashtagData()
 
+        setToolbar()
+
+        setHeaderText(getString(R.string.title_tag_all), getString(R.string.description_tag_all))
+
         swipeRefreshLayout.setOnRefreshListener {
             isReloadData = true
+            mPage = 1
             loadPostData(mCurrentTagSlug)
         }
 
@@ -80,6 +89,26 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
                 }
             })
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_main, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_aboutapp) {
+            showDialog()
+        } else if (item.itemId == R.id.action_aboutme) {
+            aboutMe()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun setToolbar() {
+        collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(context!!, android.R.color.white))
+        toolbar.inflateMenu(R.menu.menu_main)
     }
 
     private fun loadPostData(hashtag: String?) {
@@ -107,6 +136,10 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
         mAdapter.notifyDataSetChanged()
 
         canLazyLoading = data.meta?.pagination?.next != null
+
+        if (data.meta?.pagination?.page == 1) {
+            recyclerView.smoothScrollToPosition(0)
+        }
     }
 
     override fun onGetPostFailure() {
@@ -153,7 +186,7 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
     }
 
     override fun onClick(item: PostBlog, position: Int) {
-        //TODO: chrome custom tab
+        CustomChromeUtils().setBlogWebpage(context!!, item.url!!, item.title!!)
     }
 
     override fun onHashtagClick(hashtag: TagBlog) {
@@ -167,12 +200,55 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
     @SuppressLint("NewApi")
     private fun setDropdownTextAndReloadData(hashtag: String?, slug: String?) {
         isReloadData = true
+        mPage = 1
         mCurrentTagSlug = slug
 
         dropdownList.setText(hashtag, false)
         loadPostData(slug)
         lottieLoading.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
+
+        val foundTagList = mTagItemList.filter { tagBlog -> tagBlog.slug == slug }
+        when (foundTagList.isNotEmpty()) {
+            true -> {
+                ImageLoader().setTagCover(context!!, foundTagList[0].feature_image, imageTagCover)
+                setHeaderText(foundTagList[0].name!!, foundTagList[0].description!!)
+            }
+            false -> {
+                ImageLoader().setTagCover(context!!, "", imageTagCover)
+                setHeaderText(getString(R.string.title_tag_all), getString(R.string.description_tag_all))
+            }
+        }
     }
 
+    private fun setHeaderText(title: String, description: String) {
+        collapsingToolbar.title = title
+        val spannable = SpannableStringBuilder().apply {
+            bold {
+                scale(1.5f) {
+                    color(ContextCompat.getColor(context!!, R.color.whitegray2)) {
+                        append(title)
+                    }
+                }
+            }
+            append("\n")
+            color(ContextCompat.getColor(context!!, R.color.whitegray2)) {
+                append(description)
+            }
+        }
+        textHeader.text = spannable
+    }
+
+    private fun showDialog() {
+        val newFragment = AboutAppFragment.newInstance()
+        newFragment.show(activity?.supportFragmentManager!!.beginTransaction(), "dialog")
+    }
+
+    private fun aboutMe() {
+        CustomChromeUtils().setBlogWebpage(
+                context!!,
+                "https://mikkipastel.firebaseapp.com/",
+                "About Mikkipastel"
+        )
+    }
 }
