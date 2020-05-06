@@ -26,7 +26,7 @@ class CustomChromeUtils {
                 putExtra(Intent.EXTRA_REFERRER, Uri.parse("android-app://" + context.packageName))
             }
             val pendingIntent = PendingIntent.getActivity(context, 0, shareIntent, 0)
-            addMenuItem("Share", pendingIntent)
+            addMenuItem(context.getString(R.string.title_share_blog), pendingIntent)
 
             //Setting custom enter/exit animations
             setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
