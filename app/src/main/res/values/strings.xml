@@ -17,7 +17,7 @@
     <string name="msg_offline">Internet unavailable.</string>
     <string name="action_try_again">Try Again</string>
 
-    <string name="title_share_blog">แชร์บทความให้เพื่อนๆของคุณกันเถอะ</string>
+    <string name="title_share_blog">แชร์บทความ</string>
 
     <string name="header_tag_text">tag</string>
     <string name="default_tag_text">All</string>
