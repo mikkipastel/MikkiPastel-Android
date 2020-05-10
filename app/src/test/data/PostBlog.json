@@ -1,0 +1,20 @@
+{
+  "title": "มาทบทวนเรื่อง Margin และ Padding กันอีกสักนิด",
+  "feature_image": "https://www.mikkipastel.com/content/images/2020/04/IMG_0166.PNG",
+  "custom_excerpt": "แรกๆที่เราเขียน Android มักจะแยก margin และ padding ไม่ค่อยถูก พอเป็น Android Developer ไปเรื่อยๆก็จะแยกออกหล่ะ แล้วเห็นบล็อกพี่เอกเขียนหัวข้อนี้ แต่ยังไม่ได้อ่าน ก็เลยลองวาดๆเขียนๆดู",
+  "published_at": "2020-05-08T12:10:00.000+07:00",
+  "tags": [
+    {
+      "id": "5e4a503b1876cb04e896eea3",
+      "name": "android",
+      "slug": "android",
+      "description": "เราเป็นคนใช้แอนดรอยด์มาหลายปีดีดัก ตั้งแต่สมัยฝึกงานเลยนะเออ และก็เป็น Android Development จากตอนนั้นมาถึงตอนนี้",
+      "feature_image": "https://images.unsplash.com/photo-1541345023926-55d6e0853f4b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=2000&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ",
+      "visibility": "public",
+      "meta_title": null,
+      "meta_description": null,
+      "url": "https://www.mikkipastel.com/tag/android/"
+    }
+  ],
+  "url": "https://www.mikkipastel.com/android-margin-and-padding/"
+}
