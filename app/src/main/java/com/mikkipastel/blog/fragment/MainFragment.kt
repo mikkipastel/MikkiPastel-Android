@@ -93,6 +93,7 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
+//        toolbar.inflateMenu(R.menu.menu_main)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -108,7 +109,6 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
 
     private fun setToolbar() {
         collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(context!!, android.R.color.white))
-        toolbar.inflateMenu(R.menu.menu_main)
     }
 
     private fun loadPostData(hashtag: String?) {
@@ -222,7 +222,6 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
     }
 
     private fun setHeaderText(title: String, description: String) {
-        collapsingToolbar.title = title
         val spannable = SpannableStringBuilder().apply {
             bold {
                 scale(1.5f) {
