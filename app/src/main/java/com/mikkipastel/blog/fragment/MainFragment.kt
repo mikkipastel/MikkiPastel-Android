@@ -14,9 +14,9 @@ import androidx.core.text.scale
 import androidx.recyclerview.widget.RecyclerView
 import com.mikkipastel.blog.R
 import com.mikkipastel.blog.adapter.PostListAdapter
-import com.mikkipastel.blog.manager.BlogPostListener
-import com.mikkipastel.blog.manager.BlogPostPresenter
-import com.mikkipastel.blog.manager.BlogTagListener
+import com.mikkipastel.blog.viewmodel.BlogPostListener
+import com.mikkipastel.blog.viewmodel.BlogTagListener
+import com.mikkipastel.blog.viewmodel.BlogViewModel
 import com.mikkipastel.blog.model.GhostBlogModel
 import com.mikkipastel.blog.model.PostBlog
 import com.mikkipastel.blog.model.TagBlog
@@ -24,6 +24,7 @@ import com.mikkipastel.blog.utils.CustomChromeUtils
 import com.mikkipastel.blog.utils.ImageLoader
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.layout_loading_error.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListener, BlogTagListener {
@@ -43,6 +44,8 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
 
     private var isReloadData = false
     private var canLazyLoading = true
+
+    private val blogViewModel: BlogViewModel by viewModel()
 
     companion object {
         fun newInstance() = MainFragment()
@@ -108,15 +111,15 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
     }
 
     private fun setToolbar() {
-        collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(context!!, android.R.color.white))
+        collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
     }
 
     private fun loadPostData(hashtag: String?) {
-        BlogPostPresenter().getBlogPost(mPage, hashtag, this)
+        blogViewModel.getBlogPost(mPage, hashtag, this)
     }
 
     private fun loadHashtagData() {
-        BlogPostPresenter().getBlogTag(this)
+        blogViewModel.getBlogTag(this)
     }
 
     override fun onGetPostSuccess(data: GhostBlogModel) {
@@ -186,7 +189,7 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
     }
 
     override fun onClick(item: PostBlog, position: Int) {
-        CustomChromeUtils().setBlogWebpage(context!!, item.url!!, item.title!!)
+        CustomChromeUtils().setBlogWebpage(requireContext(), item.url!!, item.title!!)
     }
 
     override fun onHashtagClick(hashtag: TagBlog) {
@@ -211,11 +214,11 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
         val foundTagList = mTagItemList.filter { tagBlog -> tagBlog.slug == slug }
         when (foundTagList.isNotEmpty()) {
             true -> {
-                ImageLoader().setTagCover(context!!, foundTagList[0].feature_image, imageTagCover)
+                ImageLoader().setTagCover(requireContext(), foundTagList[0].feature_image, imageTagCover)
                 setHeaderText(foundTagList[0].name!!, foundTagList[0].description!!)
             }
             false -> {
-                ImageLoader().setTagCover(context!!, "", imageTagCover)
+                ImageLoader().setTagCover(requireContext(), "", imageTagCover)
                 setHeaderText(getString(R.string.title_tag_all), getString(R.string.description_tag_all))
             }
         }
@@ -225,13 +228,13 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
         val spannable = SpannableStringBuilder().apply {
             bold {
                 scale(1.5f) {
-                    color(ContextCompat.getColor(context!!, R.color.whitegray2)) {
+                    color(ContextCompat.getColor(requireContext(), R.color.whitegray2)) {
                         append(title)
                     }
                 }
             }
             append("\n")
-            color(ContextCompat.getColor(context!!, R.color.whitegray2)) {
+            color(ContextCompat.getColor(requireContext(), R.color.whitegray2)) {
                 append(description)
             }
         }
@@ -245,7 +248,7 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
 
     private fun aboutMe() {
         CustomChromeUtils().setBlogWebpage(
-                context!!,
+                requireContext(),
                 "https://mikkipastel.firebaseapp.com/",
                 "About Mikkipastel"
         )
