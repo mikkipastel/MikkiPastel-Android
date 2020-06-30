@@ -11,13 +11,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import androidx.core.text.color
 import androidx.core.text.scale
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.mikkipastel.blog.R
 import com.mikkipastel.blog.adapter.PostListAdapter
-import com.mikkipastel.blog.viewmodel.BlogPostListener
-import com.mikkipastel.blog.viewmodel.BlogTagListener
 import com.mikkipastel.blog.viewmodel.BlogViewModel
-import com.mikkipastel.blog.model.GhostBlogModel
 import com.mikkipastel.blog.model.PostBlog
 import com.mikkipastel.blog.model.TagBlog
 import com.mikkipastel.blog.utils.CustomChromeUtils
@@ -27,7 +25,7 @@ import kotlinx.android.synthetic.main.layout_loading_error.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListener, BlogTagListener {
+class MainFragment : Fragment(), PostListAdapter.PostItemListener {
 
     private val mBlogList = mutableListOf<PostBlog>()
     private val mAdapter by lazy {
@@ -43,7 +41,6 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
     private var mPage = 1
 
     private var isReloadData = false
-    private var canLazyLoading = true
 
     private val blogViewModel: BlogViewModel by viewModel()
 
@@ -55,11 +52,16 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        loadPostData(null)
+        loadHashtagData()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loadPostData(null)
-        loadHashtagData()
+        setupView()
 
         setToolbar()
 
@@ -79,16 +81,18 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
 
-                    if (canLazyLoading) {
-                        val totalItemCount = linearLayoutManager.itemCount
-                        val lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
-                        if (!isLoading && totalItemCount <= (lastVisibleItem + 1)) {
-                            isLoading = true
-                            mPage++
-                            loadPostData(mCurrentTagSlug)
-                            lottieProgress.visibility = View.VISIBLE
+                    blogViewModel.canLazyLoading.observe(viewLifecycleOwner, Observer {
+                        if (it) {
+                            val totalItemCount = linearLayoutManager.itemCount
+                            val lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
+                            if (!isLoading && totalItemCount <= (lastVisibleItem + 1)) {
+                                isLoading = true
+                                mPage++
+                                loadPostData(mCurrentTagSlug)
+                                lottieProgress.visibility = View.VISIBLE
+                            }
                         }
-                    }
+                    })
                 }
             })
         }
@@ -115,14 +119,37 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
     }
 
     private fun loadPostData(hashtag: String?) {
-        blogViewModel.getBlogPost(mPage, hashtag, this)
+        blogViewModel.getBlogPost(mPage, hashtag)
     }
 
     private fun loadHashtagData() {
-        blogViewModel.getBlogTag(this)
+        blogViewModel.getBlogTag()
     }
 
-    override fun onGetPostSuccess(data: GhostBlogModel) {
+    private fun setupView() {
+        blogViewModel.apply {
+            allBlogPost.observe(viewLifecycleOwner, Observer {
+                showBlogContent(it)
+            })
+            blogPage.observe(viewLifecycleOwner, Observer {
+                if (it == 1) {
+                    recyclerView.smoothScrollToPosition(0)
+                }
+            })
+            allBlogTag.observe(viewLifecycleOwner, Observer {
+                showTagContent(it)
+            })
+
+            getBlogError.observe(viewLifecycleOwner, Observer {
+                getBlogErrorView()
+            })
+            getTagError.observe(viewLifecycleOwner, Observer {
+                getTagError()
+            })
+        }
+    }
+
+    private fun showBlogContent(list: MutableList<PostBlog>) {
         layoutError.visibility = View.GONE
         lottieLoading.visibility = View.GONE
         lottieProgress.visibility = View.GONE
@@ -135,17 +162,11 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
             isReloadData = false
         }
 
-        mBlogList.addAll(data.posts!!)
+        mBlogList.addAll(list)
         mAdapter.notifyDataSetChanged()
-
-        canLazyLoading = data.meta?.pagination?.next != null
-
-        if (data.meta?.pagination?.page == 1) {
-            recyclerView.smoothScrollToPosition(0)
-        }
     }
 
-    override fun onGetPostFailure() {
+    private fun getBlogErrorView() {
         if (mBlogList.isEmpty()) {
             layoutError.visibility = View.VISIBLE
             lottieLoading.visibility = View.GONE
@@ -156,7 +177,7 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
         lottieProgress.visibility = View.GONE
     }
 
-    override fun onGetTagSuccess(data: MutableList<TagBlog>) {
+    private fun showTagContent(data: MutableList<TagBlog>) {
         layoutDropdownList.visibility = View.VISIBLE
 
         mTagItemList.addAll(data)
@@ -184,7 +205,7 @@ class MainFragment : Fragment(), BlogPostListener, PostListAdapter.PostItemListe
         }
     }
 
-    override fun onGetTagFailure() {
+    private fun getTagError() {
         layoutDropdownList.visibility = View.GONE
     }
 
