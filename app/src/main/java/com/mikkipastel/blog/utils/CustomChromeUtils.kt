@@ -14,12 +14,12 @@ class CustomChromeUtils {
     fun setBlogWebpage(context: Context, url: String, shareMessage: String) {
 
         CustomTabsIntent.Builder().apply {
-            //Setting a custom toolbar color, show title, back button
+            // Setting a custom toolbar color, show title, back button
             setCloseButtonIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_action_arrow_left))
             setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
             setShowTitle(true)
 
-            //Sharing content from CustomTabs
+            // Sharing content from CustomTabs
             val shareIntent = Intent(Intent.ACTION_SEND).apply {
                 type = "text/plain"
                 putExtra(Intent.EXTRA_TEXT, "$shareMessage $url")
@@ -28,13 +28,12 @@ class CustomChromeUtils {
             val pendingIntent = PendingIntent.getActivity(context, 0, shareIntent, 0)
             addMenuItem(context.getString(R.string.title_share_blog), pendingIntent)
 
-            //Setting custom enter/exit animations
+            // Setting custom enter/exit animations
             setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
             setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
 
-            //Open the Custom Tab
+            // Open the Custom Tab
             build().launchUrl(context, Uri.parse(url))
         }
     }
-
 }

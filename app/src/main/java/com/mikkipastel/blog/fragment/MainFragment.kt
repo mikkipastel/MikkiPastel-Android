@@ -4,26 +4,25 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.*
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import androidx.core.text.color
 import androidx.core.text.scale
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mikkipastel.blog.R
 import com.mikkipastel.blog.adapter.PostListAdapter
-import com.mikkipastel.blog.viewmodel.BlogViewModel
 import com.mikkipastel.blog.model.PostBlog
 import com.mikkipastel.blog.model.TagBlog
 import com.mikkipastel.blog.utils.CustomChromeUtils
 import com.mikkipastel.blog.utils.ImageLoader
+import com.mikkipastel.blog.viewmodel.BlogViewModel
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.layout_loading_error.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 
 class MainFragment : Fragment(), PostListAdapter.PostItemListener {
 
@@ -34,7 +33,7 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
 
     private val mTagItemList = mutableListOf<TagBlog>()
     private val mTagNameList = mutableListOf<String>()
-    private lateinit var mTagAdapter : ArrayAdapter<String>
+    private lateinit var mTagAdapter: ArrayAdapter<String>
     private var mCurrentTagSlug: String? = null
 
     private var isLoading = false
@@ -77,22 +76,25 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
             val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             layoutManager = linearLayoutManager
             adapter = mAdapter
-            addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
 
-                    blogViewModel.canLazyLoading.observe(viewLifecycleOwner, Observer {
-                        if (it) {
-                            val totalItemCount = linearLayoutManager.itemCount
-                            val lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
-                            if (!isLoading && totalItemCount <= (lastVisibleItem + 1)) {
-                                isLoading = true
-                                mPage++
-                                loadPostData(mCurrentTagSlug)
-                                lottieProgress.visibility = View.VISIBLE
+                    blogViewModel.canLazyLoading.observe(
+                        viewLifecycleOwner,
+                        Observer {
+                            if (it) {
+                                val totalItemCount = linearLayoutManager.itemCount
+                                val lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
+                                if (!isLoading && totalItemCount <= (lastVisibleItem + 1)) {
+                                    isLoading = true
+                                    mPage++
+                                    loadPostData(mCurrentTagSlug)
+                                    lottieProgress.visibility = View.VISIBLE
+                                }
                             }
                         }
-                    })
+                    )
                 }
             })
         }
@@ -128,24 +130,39 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
 
     private fun setupView() {
         blogViewModel.apply {
-            allBlogPost.observe(viewLifecycleOwner, Observer {
-                showBlogContent(it)
-            })
-            blogPage.observe(viewLifecycleOwner, Observer {
-                if (it == 1) {
-                    recyclerView.smoothScrollToPosition(0)
+            allBlogPost.observe(
+                viewLifecycleOwner,
+                Observer {
+                    showBlogContent(it)
                 }
-            })
-            allBlogTag.observe(viewLifecycleOwner, Observer {
-                showTagContent(it)
-            })
+            )
+            blogPage.observe(
+                viewLifecycleOwner,
+                Observer {
+                    if (it == 1) {
+                        recyclerView.smoothScrollToPosition(0)
+                    }
+                }
+            )
+            allBlogTag.observe(
+                viewLifecycleOwner,
+                Observer {
+                    showTagContent(it)
+                }
+            )
 
-            getBlogError.observe(viewLifecycleOwner, Observer {
-                getBlogErrorView()
-            })
-            getTagError.observe(viewLifecycleOwner, Observer {
-                getTagError()
-            })
+            getBlogError.observe(
+                viewLifecycleOwner,
+                Observer {
+                    getBlogErrorView()
+                }
+            )
+            getTagError.observe(
+                viewLifecycleOwner,
+                Observer {
+                    getTagError()
+                }
+            )
         }
     }
 
@@ -193,12 +210,12 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
             setOnItemClickListener { adapterView, view, position, id ->
                 when (mTagNameList[position] == getString(R.string.default_tag_text)) {
                     true -> setDropdownTextAndReloadData(
-                            getString(R.string.default_tag_text),
-                            null
+                        getString(R.string.default_tag_text),
+                        null
                     )
                     false -> setDropdownTextAndReloadData(
-                            mTagItemList[position-1].name,
-                            mTagItemList[position-1].slug
+                        mTagItemList[position - 1].name,
+                        mTagItemList[position - 1].slug
                     )
                 }
             }
@@ -269,9 +286,9 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
 
     private fun aboutMe() {
         CustomChromeUtils().setBlogWebpage(
-                requireContext(),
-                "https://mikkipastel.firebaseapp.com/",
-                "About Mikkipastel"
+            requireContext(),
+            "https://mikkipastel.firebaseapp.com/",
+            "About Mikkipastel"
         )
     }
 }

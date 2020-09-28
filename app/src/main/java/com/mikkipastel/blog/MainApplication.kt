@@ -1,6 +1,8 @@
 package com.mikkipastel.blog
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import com.mikkipastel.blog.manager.HttpManager
 import com.mikkipastel.blog.repository.BlogRepository
 import com.mikkipastel.blog.repository.BlogRepositoryImpl
@@ -12,9 +14,10 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
 class MainApplication : Application() {
-    override fun onCreate(){
+    override fun onCreate() {
         super.onCreate()
         initKoin()
+        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
     }
 
     private fun initKoin() {

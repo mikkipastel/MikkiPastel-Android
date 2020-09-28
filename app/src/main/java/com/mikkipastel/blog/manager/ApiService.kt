@@ -8,11 +8,13 @@ import retrofit2.http.Query
 const val ghost_key = "8443fdc53f9772eb7ee10c1bd8"
 
 interface ApiService {
-    //Network class
-    @GET("posts?key=${ghost_key}&include=tags&fields=title,url,feature_image,custom_excerpt,published_at")
-    suspend fun getAllPost(@Query("page") page: Int,
-                           @Query("filter") filter: String?): GhostBlogModel
+    // Network class
+    @GET("posts?key=$ghost_key&include=tags&fields=title,url,feature_image,custom_excerpt,published_at")
+    suspend fun getAllPost(
+        @Query("page") page: Int,
+        @Query("filter") filter: String?
+    ): GhostBlogModel
 
-    @GET("tags?key=${ghost_key}")
+    @GET("tags?key=$ghost_key")
     suspend fun getAllTags(): GhostTagsModel
 }

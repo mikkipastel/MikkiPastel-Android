@@ -9,7 +9,7 @@ import com.mikkipastel.blog.repository.BlogRepository
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 
-class BlogViewModel(private val blogRepository: BlogRepository): ViewModel() {
+class BlogViewModel(private val blogRepository: BlogRepository) : ViewModel() {
 
     private val _allBlogPost = MutableLiveData<MutableList<PostBlog>>()
     val allBlogPost = _allBlogPost

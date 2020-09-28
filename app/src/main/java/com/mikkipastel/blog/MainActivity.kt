@@ -6,8 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsServiceConnection
 import androidx.browser.customtabs.CustomTabsSession
@@ -19,13 +17,11 @@ import com.google.android.play.core.install.model.ActivityResult
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
-import com.mikkipastel.blog.fragment.AboutAppFragment
 import com.mikkipastel.blog.fragment.MainFragment
-import com.mikkipastel.blog.utils.CustomChromeUtils
 
 const val MY_REQUEST_CODE = 101
 
-class MainActivity: AppCompatActivity(), InstallStateUpdatedListener {
+class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
 
     private val appUpdateManager by lazy {
         AppUpdateManagerFactory.create(this)
@@ -37,8 +33,8 @@ class MainActivity: AppCompatActivity(), InstallStateUpdatedListener {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.contentContainer, MainFragment.newInstance())
-                    .commit()
+                .replace(R.id.contentContainer, MainFragment.newInstance())
+                .commit()
         }
 
         val prefs = getSharedPreferences("data_install", Context.MODE_PRIVATE)
@@ -59,16 +55,18 @@ class MainActivity: AppCompatActivity(), InstallStateUpdatedListener {
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
                 if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
                     appUpdateManager.startUpdateFlowForResult(
-                            appUpdateInfo,
-                            AppUpdateType.FLEXIBLE,
-                            this,
-                            MY_REQUEST_CODE)
+                        appUpdateInfo,
+                        AppUpdateType.FLEXIBLE,
+                        this,
+                        MY_REQUEST_CODE
+                    )
                 } else if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
                     appUpdateManager.startUpdateFlowForResult(
-                            appUpdateInfo,
-                            AppUpdateType.IMMEDIATE,
-                            this,
-                            MY_REQUEST_CODE)
+                        appUpdateInfo,
+                        AppUpdateType.IMMEDIATE,
+                        this,
+                        MY_REQUEST_CODE
+                    )
                 }
             }
 
@@ -90,7 +88,7 @@ class MainActivity: AppCompatActivity(), InstallStateUpdatedListener {
             }
 
             override fun onServiceDisconnected(name: ComponentName) {
-                 mCustomTabsClient = null
+                mCustomTabsClient = null
             }
         }
     }
@@ -123,17 +121,17 @@ class MainActivity: AppCompatActivity(), InstallStateUpdatedListener {
 
     private fun popupSnackbarForState(text: String, length: Int) {
         Snackbar.make(
-                findViewById(R.id.rootview),
-                text,
-                length
+            findViewById(R.id.rootview),
+            text,
+            length
         ).show()
     }
 
     private fun popupSnackbarForCompleteUpdate() {
         Snackbar.make(
-                findViewById(R.id.rootview),
-                "An update has just been downloaded from Play Store.",
-                Snackbar.LENGTH_INDEFINITE
+            findViewById(R.id.rootview),
+            "An update has just been downloaded from Play Store.",
+            Snackbar.LENGTH_INDEFINITE
         ).apply {
             setAction("RESTART") {
                 appUpdateManager.completeUpdate()
@@ -149,8 +147,8 @@ class MainActivity: AppCompatActivity(), InstallStateUpdatedListener {
     }
 
     private fun addShortcut() {
-        //Adding shortcut for MainActivity
-        //on Home screen
+        // Adding shortcut for MainActivity
+        // on Home screen
 
         val shortcutIntent = Intent(applicationContext, MainActivity::class.java)
 
@@ -159,8 +157,10 @@ class MainActivity: AppCompatActivity(), InstallStateUpdatedListener {
         val addIntent = Intent()
         addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent)
         addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "MikkiPastel")
-        addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
-                Intent.ShortcutIconResource.fromContext(applicationContext, R.mipmap.ic_launcher))
+        addIntent.putExtra(
+            Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+            Intent.ShortcutIconResource.fromContext(applicationContext, R.mipmap.ic_launcher)
+        )
 
         addIntent.action = "com.android.launcher.action.INSTALL_SHORTCUT"
         applicationContext.sendBroadcast(addIntent)

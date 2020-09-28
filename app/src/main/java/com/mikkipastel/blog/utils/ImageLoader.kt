@@ -10,19 +10,19 @@ internal class ImageLoader {
 
     fun setBlogCover(context: Context, url: String?, imageView: ImageView) {
         Glide.with(context)
-                .load(url)
-                .placeholder(R.drawable.placeholder_loading)
-                .error(R.drawable.placeholder_blog)
-                .apply(RequestOptions.fitCenterTransform())
-                .into(imageView)
+            .load(url)
+            .placeholder(R.drawable.placeholder_loading)
+            .error(R.drawable.placeholder_blog)
+            .apply(RequestOptions.fitCenterTransform())
+            .into(imageView)
     }
 
     fun setTagCover(context: Context, url: String?, imageView: ImageView) {
         Glide.with(context)
-                .load(url)
-                .placeholder(R.drawable.placeholder_loading)
-                .error(R.drawable.placeholder_cover)
-                .apply(RequestOptions.fitCenterTransform())
-                .into(imageView)
+            .load(url)
+            .placeholder(R.drawable.placeholder_loading)
+            .error(R.drawable.placeholder_cover)
+            .apply(RequestOptions.fitCenterTransform())
+            .into(imageView)
     }
 }

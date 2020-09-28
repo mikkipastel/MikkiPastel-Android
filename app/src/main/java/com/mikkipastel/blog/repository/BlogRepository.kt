@@ -9,7 +9,7 @@ interface BlogRepository {
     suspend fun getBlogTag(): GhostTagsModel
 }
 
-class BlogRepositoryImpl(private val service: ApiService): BlogRepository {
+class BlogRepositoryImpl(private val service: ApiService) : BlogRepository {
     override suspend fun getBlogPost(page: Int, hashtag: String?): GhostBlogModel {
         return service.getAllPost(page, hashtag)
     }

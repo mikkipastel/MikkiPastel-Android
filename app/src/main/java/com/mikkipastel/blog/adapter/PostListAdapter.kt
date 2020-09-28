@@ -1,23 +1,22 @@
 package com.mikkipastel.blog.adapter
 
-import com.google.android.material.chip.Chip
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_content.*
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
 import com.mikkipastel.blog.R.*
 import com.mikkipastel.blog.model.PostBlog
 import com.mikkipastel.blog.model.TagBlog
 import com.mikkipastel.blog.utils.ImageLoader
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_content.*
 
-
-class PostListAdapter(private val dataItems: MutableList<PostBlog>,
-                      private val listener: PostItemListener)
-    : RecyclerView.Adapter<PostListItemViewHolder>() {
+class PostListAdapter(
+    private val dataItems: MutableList<PostBlog>,
+    private val listener: PostItemListener
+) :
+    RecyclerView.Adapter<PostListItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostListItemViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(layout.item_content, parent, false)
@@ -62,8 +61,9 @@ class PostListItemViewHolder(override val containerView: View) : RecyclerView.Vi
                     chip.apply {
                         val tag = it
                         layoutParams = ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT)
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                        )
                         text = tag.name
                         setOnClickListener {
                             hashtagListener.onHashtagClick(tag)
