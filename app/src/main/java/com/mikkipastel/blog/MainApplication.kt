@@ -22,7 +22,6 @@ class MainApplication : Application() {
 
     private fun initKoin() {
         startKoin {
-            androidLogger()
             androidContext(this@MainApplication)
             val networkModule = module {
                 single { HttpManager().getApiService() }
