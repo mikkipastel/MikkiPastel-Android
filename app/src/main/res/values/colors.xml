@@ -7,5 +7,10 @@
     <color name="colorAccentDark">#c9696b</color>
     <color name="colorAccentLight">#ffcbca</color>
 
-    <color name="whitegray2">#eeeeeeff</color>
+    <color name="colorTransparentView">#80000000</color>
+    <color name="colorDividerLine">#1E000000</color>
+
+    <color name="colorMainGray">#EEEEEEFF</color>
+    <color name="colorMainTextWhite">@android:color/white</color>
+    <color name="colorMainTextBlack">@android:color/black</color>
 </resources>
