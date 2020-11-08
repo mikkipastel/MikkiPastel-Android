@@ -27,7 +27,7 @@ class PostListAdapter(
         holder.apply {
             bind(dataItems[position], listener)
             itemView.setOnClickListener {
-                listener.onClick(dataItems[position], position)
+                listener.onContentClick(dataItems[position])
             }
         }
     }
@@ -35,7 +35,7 @@ class PostListAdapter(
     override fun getItemCount() = dataItems.size
 
     interface PostItemListener {
-        fun onClick(item: PostBlog, position: Int)
+        fun onContentClick(item: PostBlog)
         fun onHashtagClick(hashtag: TagBlog)
     }
 }

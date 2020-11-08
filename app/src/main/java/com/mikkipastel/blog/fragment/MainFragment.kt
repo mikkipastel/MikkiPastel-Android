@@ -102,22 +102,21 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
-//        toolbar.inflateMenu(R.menu.menu_main)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_aboutapp) {
-            showDialog()
-        } else if (item.itemId == R.id.action_aboutme) {
-            aboutMe()
+        when (item.itemId) {
+            R.id.action_share -> {}
+            R.id.action_aboutapp -> showDialog()
+            R.id.action_aboutme -> aboutMe()
         }
 
         return super.onOptionsItemSelected(item)
     }
 
     private fun setToolbar() {
-        collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+        collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), R.color.colorMainTextWhite))
     }
 
     private fun loadPostData(hashtag: String?) {
@@ -188,6 +187,7 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
             layoutError.visibility = View.VISIBLE
             lottieLoading.visibility = View.GONE
             buttonTryAgain.setOnClickListener {
+                loadHashtagData()
                 loadPostData(mCurrentTagSlug)
             }
         }
@@ -226,7 +226,7 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
         layoutDropdownList.visibility = View.GONE
     }
 
-    override fun onClick(item: PostBlog, position: Int) {
+    override fun onContentClick(item: PostBlog) {
         CustomChromeUtils().setBlogWebpage(requireContext(), item.url!!, item.title!!)
     }
 
@@ -266,13 +266,13 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
         val spannable = SpannableStringBuilder().apply {
             bold {
                 scale(1.5f) {
-                    color(ContextCompat.getColor(requireContext(), R.color.whitegray2)) {
+                    color(ContextCompat.getColor(requireContext(), R.color.colorMainGray)) {
                         append(title)
                     }
                 }
             }
             append("\n")
-            color(ContextCompat.getColor(requireContext(), R.color.whitegray2)) {
+            color(ContextCompat.getColor(requireContext(), R.color.colorMainGray)) {
                 append(description)
             }
         }
