@@ -11,6 +11,7 @@
     <color name="colorDividerLine">#1E000000</color>
 
     <color name="colorMainGray">#EEEEEEFF</color>
+    <color name="colorMainText">#EEEEEEFF</color>
     <color name="colorMainTextWhite">@android:color/white</color>
     <color name="colorMainTextBlack">@android:color/black</color>
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorMainGray">#EE172121</color>
+    <color name="colorMainGray">#1E000000</color>
     <color name="colorMainTextWhite">@android:color/black</color>
     <color name="colorMainTextBlack">@android:color/white</color>
 </resources>

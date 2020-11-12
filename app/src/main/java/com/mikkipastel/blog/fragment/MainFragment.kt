@@ -13,7 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.mikkipastel.blog.MainActivity
 import com.mikkipastel.blog.R
+import com.mikkipastel.blog.SettingsActivity
 import com.mikkipastel.blog.adapter.PostListAdapter
 import com.mikkipastel.blog.model.PostBlog
 import com.mikkipastel.blog.model.TagBlog
@@ -100,23 +102,22 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_main, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_share -> {}
-            R.id.action_aboutapp -> showDialog()
-            R.id.action_aboutme -> aboutMe()
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
     private fun setToolbar() {
-        collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), R.color.colorMainTextWhite))
+        collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(
+                requireContext(),
+                R.color.colorMainTextWhite
+        ))
+        toolbar.apply {
+            inflateMenu(R.menu.menu_main)
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.action_settings -> openAppSettingsPage()
+                    R.id.action_aboutapp -> showDialog()
+                    R.id.action_aboutme -> aboutMe()
+                }
+                return@setOnMenuItemClickListener false
+            }
+        }
     }
 
     private fun loadPostData(hashtag: String?) {
@@ -266,17 +267,21 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
         val spannable = SpannableStringBuilder().apply {
             bold {
                 scale(1.5f) {
-                    color(ContextCompat.getColor(requireContext(), R.color.colorMainGray)) {
+                    color(ContextCompat.getColor(requireContext(), R.color.colorMainText)) {
                         append(title)
                     }
                 }
             }
             append("\n")
-            color(ContextCompat.getColor(requireContext(), R.color.colorMainGray)) {
+            color(ContextCompat.getColor(requireContext(), R.color.colorMainText)) {
                 append(description)
             }
         }
         textHeader.text = spannable
+    }
+
+    private fun openAppSettingsPage() {
+        startActivity(SettingsActivity.newIntent(requireContext()))
     }
 
     private fun showDialog() {
