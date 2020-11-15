@@ -3,6 +3,7 @@ package com.mikkipastel.blog
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+import androidx.preference.PreferenceManager
 import com.mikkipastel.blog.manager.HttpManager
 import com.mikkipastel.blog.repository.BlogRepository
 import com.mikkipastel.blog.repository.BlogRepositoryImpl
@@ -17,7 +18,7 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         initKoin()
-        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
+        initDarkMode()
     }
 
     private fun initKoin() {
@@ -31,6 +32,14 @@ class MainApplication : Application() {
                 viewModel { BlogViewModel(get()) }
             }
             modules(listOf(networkModule, blogModule))
+        }
+    }
+
+    private fun initDarkMode() {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        when (sharedPreferences.getBoolean("pref_dark_mode", false)) {
+            true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            false -> AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
         }
     }
 }

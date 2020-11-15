@@ -50,7 +50,6 @@ class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
 
         getInAppUpdateWithPlayStore()
         initChromeCustomTabService()
-        initDarkMode()
     }
 
     private fun getInAppUpdateWithPlayStore() {
@@ -96,14 +95,6 @@ class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
             override fun onServiceDisconnected(name: ComponentName) {
                 mCustomTabsClient = null
             }
-        }
-    }
-
-    private fun initDarkMode() {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        when (sharedPreferences.getBoolean("pref_dark_mode", false)) {
-            true -> AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
-            false -> AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
         }
     }
 
