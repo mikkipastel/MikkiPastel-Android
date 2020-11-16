@@ -8,10 +8,6 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_aboutapp"
-        android:title="@string/about_app"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_aboutme"
         android:title="@string/about_me"
         app:showAsAction="never" />

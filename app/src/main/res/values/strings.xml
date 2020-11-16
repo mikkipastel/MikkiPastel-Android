@@ -2,16 +2,6 @@
     <string name="app_name">MikkiPastel</string>
     <string name="action_settings">Setting</string>
 
-    <string name="about_app">About app</string>
-    <string name="versions">V1.0b</string>
-    <string name="header_versions">About Version 1.0b</string>
-    <string name="content_version">
-        - read blog from https://mikkipastel.blogspot.com by this application
-        (call data with blogger API 3, Retrofit and Gilde to show by RecyclerView)\n
-        - read blog content by chrome custom tab\n
-        - update or refresh new content by pull to refresh\n
-        - share content to social network
-    </string>
     <string name="btn_ok">OK</string>
     <string name="about_me">About Me</string>
     <string name="msg_offline">Internet unavailable.</string>

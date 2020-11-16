@@ -111,7 +111,6 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.action_settings -> openAppSettingsPage()
-                    R.id.action_aboutapp -> showDialog()
                     R.id.action_aboutme -> aboutMe()
                 }
                 return@setOnMenuItemClickListener false
@@ -281,11 +280,6 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
 
     private fun openAppSettingsPage() {
         startActivity(SettingsActivity.newIntent(requireContext()))
-    }
-
-    private fun showDialog() {
-        val newFragment = AboutAppFragment.newInstance()
-        newFragment.show(activity?.supportFragmentManager!!.beginTransaction(), "dialog")
     }
 
     private fun aboutMe() {
