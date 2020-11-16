@@ -1,4 +1,4 @@
-package com.mikkipastel.blog
+package com.mikkipastel.blog.activity
 
 import android.app.Activity
 import android.content.ComponentName
@@ -6,13 +6,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsServiceConnection
 import androidx.browser.customtabs.CustomTabsSession
-import androidx.preference.PreferenceManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.InstallState
@@ -21,8 +17,8 @@ import com.google.android.play.core.install.model.ActivityResult
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.mikkipastel.blog.R
 import com.mikkipastel.blog.fragment.MainFragment
-import com.mikkipastel.blog.fragment.SettingsFragment
 
 const val MY_REQUEST_CODE = 101
 

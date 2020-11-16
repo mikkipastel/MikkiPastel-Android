@@ -1,4 +1,4 @@
-package com.mikkipastel.blog
+package com.mikkipastel.blog.activity
 
 import android.content.Context
 import android.content.Intent
@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
+import com.mikkipastel.blog.R
 import com.mikkipastel.blog.fragment.SettingsFragment
 import kotlinx.android.synthetic.main.activity_settings.*
 

@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.mikkipastel.blog.MainActivity">
+        <activity android:name="com.mikkipastel.blog.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SettingsActivity"/>
+        <activity android:name=".activity.SettingsActivity"/>
 
     </application>
 </manifest>

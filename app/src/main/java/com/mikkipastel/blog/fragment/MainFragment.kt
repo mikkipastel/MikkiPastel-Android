@@ -13,9 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.mikkipastel.blog.MainActivity
 import com.mikkipastel.blog.R
-import com.mikkipastel.blog.SettingsActivity
+import com.mikkipastel.blog.activity.SettingsActivity
 import com.mikkipastel.blog.adapter.PostListAdapter
 import com.mikkipastel.blog.model.PostBlog
 import com.mikkipastel.blog.model.TagBlog
