@@ -1,15 +1,19 @@
 package com.mikkipastel.blog.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mikkipastel.blog.dao.BlogTagDatabase
 import com.mikkipastel.blog.model.PostBlog
 import com.mikkipastel.blog.model.TagBlog
 import com.mikkipastel.blog.repository.BlogRepository
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class BlogViewModel(private val blogRepository: BlogRepository) : ViewModel() {
+class BlogViewModel(application: Application, private val blogRepository: BlogRepository) : ViewModel() {
 
     private val _allBlogPost = MutableLiveData<MutableList<PostBlog>>()
     val allBlogPost = _allBlogPost
@@ -28,6 +32,9 @@ class BlogViewModel(private val blogRepository: BlogRepository) : ViewModel() {
 
     private val _getTagError = MutableLiveData<Unit>()
     val getTagError = _getTagError
+
+    private val blogDao = BlogTagDatabase.getBlogTagDatabase(application).blogTagDao
+    val localBlogTagList = blogDao.getTagBlog()
 
     fun getBlogPost(page: Int, hashtag: String?) {
         val tag = if (hashtag == null) "" else "tag:$hashtag"
@@ -49,6 +56,9 @@ class BlogViewModel(private val blogRepository: BlogRepository) : ViewModel() {
         viewModelScope.launch(exceptionHandler) {
             val response = blogRepository.getBlogTag()
             _allBlogTag.value = response.tags
+            withContext(Dispatchers.IO) {
+                blogRepository.insertAllTagToRoom(response.tags)
+            }
         }
     }
 }

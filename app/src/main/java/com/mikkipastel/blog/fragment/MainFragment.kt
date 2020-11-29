@@ -222,7 +222,12 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
     }
 
     private fun getTagError() {
-        layoutDropdownList.visibility = View.GONE
+        blogViewModel.localBlogTagList.observe(
+                viewLifecycleOwner,
+                Observer {
+                    showTagContent(it)
+                }
+        )
     }
 
     override fun onContentClick(item: PostBlog) {

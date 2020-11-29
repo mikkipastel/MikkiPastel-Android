@@ -75,7 +75,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:hint="@string/header_tag_text"
-            android:visibility="gone"
             app:startIconDrawable="@drawable/ic_filter_tag"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 

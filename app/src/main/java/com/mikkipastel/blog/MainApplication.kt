@@ -4,6 +4,9 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.preference.PreferenceManager
+import androidx.room.Room
+import com.mikkipastel.blog.dao.BlogTagDatabase
+import com.mikkipastel.blog.dao.blogTagTable
 import com.mikkipastel.blog.manager.HttpManager
 import com.mikkipastel.blog.repository.BlogRepository
 import com.mikkipastel.blog.repository.BlogRepositoryImpl
@@ -28,10 +31,14 @@ class MainApplication : Application() {
                 single { HttpManager().getApiService() }
             }
             val blogModule = module {
-                single<BlogRepository> { BlogRepositoryImpl(get()) }
-                viewModel { BlogViewModel(get()) }
+                single<BlogRepository> { BlogRepositoryImpl(get(), get()) }
+                viewModel { BlogViewModel(get(), get()) }
             }
-            modules(listOf(networkModule, blogModule))
+            val databaseModule = module {
+                single { Room.databaseBuilder(androidContext(), BlogTagDatabase::class.java, blogTagTable).build() }
+                single { BlogTagDatabase.getBlogTagDatabase(get()).blogTagDao }
+            }
+            modules(listOf(networkModule, blogModule, databaseModule))
         }
     }
 

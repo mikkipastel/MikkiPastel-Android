@@ -1,7 +1,11 @@
 package com.mikkipastel.blog.model
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import com.mikkipastel.blog.dao.BlogTagDatabase
+import com.mikkipastel.blog.dao.blogTagTable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -26,15 +30,17 @@ data class PostBlog(
     @SerializedName("url") val url: String?
 ) : Parcelable
 
+@Entity(tableName = blogTagTable)
 @Parcelize
 data class TagBlog(
-    @SerializedName("id") val id: String?,
-    @SerializedName("name") val name: String?,
-    @SerializedName("slug") val slug: String?,
-    @SerializedName("description") val description: String?,
-    @SerializedName("feature_image") val feature_image: String?,
-    @SerializedName("visibility") val visibility: String?,
-    @SerializedName("url") val url: String?
+        @PrimaryKey(autoGenerate = true) val primaryKey: Int,
+        @SerializedName("id") val id: String?,
+        @SerializedName("name") val name: String?,
+        @SerializedName("slug") val slug: String?,
+        @SerializedName("description") val description: String?,
+        @SerializedName("feature_image") val feature_image: String?,
+        @SerializedName("visibility") val visibility: String?,
+        @SerializedName("url") val url: String?
 ) : Parcelable
 
 @Parcelize
