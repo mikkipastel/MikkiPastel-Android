@@ -1,23 +1,14 @@
 package com.mikkipastel.blog.viewmodel
 
-import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mikkipastel.blog.dao.BlogContentDatabase
-import com.mikkipastel.blog.dao.BlogTagDatabase
 import com.mikkipastel.blog.model.PostBlog
 import com.mikkipastel.blog.model.TagBlog
 import com.mikkipastel.blog.repository.BlogRepository
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
-class BlogViewModel(
-    application: Application,
-    private val blogRepository: BlogRepository,
-) : ViewModel() {
+class BlogViewModel(private val blogRepository: BlogRepository) : ViewModel() {
 
     private val _allBlogPost = MutableLiveData<MutableList<PostBlog>>()
     val allBlogPost = _allBlogPost
@@ -37,11 +28,8 @@ class BlogViewModel(
     private val _getTagError = MutableLiveData<Unit>()
     val getTagError = _getTagError
 
-    private val blogTagDao = BlogTagDatabase.getBlogTagDatabase(application).blogTagTagDao
-    val localBlogTagList = blogTagDao.getTagBlog()
-
-    private val blogContentDao = BlogContentDatabase.getBlogContentDatabase(application).blogContentDao
-    val localBlogContentList = blogContentDao.getContentBlog()
+    val localBlogTagList = MutableLiveData<MutableList<TagBlog>>()
+    val localBlogContentList = MutableLiveData<MutableList<PostBlog>>()
 
     fun getBlogPost(page: Int, hashtag: String?) {
         val tag = if (hashtag == null) "" else "tag:$hashtag"
@@ -57,6 +45,12 @@ class BlogViewModel(
                 if (hashtag == null && response.meta?.pagination?.page == 1)
                     blogRepository.insertAllBlogToRoom(response.posts!!)
             }
+        }.run {
+            GlobalScope.launch {
+                if (hashtag == null) {
+                    localBlogContentList.postValue(blogRepository.getCachingBlogContent())
+                }
+            }
         }
     }
 
@@ -69,6 +63,10 @@ class BlogViewModel(
             _allBlogTag.value = response.tags
             withContext(Dispatchers.IO) {
                 blogRepository.insertAllTagToRoom(response.tags)
+            }
+        }.run {
+            GlobalScope.launch {
+                localBlogTagList.postValue(blogRepository.getCachingTagContent())
             }
         }
     }

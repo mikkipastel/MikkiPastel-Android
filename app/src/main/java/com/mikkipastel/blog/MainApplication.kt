@@ -33,7 +33,7 @@ class MainApplication : Application() {
             }
             val blogModule = module {
                 single<BlogRepository> { BlogRepositoryImpl(get(), get(), get()) }
-                viewModel { BlogViewModel(get(), get()) }
+                viewModel { BlogViewModel(get()) }
             }
             val databaseModule = module {
                 single { Room.databaseBuilder(androidContext(), BlogTagDatabase::class.java, blogTagTable).build() }
