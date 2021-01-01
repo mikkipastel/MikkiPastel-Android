@@ -152,7 +152,10 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
             getBlogError.observe(
                 viewLifecycleOwner,
                 Observer {
-                    getBlogErrorView()
+                    when (mCurrentTagSlug == null) {
+                        true -> getBlogContentError()
+                        false -> getBlogErrorView()
+                    }
                 }
             )
             getTagError.observe(
@@ -182,13 +185,11 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
     }
 
     private fun getBlogErrorView() {
-        if (mBlogList.isEmpty()) {
-            layoutError.visibility = View.VISIBLE
-            lottieLoading.visibility = View.GONE
-            buttonTryAgain.setOnClickListener {
-                loadHashtagData()
-                loadPostData(mCurrentTagSlug)
-            }
+        layoutError.visibility = View.VISIBLE
+        lottieLoading.visibility = View.GONE
+        buttonTryAgain.setOnClickListener {
+            loadHashtagData()
+            loadPostData(mCurrentTagSlug)
         }
         lottieProgress.visibility = View.GONE
     }
@@ -227,6 +228,15 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
                 Observer {
                     showTagContent(it)
                 }
+        )
+    }
+
+    private fun getBlogContentError() {
+        blogViewModel.localBlogContentList.observe(
+            viewLifecycleOwner,
+            Observer {
+                showBlogContent(it)
+            }
         )
     }
 

@@ -4,24 +4,24 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.mikkipastel.blog.model.TagBlog
+import com.mikkipastel.blog.model.PostBlog
 
-const val blogTagTable = "blog_tag_table"
+const val blogContentTable = "blog_content_table"
 
-@Database(entities = [TagBlog::class], version = 1)
-abstract class BlogTagDatabase : RoomDatabase() {
-    abstract val blogTagTagDao: BlogTagDao
+@Database(entities = [PostBlog::class], version = 1)
+abstract class BlogContentDatabase : RoomDatabase() {
+    abstract val blogContentDao: BlogContentDao
 
     companion object {
         @Volatile
-        private var INSTANCE: BlogTagDatabase? = null
+        private var INSTANCE: BlogContentDatabase? = null
 
-        fun getBlogTagDatabase(context: Context): BlogTagDatabase {
+        fun getBlogContentDatabase(context: Context): BlogContentDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                         context.applicationContext,
-                        BlogTagDatabase::class.java,
-                        blogTagTable
+                        BlogContentDatabase::class.java,
+                        blogContentTable
                 )
                         .fallbackToDestructiveMigration()
                         .build()

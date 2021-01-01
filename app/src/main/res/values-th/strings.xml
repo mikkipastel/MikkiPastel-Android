@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">MikkiPastel</string>
+    <string name="action_settings">การตั้งค่า</string>
+
+    <string name="btn_ok">ตกลง</string>
+    <string name="about_me">เกี่ยวกับฉัน</string>
+    <string name="msg_offline">มีปัญหาในการเชื่อมต่ออินเตอร์เน็ท</string>
+    <string name="action_try_again">ลองใหม่อีกครั้ง</string>
+
+    <string name="title_share_blog">แชร์บทความ</string>
+
+    <string name="header_tag_text">tag</string>
+    <string name="default_tag_text">All</string>
+
+    <string name="title_tag_all">MikkiPastel Studio</string>
+    <string name="description_tag_all">Android developer, Programmer and Blogger</string>
+</resources>

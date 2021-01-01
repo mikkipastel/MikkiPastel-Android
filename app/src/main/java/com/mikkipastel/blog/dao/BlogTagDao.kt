@@ -8,7 +8,7 @@ import androidx.room.Query
 import com.mikkipastel.blog.model.TagBlog
 
 @Dao
-interface BlogDao {
+interface BlogTagDao {
     @Query("SELECT * FROM $blogTagTable ORDER BY name ASC")
     fun getTagBlog() : LiveData<MutableList<TagBlog>>
 

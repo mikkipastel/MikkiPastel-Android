@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mikkipastel.blog.dao.BlogContentDatabase
 import com.mikkipastel.blog.dao.BlogTagDatabase
 import com.mikkipastel.blog.model.PostBlog
 import com.mikkipastel.blog.model.TagBlog
@@ -13,7 +14,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class BlogViewModel(application: Application, private val blogRepository: BlogRepository) : ViewModel() {
+class BlogViewModel(
+    application: Application,
+    private val blogRepository: BlogRepository,
+) : ViewModel() {
 
     private val _allBlogPost = MutableLiveData<MutableList<PostBlog>>()
     val allBlogPost = _allBlogPost
@@ -33,8 +37,11 @@ class BlogViewModel(application: Application, private val blogRepository: BlogRe
     private val _getTagError = MutableLiveData<Unit>()
     val getTagError = _getTagError
 
-    private val blogDao = BlogTagDatabase.getBlogTagDatabase(application).blogTagDao
-    val localBlogTagList = blogDao.getTagBlog()
+    private val blogTagDao = BlogTagDatabase.getBlogTagDatabase(application).blogTagTagDao
+    val localBlogTagList = blogTagDao.getTagBlog()
+
+    private val blogContentDao = BlogContentDatabase.getBlogContentDatabase(application).blogContentDao
+    val localBlogContentList = blogContentDao.getContentBlog()
 
     fun getBlogPost(page: Int, hashtag: String?) {
         val tag = if (hashtag == null) "" else "tag:$hashtag"
@@ -46,6 +53,10 @@ class BlogViewModel(application: Application, private val blogRepository: BlogRe
             _allBlogPost.value = response.posts
             _canLazyLoading.value = response.meta?.pagination?.next != null
             _blogPage.value = response.meta?.pagination?.page
+            withContext(Dispatchers.IO) {
+                if (hashtag == null && response.meta?.pagination?.page == 1)
+                    blogRepository.insertAllBlogToRoom(response.posts!!)
+            }
         }
     }
 
