@@ -36,7 +36,7 @@ class BlogViewModel(private val blogRepository: BlogRepository) : ViewModel() {
                     blogRepository.insertAllBlogToRoom(response.posts!!)
             }
         }.run {
-            GlobalScope.launch {
+            viewModelScope.launch(exceptionHandler) {
                 if (hashtag == null) {
                     localBlogContentList.postValue(blogRepository.getCachingBlogContent())
                 }
