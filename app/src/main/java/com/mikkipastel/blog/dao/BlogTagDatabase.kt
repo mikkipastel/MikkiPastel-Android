@@ -8,7 +8,7 @@ import com.mikkipastel.blog.model.TagBlog
 
 const val blogTagTable = "blog_tag_table"
 
-@Database(entities = [TagBlog::class], version = 1)
+@Database(entities = [TagBlog::class], version = 1, exportSchema = false)
 abstract class BlogTagDatabase : RoomDatabase() {
     abstract val blogTagTagDao: BlogTagDao
 
