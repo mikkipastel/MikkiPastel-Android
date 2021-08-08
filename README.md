@@ -4,4 +4,8 @@ url in play store : https://play.google.com/store/apps/details?id=com.mikkipaste
 
 My blog : https://www.mikkipastel.com
 
-My website : https://mikkipastel.firebaseapp.com
+My portfolio : https://mikkipastel.web.app
+
+### Donate me
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S31VK3J)
