@@ -10,4 +10,8 @@
         app:key="pref_app_version"
         app:summary="1.0.5"
         app:title="App Version" />
+
+    <Preference
+        app:key="open_source_menu"
+        app:title="Open Source Licenses" />
 </PreferenceScreen>
