@@ -5,10 +5,9 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import com.mikkipastel.blog.dao.BlogTagDatabase
 import com.mikkipastel.blog.dao.blogContentTable
 import com.mikkipastel.blog.dao.blogTagTable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class GhostTagsModel(@SerializedName("tags") val tags: MutableList<TagBlog>) : Parcelable

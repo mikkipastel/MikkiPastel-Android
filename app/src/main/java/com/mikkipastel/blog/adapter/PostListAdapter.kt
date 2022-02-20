@@ -1,16 +1,13 @@
 package com.mikkipastel.blog.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
-import com.mikkipastel.blog.R.*
+import com.mikkipastel.blog.databinding.ItemContentBinding
 import com.mikkipastel.blog.model.PostBlog
 import com.mikkipastel.blog.model.TagBlog
 import com.mikkipastel.blog.utils.ImageLoader
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_content.*
 
 class PostListAdapter(
     private val dataItems: MutableList<PostBlog>,
@@ -19,8 +16,13 @@ class PostListAdapter(
     RecyclerView.Adapter<PostListItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostListItemViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(layout.item_content, parent, false)
-        return PostListItemViewHolder(view)
+        return PostListItemViewHolder(
+            ItemContentBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: PostListItemViewHolder, position: Int) {
@@ -40,36 +42,40 @@ class PostListAdapter(
     }
 }
 
-class PostListItemViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class PostListItemViewHolder(
+    private val itemBinding: ItemContentBinding
+) : RecyclerView.ViewHolder(itemBinding.root) {
     fun bind(item: PostBlog, hashtagListener: PostListAdapter.PostItemListener) {
-        val params = imageCover.layoutParams
-        val width = imageCover.resources.displayMetrics.widthPixels
-        params.height = (width * 3) / 5
-        imageCover.layoutParams = params
+        itemBinding.apply {
+            val params = imageCover.layoutParams
+            val width = imageCover.resources.displayMetrics.widthPixels
+            params.height = (width * 3) / 5
+            imageCover.layoutParams = params
 
-        ImageLoader().setBlogCover(containerView.context, item.feature_image, imageCover)
+            ImageLoader().setBlogCover(root.context, item.feature_image, imageCover)
 
-        textPrimaryTopic.text = item.title
-        textSecondary.text = item.custom_excerpt?.replace("\n", "") ?: ""
+            textPrimaryTopic.text = item.title
+            textSecondary.text = item.custom_excerpt?.replace("\n", "") ?: ""
 
-        chipGroup.removeAllViews()
+            chipGroup.removeAllViews()
 
-        item.tags?.let {
-            if (it.isNotEmpty()) {
-                it.forEach {
-                    val chip = Chip(containerView.context)
-                    chip.apply {
-                        val tag = it
-                        layoutParams = ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT
-                        )
-                        text = tag.name
-                        setOnClickListener {
-                            hashtagListener.onHashtagClick(tag)
+            item.tags?.let {
+                if (it.isNotEmpty()) {
+                    it.forEach {
+                        val chip = Chip(root.context)
+                        chip.apply {
+                            val tag = it
+                            layoutParams = ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT
+                            )
+                            text = tag.name
+                            setOnClickListener {
+                                hashtagListener.onHashtagClick(tag)
+                            }
                         }
+                        chipGroup.addView(chip)
                     }
-                    chipGroup.addView(chip)
                 }
             }
         }

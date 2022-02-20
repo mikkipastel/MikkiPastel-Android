@@ -3,14 +3,12 @@ package com.mikkipastel.blog.repository
 import com.mikkipastel.blog.dao.BlogContentDao
 import com.mikkipastel.blog.dao.BlogTagDao
 import com.mikkipastel.blog.manager.ApiService
-import com.mikkipastel.blog.model.GhostBlogModel
-import com.mikkipastel.blog.model.GhostTagsModel
-import com.mikkipastel.blog.model.PostBlog
-import com.mikkipastel.blog.model.TagBlog
+import com.mikkipastel.blog.model.*
+import retrofit2.Response
 
 interface BlogRepository {
-    suspend fun getBlogPost(page: Int, hashtag: String?): GhostBlogModel
-    suspend fun getBlogTag(): GhostTagsModel
+    suspend fun getBlogPost(page: Int, hashtag: String?): ResultResponse<GhostBlogModel>
+    suspend fun getBlogTag(): ResultResponse<GhostTagsModel>
     suspend fun insertAllTagToRoom(list: MutableList<TagBlog>)
     suspend fun insertAllBlogToRoom(list: MutableList<PostBlog>)
     suspend fun getCachingTagContent(): MutableList<TagBlog>
@@ -22,12 +20,24 @@ class BlogRepositoryImpl(
     private val blogTagDao: BlogTagDao,
     private val blogContentDao: BlogContentDao
 ) : BlogRepository {
-    override suspend fun getBlogPost(page: Int, hashtag: String?): GhostBlogModel {
-        return service.getAllPost(page, hashtag)
+    override suspend fun getBlogPost(page: Int, hashtag: String?): ResultResponse<GhostBlogModel> {
+        return object : DirectNetworkBoundResource<GhostBlogModel, GhostBlogModel>() {
+            override suspend fun createCall(): Response<GhostBlogModel> =
+                service.getAllPost(page, hashtag)
+
+            override suspend fun convertToResultType(response: GhostBlogModel): GhostBlogModel =
+                response
+        }.asResult()
     }
 
-    override suspend fun getBlogTag(): GhostTagsModel {
-        return service.getAllTags()
+    override suspend fun getBlogTag(): ResultResponse<GhostTagsModel> {
+        return object : DirectNetworkBoundResource<GhostTagsModel, GhostTagsModel>() {
+            override suspend fun createCall(): Response<GhostTagsModel> =
+                service.getAllTags()
+
+            override suspend fun convertToResultType(response: GhostTagsModel): GhostTagsModel =
+                response
+        }.asResult()
     }
 
     override suspend fun insertAllTagToRoom(list: MutableList<TagBlog>) {

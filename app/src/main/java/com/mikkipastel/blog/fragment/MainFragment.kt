@@ -16,16 +16,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mikkipastel.blog.R
 import com.mikkipastel.blog.activity.SettingsActivity
 import com.mikkipastel.blog.adapter.PostListAdapter
+import com.mikkipastel.blog.databinding.FragmentMainBinding
 import com.mikkipastel.blog.model.PostBlog
 import com.mikkipastel.blog.model.TagBlog
 import com.mikkipastel.blog.utils.CustomChromeUtils
 import com.mikkipastel.blog.utils.ImageLoader
 import com.mikkipastel.blog.viewmodel.BlogViewModel
-import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.android.synthetic.main.layout_loading_error.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment(), PostListAdapter.PostItemListener {
+
+    private lateinit var binding: FragmentMainBinding
 
     private val mBlogList = mutableListOf<PostBlog>()
     private val mAdapter by lazy {
@@ -48,8 +49,13 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
         fun newInstance() = MainFragment()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_main, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        binding = FragmentMainBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -67,53 +73,57 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
 
         setHeaderText(getString(R.string.title_tag_all), getString(R.string.description_tag_all))
 
-        swipeRefreshLayout.setOnRefreshListener {
-            isReloadData = true
-            mPage = 1
-            loadPostData(mCurrentTagSlug)
-        }
+        binding.apply {
+            swipeRefreshLayout.setOnRefreshListener {
+                isReloadData = true
+                mPage = 1
+                loadPostData(mCurrentTagSlug)
+            }
 
-        recyclerView.apply {
-            val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            layoutManager = linearLayoutManager
-            adapter = mAdapter
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    super.onScrollStateChanged(recyclerView, newState)
+            recyclerView.apply {
+                val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+                layoutManager = linearLayoutManager
+                adapter = mAdapter
+                addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        super.onScrollStateChanged(recyclerView, newState)
 
-                    blogViewModel.canLazyLoading.observe(
-                        viewLifecycleOwner,
-                        Observer {
-                            if (it) {
-                                val totalItemCount = linearLayoutManager.itemCount
-                                val lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
-                                if (!isLoading && totalItemCount <= (lastVisibleItem + 1)) {
-                                    isLoading = true
-                                    mPage++
-                                    loadPostData(mCurrentTagSlug)
-                                    lottieProgress.visibility = View.VISIBLE
+                        blogViewModel.canLazyLoading.observe(
+                            viewLifecycleOwner,
+                            Observer {
+                                if (it) {
+                                    val totalItemCount = linearLayoutManager.itemCount
+                                    val lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
+                                    if (!isLoading && totalItemCount <= (lastVisibleItem + 1)) {
+                                        isLoading = true
+                                        mPage++
+                                        loadPostData(mCurrentTagSlug)
+                                        lottieProgress.visibility = View.VISIBLE
+                                    }
                                 }
                             }
-                        }
-                    )
-                }
-            })
+                        )
+                    }
+                })
+            }
         }
     }
 
     private fun setToolbar() {
-        collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(
+        binding.apply {
+            collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(
                 requireContext(),
                 R.color.colorMainTextWhite
-        ))
-        toolbar.apply {
-            inflateMenu(R.menu.menu_main)
-            setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.action_settings -> openAppSettingsPage()
-                    R.id.action_aboutme -> aboutMe()
+            ))
+            toolbar.apply {
+                inflateMenu(R.menu.menu_main)
+                setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.action_settings -> openAppSettingsPage()
+                        R.id.action_aboutme -> aboutMe()
+                    }
+                    return@setOnMenuItemClickListener false
                 }
-                return@setOnMenuItemClickListener false
             }
         }
     }
@@ -130,28 +140,28 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
         blogViewModel.apply {
             allBlogPost.observe(
                 viewLifecycleOwner,
-                Observer {
+                {
                     showBlogContent(it)
                 }
             )
             blogPage.observe(
                 viewLifecycleOwner,
-                Observer {
+                {
                     if (it == 1) {
-                        recyclerView.smoothScrollToPosition(0)
+                        binding.recyclerView.smoothScrollToPosition(0)
                     }
                 }
             )
             allBlogTag.observe(
                 viewLifecycleOwner,
-                Observer {
+                {
                     showTagContent(it)
                 }
             )
 
             getBlogError.observe(
                 viewLifecycleOwner,
-                Observer {
+                {
                     when (mCurrentTagSlug == null) {
                         true -> getBlogContentError()
                         false -> getBlogErrorView()
@@ -160,7 +170,7 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
             )
             getTagError.observe(
                 viewLifecycleOwner,
-                Observer {
+                {
                     getTagError()
                 }
             )
@@ -168,11 +178,14 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
     }
 
     private fun showBlogContent(list: MutableList<PostBlog>) {
-        layoutError.visibility = View.GONE
-        lottieLoading.visibility = View.GONE
-        lottieProgress.visibility = View.GONE
-        recyclerView.visibility = View.VISIBLE
-        swipeRefreshLayout.isRefreshing = false
+        binding.apply {
+            layoutError.root.visibility = View.GONE
+            lottieLoading.visibility = View.GONE
+            lottieProgress.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+            swipeRefreshLayout.isRefreshing = false
+        }
+
         isLoading = false
 
         if (isReloadData) {
@@ -185,17 +198,21 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
     }
 
     private fun getBlogErrorView() {
-        layoutError.visibility = View.VISIBLE
-        lottieLoading.visibility = View.GONE
-        buttonTryAgain.setOnClickListener {
-            loadHashtagData()
-            loadPostData(mCurrentTagSlug)
+        binding.apply {
+            layoutError.apply {
+                root.visibility = View.VISIBLE
+                layoutError.buttonTryAgain.setOnClickListener {
+                    loadHashtagData()
+                    loadPostData(mCurrentTagSlug)
+                }
+            }
+            lottieLoading.visibility = View.GONE
+            lottieProgress.visibility = View.GONE
         }
-        lottieProgress.visibility = View.GONE
     }
 
     private fun showTagContent(data: MutableList<TagBlog>) {
-        layoutDropdownList.visibility = View.VISIBLE
+        binding.layoutDropdownList.visibility = View.VISIBLE
 
         mTagItemList.addAll(data)
         mTagNameList.add("All")
@@ -205,7 +222,7 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
         }
 
         mTagAdapter = ArrayAdapter(requireContext(), R.layout.item_hashtag, mTagNameList)
-        dropdownList.apply {
+        binding.dropdownList.apply {
             setAdapter(mTagAdapter)
             setOnItemClickListener { adapterView, view, position, id ->
                 when (mTagNameList[position] == getString(R.string.default_tag_text)) {
@@ -224,17 +241,17 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
 
     private fun getTagError() {
         blogViewModel.localBlogTagList.observe(
-                viewLifecycleOwner,
-                Observer {
-                    showTagContent(it)
-                }
+            viewLifecycleOwner,
+            {
+                showTagContent(it)
+            }
         )
     }
 
     private fun getBlogContentError() {
         blogViewModel.localBlogContentList.observe(
             viewLifecycleOwner,
-            Observer {
+            {
                 showBlogContent(it)
             }
         )
@@ -258,19 +275,31 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
         mPage = 1
         mCurrentTagSlug = slug
 
-        dropdownList.setText(hashtag, false)
         loadPostData(slug)
-        lottieLoading.visibility = View.VISIBLE
-        recyclerView.visibility = View.GONE
+
+        binding.apply {
+            dropdownList.setText(hashtag, false)
+            lottieLoading.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+        }
+
 
         val foundTagList = mTagItemList.filter { tagBlog -> tagBlog.slug == slug }
         when (foundTagList.isNotEmpty()) {
             true -> {
-                ImageLoader().setTagCover(requireContext(), foundTagList[0].feature_image, imageTagCover)
+                ImageLoader().setTagCover(
+                    requireContext(),
+                    foundTagList[0].feature_image,
+                    binding.imageTagCover
+                )
                 setHeaderText(foundTagList[0].name!!, foundTagList[0].description!!)
             }
             false -> {
-                ImageLoader().setTagCover(requireContext(), "", imageTagCover)
+                ImageLoader().setTagCover(
+                    requireContext(),
+                    "",
+                    binding.imageTagCover
+                )
                 setHeaderText(getString(R.string.title_tag_all), getString(R.string.description_tag_all))
             }
         }
@@ -290,7 +319,7 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
                 append(description)
             }
         }
-        textHeader.text = spannable
+        binding.textHeader.text = spannable
     }
 
     private fun openAppSettingsPage() {

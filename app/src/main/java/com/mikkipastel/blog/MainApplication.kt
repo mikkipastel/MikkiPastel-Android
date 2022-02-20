@@ -9,13 +9,19 @@ import com.mikkipastel.blog.dao.BlogContentDatabase
 import com.mikkipastel.blog.dao.BlogTagDatabase
 import com.mikkipastel.blog.dao.blogContentTable
 import com.mikkipastel.blog.dao.blogTagTable
+import com.mikkipastel.blog.domain.GetBlogPostUseCase
+import com.mikkipastel.blog.domain.GetBlogTagUseCase
 import com.mikkipastel.blog.manager.HttpManager
 import com.mikkipastel.blog.repository.BlogRepository
 import com.mikkipastel.blog.repository.BlogRepositoryImpl
 import com.mikkipastel.blog.viewmodel.BlogViewModel
+import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
-import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.android.ext.koin.androidLogger
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 class MainApplication : Application() {
@@ -27,13 +33,17 @@ class MainApplication : Application() {
 
     private fun initKoin() {
         startKoin {
+            androidLogger(Level.ERROR)
             androidContext(this@MainApplication)
             val networkModule = module {
                 single { HttpManager().getApiService() }
             }
             val blogModule = module {
                 single<BlogRepository> { BlogRepositoryImpl(get(), get(), get()) }
-                viewModel { BlogViewModel(get()) }
+                single(named("io")) { Dispatchers.IO }
+                factory { GetBlogPostUseCase(get(), get(named("io"))) }
+                factory { GetBlogTagUseCase(get(), get(named("io"))) }
+                viewModel { BlogViewModel(get(), get(), get()) }
             }
             val databaseModule = module {
                 single { Room.databaseBuilder(androidContext(), BlogTagDatabase::class.java, blogTagTable).build() }

@@ -3,12 +3,20 @@ package com.mikkipastel.blog.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mikkipastel.blog.domain.GetBlogPostUseCase
+import com.mikkipastel.blog.domain.GetBlogTagUseCase
 import com.mikkipastel.blog.model.PostBlog
+import com.mikkipastel.blog.model.ResultResponse
 import com.mikkipastel.blog.model.TagBlog
+import com.mikkipastel.blog.model.request.GetBlogPostRequest
 import com.mikkipastel.blog.repository.BlogRepository
 import kotlinx.coroutines.*
 
-class BlogViewModel(private val blogRepository: BlogRepository) : ViewModel() {
+class BlogViewModel(
+    private val blogRepository: BlogRepository,
+    private val getBlogPostUseCase: GetBlogPostUseCase,
+    private val getBlogTagUseCase: GetBlogTagUseCase
+) : ViewModel() {
 
     val allBlogPost = MutableLiveData<MutableList<PostBlog>>()
     val canLazyLoading = MutableLiveData<Boolean>()
@@ -21,43 +29,62 @@ class BlogViewModel(private val blogRepository: BlogRepository) : ViewModel() {
     val localBlogTagList = MutableLiveData<MutableList<TagBlog>>()
     val localBlogContentList = MutableLiveData<MutableList<PostBlog>>()
 
-    fun getBlogPost(page: Int, hashtag: String?) {
-        val tag = if (hashtag == null) "" else "tag:$hashtag"
-        val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
-            getBlogError.value = Unit
+    fun getBlogPost(
+        page: Int,
+        hashtag: String?
+    ) = viewModelScope.launch(Dispatchers.Main) {
+        val response = withContext(Dispatchers.IO) {
+            getBlogPostUseCase.run(
+                GetBlogPostRequest(
+                    page,
+                    hashtag
+                )
+            )
         }
-        viewModelScope.launch(exceptionHandler) {
-            val response = blogRepository.getBlogPost(page, tag)
-            allBlogPost.value = response.posts
-            canLazyLoading.value = response.meta?.pagination?.next != null
-            blogPage.value = response.meta?.pagination?.page
-            withContext(Dispatchers.IO) {
-                if (hashtag == null && response.meta?.pagination?.page == 1)
-                    blogRepository.insertAllBlogToRoom(response.posts!!)
-            }
-        }.run {
-            viewModelScope.launch(exceptionHandler) {
-                if (hashtag == null) {
-                    localBlogContentList.postValue(blogRepository.getCachingBlogContent())
+
+        when (response) {
+            is ResultResponse.Success -> {
+                allBlogPost.value = response.data?.posts!!
+                canLazyLoading.value = response.data.meta?.pagination?.next != null
+                blogPage.value = response.data.meta?.pagination?.page!!
+                withContext(Dispatchers.IO) {
+                    if (hashtag == null && response.data.meta.pagination.page == 1) {
+                        blogRepository.insertAllBlogToRoom(response.data.posts)
+                    }
                 }
+            }
+            is ResultResponse.Error -> {
+                getBlogError.value = Unit
+            }
+        }
+    }.run {
+        GlobalScope.launch {
+            if (hashtag == null) {
+                localBlogContentList.postValue(blogRepository.getCachingBlogContent())
             }
         }
     }
 
-    fun getBlogTag() {
-        val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
-            getTagError.value = Unit
+    fun getBlogTag() = viewModelScope.launch(Dispatchers.Main) {
+        val response = withContext(Dispatchers.IO) {
+            getBlogTagUseCase.run(Unit)
         }
-        viewModelScope.launch(exceptionHandler) {
-            val response = blogRepository.getBlogTag()
-            allBlogTag.value = response.tags
-            withContext(Dispatchers.IO) {
-                blogRepository.insertAllTagToRoom(response.tags)
+
+        when (response) {
+            is ResultResponse.Success -> {
+                val allTags = response.data?.tags!!
+                allBlogTag.value = allTags
+                withContext(Dispatchers.IO) {
+                    blogRepository.insertAllTagToRoom(allTags)
+                }
             }
-        }.run {
-            GlobalScope.launch {
-                localBlogTagList.postValue(blogRepository.getCachingTagContent())
+            is ResultResponse.Error -> {
+                getTagError.value = Unit
             }
+        }
+    }.run {
+        GlobalScope.launch {
+            localBlogTagList.postValue(blogRepository.getCachingTagContent())
         }
     }
 }
