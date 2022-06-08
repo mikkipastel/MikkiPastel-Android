@@ -17,6 +17,15 @@ android {
         versionCode version_code
         versionName version_name
         multiDexEnabled true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation":"$projectDir/schemas".toString(),
+                        "room.incremental":"true",
+                        "room.expandProjection":"true"]
+            }
+        }
     }
     buildTypes {
         release {
@@ -24,14 +33,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    productFlavors {
-    }
+    productFlavors {}
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = '1.8'
     }
     viewBinding {
         enabled = true
@@ -61,7 +69,7 @@ dependencies {
     api "androidx.lifecycle:lifecycle-livedata-ktx:$versions.lifecycle"
 
     implementation "androidx.room:room-runtime:$versions.room"
-    kapt "androidx.room:room-compiler:$versions.room"
+    annotationProcessor "androidx.room:room-compiler:$versions.room"
     implementation "androidx.room:room-ktx:$versions.room"
     androidTestImplementation "androidx.room:room-testing:$versions.room"
 
