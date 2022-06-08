@@ -5,10 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.preference.PreferenceManager
 import androidx.room.Room
-import com.mikkipastel.blog.dao.BlogContentDatabase
-import com.mikkipastel.blog.dao.BlogTagDatabase
-import com.mikkipastel.blog.dao.blogContentTable
-import com.mikkipastel.blog.dao.blogTagTable
+import com.mikkipastel.blog.dao.*
 import com.mikkipastel.blog.domain.GetBlogPostUseCase
 import com.mikkipastel.blog.domain.GetBlogTagUseCase
 import com.mikkipastel.blog.manager.HttpManager
@@ -47,7 +44,7 @@ class MainApplication : Application() {
             }
             val databaseModule = module {
                 single { Room.databaseBuilder(androidContext(), BlogTagDatabase::class.java, blogTagTable).build() }
-                single { BlogTagDatabase.getBlogTagDatabase(get()).blogTagTagDao }
+                single { BlogTagDatabase.getBlogTagDatabase(get()).blogTagDao }
 
                 single { Room.databaseBuilder(androidContext(), BlogContentDatabase::class.java, blogContentTable).build() }
                 single { BlogContentDatabase.getBlogContentDatabase(get()).blogContentDao }
