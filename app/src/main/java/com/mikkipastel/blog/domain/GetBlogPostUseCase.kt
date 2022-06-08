@@ -3,6 +3,7 @@ package com.mikkipastel.blog.domain
 import com.mikkipastel.blog.model.GhostBlogModel
 import com.mikkipastel.blog.model.ResultResponse
 import com.mikkipastel.blog.model.request.GetBlogPostRequest
+import com.mikkipastel.blog.model.request.Request
 import com.mikkipastel.blog.repository.BlogRepository
 import kotlinx.coroutines.CoroutineDispatcher
 
@@ -17,8 +18,9 @@ class GetBlogPostUseCase(
         needFresh: Boolean
     ): ResultResponse<GhostBlogModel> {
         return repo.getBlogPost(
-            params.page,
-            params.hashtag
+            Request(
+                params
+            )
         )
     }
 }

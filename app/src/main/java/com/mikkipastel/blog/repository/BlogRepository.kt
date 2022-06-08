@@ -4,10 +4,12 @@ import com.mikkipastel.blog.dao.BlogContentDao
 import com.mikkipastel.blog.dao.BlogTagDao
 import com.mikkipastel.blog.manager.ApiService
 import com.mikkipastel.blog.model.*
+import com.mikkipastel.blog.model.request.GetBlogPostRequest
+import com.mikkipastel.blog.model.request.Request
 import retrofit2.Response
 
 interface BlogRepository {
-    suspend fun getBlogPost(page: Int, hashtag: String?): ResultResponse<GhostBlogModel>
+    suspend fun getBlogPost(request: Request<GetBlogPostRequest>): ResultResponse<GhostBlogModel>
     suspend fun getBlogTag(): ResultResponse<GhostTagsModel>
     suspend fun insertAllTagToRoom(list: MutableList<TagBlog>)
     suspend fun insertAllBlogToRoom(list: MutableList<PostBlog>)
@@ -20,10 +22,10 @@ class BlogRepositoryImpl(
     private val blogTagDao: BlogTagDao,
     private val blogContentDao: BlogContentDao
 ) : BlogRepository {
-    override suspend fun getBlogPost(page: Int, hashtag: String?): ResultResponse<GhostBlogModel> {
+    override suspend fun getBlogPost(request: Request<GetBlogPostRequest>): ResultResponse<GhostBlogModel> {
         return object : DirectNetworkBoundResource<GhostBlogModel, GhostBlogModel>() {
             override suspend fun createCall(): Response<GhostBlogModel> =
-                service.getAllPost(page, hashtag)
+                service.getAllPost(request.value.page, request.value.hashtag)
 
             override suspend fun convertToResultType(response: GhostBlogModel): GhostBlogModel =
                 response
