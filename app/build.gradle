@@ -23,7 +23,8 @@ android {
                 arguments += [
                         "room.schemaLocation":"$projectDir/schemas".toString(),
                         "room.incremental":"true",
-                        "room.expandProjection":"true"]
+                        "room.expandProjection":"true"
+                ]
             }
         }
     }
@@ -69,7 +70,7 @@ dependencies {
     api "androidx.lifecycle:lifecycle-livedata-ktx:$versions.lifecycle"
 
     implementation "androidx.room:room-runtime:$versions.room"
-    annotationProcessor "androidx.room:room-compiler:$versions.room"
+    kapt "androidx.room:room-compiler:$versions.room"
     implementation "androidx.room:room-ktx:$versions.room"
     androidTestImplementation "androidx.room:room-testing:$versions.room"
 

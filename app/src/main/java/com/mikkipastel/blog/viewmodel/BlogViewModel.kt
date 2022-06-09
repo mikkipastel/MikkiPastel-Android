@@ -58,7 +58,7 @@ class BlogViewModel(
             }
         }
     }.run {
-        GlobalScope.launch {
+        viewModelScope.launch {
             if (hashtag == null) {
                 localBlogContentList.postValue(blogRepository.getCachingBlogContent())
             }
@@ -83,7 +83,7 @@ class BlogViewModel(
             }
         }
     }.run {
-        GlobalScope.launch {
+        viewModelScope.launch {
             localBlogTagList.postValue(blogRepository.getCachingTagContent())
         }
     }
