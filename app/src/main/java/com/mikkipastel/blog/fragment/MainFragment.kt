@@ -10,7 +10,6 @@ import androidx.core.text.bold
 import androidx.core.text.color
 import androidx.core.text.scale
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mikkipastel.blog.R
@@ -89,20 +88,20 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
                         super.onScrollStateChanged(recyclerView, newState)
 
                         blogViewModel.canLazyLoading.observe(
-                            viewLifecycleOwner,
-                            Observer {
-                                if (it) {
-                                    val totalItemCount = linearLayoutManager.itemCount
-                                    val lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
-                                    if (!isLoading && totalItemCount <= (lastVisibleItem + 1)) {
-                                        isLoading = true
-                                        mPage++
-                                        loadPostData(mCurrentTagSlug)
-                                        lottieProgress.visibility = View.VISIBLE
-                                    }
+                            viewLifecycleOwner
+                        ) {
+                            if (it) {
+                                val totalItemCount = linearLayoutManager.itemCount
+                                val lastVisibleItem =
+                                    linearLayoutManager.findLastVisibleItemPosition()
+                                if (!isLoading && totalItemCount <= (lastVisibleItem + 1)) {
+                                    isLoading = true
+                                    mPage++
+                                    loadPostData(mCurrentTagSlug)
+                                    lottieProgress.visibility = View.VISIBLE
                                 }
                             }
-                        )
+                        }
                     }
                 })
             }
@@ -139,41 +138,36 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
     private fun setupView() {
         blogViewModel.apply {
             allBlogPost.observe(
-                viewLifecycleOwner,
-                {
-                    showBlogContent(it)
-                }
-            )
+                viewLifecycleOwner
+            ) {
+                showBlogContent(it)
+            }
             blogPage.observe(
-                viewLifecycleOwner,
-                {
-                    if (it == 1) {
-                        binding.recyclerView.smoothScrollToPosition(0)
-                    }
+                viewLifecycleOwner
+            ) {
+                if (it == 1) {
+                    binding.recyclerView.smoothScrollToPosition(0)
                 }
-            )
+            }
             allBlogTag.observe(
-                viewLifecycleOwner,
-                {
-                    showTagContent(it)
-                }
-            )
+                viewLifecycleOwner
+            ) {
+                showTagContent(it)
+            }
 
             getBlogError.observe(
-                viewLifecycleOwner,
-                {
-                    when (mCurrentTagSlug == null) {
-                        true -> getBlogContentError()
-                        false -> getBlogErrorView()
-                    }
+                viewLifecycleOwner
+            ) {
+                when (mCurrentTagSlug == null) {
+                    true -> getBlogContentError()
+                    false -> getBlogErrorView()
                 }
-            )
+            }
             getTagError.observe(
-                viewLifecycleOwner,
-                {
-                    getTagError()
-                }
-            )
+                viewLifecycleOwner
+            ) {
+                getTagError()
+            }
         }
     }
 
@@ -241,20 +235,18 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
 
     private fun getTagError() {
         blogViewModel.localBlogTagList.observe(
-            viewLifecycleOwner,
-            {
-                showTagContent(it)
-            }
-        )
+            viewLifecycleOwner
+        ) {
+            showTagContent(it)
+        }
     }
 
     private fun getBlogContentError() {
         blogViewModel.localBlogContentList.observe(
-            viewLifecycleOwner,
-            {
-                showBlogContent(it)
-            }
-        )
+            viewLifecycleOwner
+        ) {
+            showBlogContent(it)
+        }
     }
 
     override fun onContentClick(item: PostBlog) {
