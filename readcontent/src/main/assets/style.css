@@ -15,6 +15,26 @@ p {
     word-wrap: break-word;
 }
 
+h3 {
+    font-family: sf_pro_text, serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: #393939;
+    line-height: 28px;
+    font-style: medium;
+    word-wrap: break-word;
+}
+
+h2 {
+    font-family: sf_pro_text, serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #393939;
+    line-height: 34px;
+    font-style: bold;
+    word-wrap: break-word;
+}
+
 body {
     font-family: sf_pro_text;
     color: #393939;

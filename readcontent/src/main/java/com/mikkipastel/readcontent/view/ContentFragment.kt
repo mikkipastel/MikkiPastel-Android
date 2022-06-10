@@ -1,5 +1,6 @@
 package com.mikkipastel.readcontent.view
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Base64
 import android.view.LayoutInflater
@@ -9,6 +10,10 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
+import androidx.webkit.WebSettingsCompat
+import androidx.webkit.WebSettingsCompat.FORCE_DARK_OFF
+import androidx.webkit.WebSettingsCompat.FORCE_DARK_ON
+import androidx.webkit.WebViewFeature
 import com.mikkipastel.readcontent.viewmodel.ContentViewModel
 import com.mikkipastel.readcontent.databinding.FragmentContentBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -84,6 +89,20 @@ class ContentFragment: Fragment() {
             settings.apply {
                 javaScriptEnabled = true
                 loadWithOverviewMode = true
+
+                if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                    when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+                        Configuration.UI_MODE_NIGHT_YES -> {
+                            WebSettingsCompat.setForceDark(this, FORCE_DARK_ON)
+                        }
+                        Configuration.UI_MODE_NIGHT_NO, Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                            WebSettingsCompat.setForceDark(this, FORCE_DARK_OFF)
+                        }
+                        else -> {
+                            //
+                        }
+                    }
+                }
             }
             loadData(
                 encodedHtml,
@@ -105,14 +124,14 @@ class ContentFragment: Fragment() {
         }
     }
 
-    private fun injectCss(webview: WebView?) {
+    private fun injectCss(webView: WebView?) {
         try {
             val inputStream = requireContext().assets.open("style.css")
             val buffer = ByteArray(inputStream.available())
             inputStream.read(buffer)
             inputStream.close()
             val encoded = Base64.encodeToString(buffer , Base64.NO_WRAP)
-            webview?.loadUrl(
+            webView?.loadUrl(
                 "javascript:(function() {" +
                     "var parent = document.getElementsByTagName('head').item(0);" +
                     "var style = document.createElement('style');" +
