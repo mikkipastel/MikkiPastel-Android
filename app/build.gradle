@@ -69,19 +69,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle_extensions"
     api "androidx.lifecycle:lifecycle-livedata-ktx:$versions.lifecycle"
 
-    implementation "androidx.room:room-runtime:$versions.room"
-    kapt "androidx.room:room-compiler:$versions.room"
-    implementation "androidx.room:room-ktx:$versions.room"
-    androidTestImplementation "androidx.room:room-testing:$versions.room"
-
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
-
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
-    testImplementation 'com.squareup.okhttp:mockwebserver:2.7.5'
 
     implementation platform("com.google.firebase:firebase-bom:$versions.firebase_bom")
     implementation 'com.google.firebase:firebase-messaging-ktx'
@@ -95,4 +84,7 @@ dependencies {
     implementation "io.insert-koin:koin-android:$versions.koin"
 
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
+
+    implementation project(path: ':readcontent')
+    implementation project(path: ':blogservice')
 }

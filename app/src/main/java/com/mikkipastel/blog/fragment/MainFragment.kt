@@ -16,11 +16,12 @@ import com.mikkipastel.blog.R
 import com.mikkipastel.blog.activity.SettingsActivity
 import com.mikkipastel.blog.adapter.PostListAdapter
 import com.mikkipastel.blog.databinding.FragmentMainBinding
-import com.mikkipastel.blog.model.PostBlog
-import com.mikkipastel.blog.model.TagBlog
+import com.mikkipastel.blogservice.model.PostBlog
+import com.mikkipastel.blogservice.model.TagBlog
 import com.mikkipastel.blog.utils.CustomChromeUtils
 import com.mikkipastel.blog.utils.ImageLoader
 import com.mikkipastel.blog.viewmodel.BlogViewModel
+import com.mikkipastel.readcontent.view.ContentActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment(), PostListAdapter.PostItemListener {
@@ -66,12 +67,66 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupView()
-
+        setupViewModel()
         setToolbar()
-
         setHeaderText(getString(R.string.title_tag_all), getString(R.string.description_tag_all))
+        initView()
+    }
 
+    private fun setToolbar() {
+        binding.apply {
+            collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(
+                requireContext(),
+                R.color.colorMainTextWhite
+            ))
+            toolbar.apply {
+                inflateMenu(R.menu.menu_main)
+                setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.action_settings -> openAppSettingsPage()
+                        R.id.action_aboutme -> aboutMe()
+                    }
+                    return@setOnMenuItemClickListener false
+                }
+            }
+        }
+    }
+
+    private fun loadPostData(hashtag: String?) {
+        blogViewModel.getBlogPost(mPage, hashtag)
+    }
+
+    private fun loadHashtagData() {
+        blogViewModel.getBlogTag()
+    }
+
+    private fun setupViewModel() {
+        blogViewModel.apply {
+            allBlogPost.observe(viewLifecycleOwner) {
+                showBlogContent(it)
+            }
+            blogPage.observe(viewLifecycleOwner) {
+                if (it == 1) {
+                    binding.recyclerView.smoothScrollToPosition(0)
+                }
+            }
+            allBlogTag.observe(viewLifecycleOwner) {
+                showTagContent(it)
+            }
+
+            getBlogError.observe(viewLifecycleOwner) {
+                when (mCurrentTagSlug == null) {
+                    true -> getBlogContentError()
+                    false -> getBlogErrorView()
+                }
+            }
+            getTagError.observe(viewLifecycleOwner) {
+                getTagError()
+            }
+        }
+    }
+
+    private fun initView() {
         binding.apply {
             swipeRefreshLayout.setOnRefreshListener {
                 isReloadData = true
@@ -104,69 +159,6 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
                         }
                     }
                 })
-            }
-        }
-    }
-
-    private fun setToolbar() {
-        binding.apply {
-            collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(
-                requireContext(),
-                R.color.colorMainTextWhite
-            ))
-            toolbar.apply {
-                inflateMenu(R.menu.menu_main)
-                setOnMenuItemClickListener {
-                    when (it.itemId) {
-                        R.id.action_settings -> openAppSettingsPage()
-                        R.id.action_aboutme -> aboutMe()
-                    }
-                    return@setOnMenuItemClickListener false
-                }
-            }
-        }
-    }
-
-    private fun loadPostData(hashtag: String?) {
-        blogViewModel.getBlogPost(mPage, hashtag)
-    }
-
-    private fun loadHashtagData() {
-        blogViewModel.getBlogTag()
-    }
-
-    private fun setupView() {
-        blogViewModel.apply {
-            allBlogPost.observe(
-                viewLifecycleOwner
-            ) {
-                showBlogContent(it)
-            }
-            blogPage.observe(
-                viewLifecycleOwner
-            ) {
-                if (it == 1) {
-                    binding.recyclerView.smoothScrollToPosition(0)
-                }
-            }
-            allBlogTag.observe(
-                viewLifecycleOwner
-            ) {
-                showTagContent(it)
-            }
-
-            getBlogError.observe(
-                viewLifecycleOwner
-            ) {
-                when (mCurrentTagSlug == null) {
-                    true -> getBlogContentError()
-                    false -> getBlogErrorView()
-                }
-            }
-            getTagError.observe(
-                viewLifecycleOwner
-            ) {
-                getTagError()
             }
         }
     }
@@ -250,7 +242,8 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
     }
 
     override fun onContentClick(item: PostBlog) {
-        CustomChromeUtils().setBlogWebpage(requireContext(), item.url!!, item.title!!)
+        //CustomChromeUtils().setBlogWebpage(requireContext(), item.url!!, item.title!!)
+        ContentActivity.newIntent(requireContext(), item.id)
     }
 
     override fun onHashtagClick(hashtag: TagBlog) {

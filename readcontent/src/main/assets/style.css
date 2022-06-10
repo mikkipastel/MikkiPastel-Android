@@ -1,0 +1,38 @@
+@font-face {
+    font-family: sf_pro_text;
+    src: url('font/roboto_regular.ttf') format('TrueType');
+    font-weight: normal;
+    font-style: normal;
+}
+
+p {
+    font-family: sf_pro_text, serif;
+    font-size: 16px;
+    font-weight: 300;
+    color: #393939;
+    line-height: 22px;
+    font-style: normal;
+    word-wrap: break-word;
+}
+
+body {
+    font-family: sf_pro_text;
+    color: #393939;
+    font-size: 16px;
+}
+
+.gfg {
+    width:auto;
+    text-align:center;
+    padding: 15px;
+}
+
+.ql-size-large {
+  font-size: 1.5em;
+}
+
+img {
+    object-fit: contain;
+    max-width: 100%;
+    height: auto;
+}

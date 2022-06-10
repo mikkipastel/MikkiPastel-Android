@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.mikkipastel.blog.databinding.ItemContentBinding
-import com.mikkipastel.blog.model.PostBlog
-import com.mikkipastel.blog.model.TagBlog
+import com.mikkipastel.blogservice.model.PostBlog
+import com.mikkipastel.blogservice.model.TagBlog
 import com.mikkipastel.blog.utils.ImageLoader
 
 class PostListAdapter(

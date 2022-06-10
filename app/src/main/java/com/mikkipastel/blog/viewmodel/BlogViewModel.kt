@@ -3,13 +3,13 @@ package com.mikkipastel.blog.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mikkipastel.blog.domain.GetBlogPostUseCase
-import com.mikkipastel.blog.domain.GetBlogTagUseCase
-import com.mikkipastel.blog.model.PostBlog
-import com.mikkipastel.blog.model.ResultResponse
-import com.mikkipastel.blog.model.TagBlog
-import com.mikkipastel.blog.model.request.GetBlogPostRequest
-import com.mikkipastel.blog.repository.BlogRepository
+import com.mikkipastel.blogservice.domain.GetBlogPostUseCase
+import com.mikkipastel.blogservice.domain.GetBlogTagUseCase
+import com.mikkipastel.blogservice.model.PostBlog
+import com.mikkipastel.blogservice.model.ResultResponse
+import com.mikkipastel.blogservice.model.TagBlog
+import com.mikkipastel.blogservice.model.request.GetBlogPostRequest
+import com.mikkipastel.blogservice.repository.BlogRepository
 import kotlinx.coroutines.*
 
 class BlogViewModel(
@@ -33,11 +33,12 @@ class BlogViewModel(
         page: Int,
         hashtag: String?
     ) = viewModelScope.launch(Dispatchers.Main) {
+        val tag = if (hashtag == null) "" else "tag:$hashtag"
         val response = withContext(Dispatchers.IO) {
             getBlogPostUseCase.run(
                 GetBlogPostRequest(
                     page,
-                    hashtag
+                    tag
                 )
             )
         }
@@ -45,8 +46,8 @@ class BlogViewModel(
         when (response) {
             is ResultResponse.Success -> {
                 allBlogPost.value = response.data?.posts!!
-                canLazyLoading.value = response.data.meta?.pagination?.next != null
-                blogPage.value = response.data.meta?.pagination?.page!!
+                canLazyLoading.value = response.data?.meta?.pagination?.next != null
+                blogPage.value = response.data?.meta?.pagination?.page!!
 //                withContext(Dispatchers.IO) {
 //                    if (hashtag == null && response.data.meta.pagination.page == 1) {
 //                        blogRepository.insertAllBlogToRoom(response.data.posts)
