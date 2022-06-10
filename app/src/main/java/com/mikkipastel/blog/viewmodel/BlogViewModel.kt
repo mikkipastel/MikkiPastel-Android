@@ -47,23 +47,24 @@ class BlogViewModel(
                 allBlogPost.value = response.data?.posts!!
                 canLazyLoading.value = response.data.meta?.pagination?.next != null
                 blogPage.value = response.data.meta?.pagination?.page!!
-                withContext(Dispatchers.IO) {
-                    if (hashtag == null && response.data.meta.pagination.page == 1) {
-                        blogRepository.insertAllBlogToRoom(response.data.posts)
-                    }
-                }
+//                withContext(Dispatchers.IO) {
+//                    if (hashtag == null && response.data.meta.pagination.page == 1) {
+//                        blogRepository.insertAllBlogToRoom(response.data.posts)
+//                    }
+//                }
             }
             is ResultResponse.Error -> {
                 getBlogError.value = Unit
             }
         }
-    }.run {
-        viewModelScope.launch {
-            if (hashtag == null) {
-                localBlogContentList.postValue(blogRepository.getCachingBlogContent())
-            }
-        }
     }
+//        .run {
+//        viewModelScope.launch {
+//            if (hashtag == null) {
+//                localBlogContentList.postValue(blogRepository.getCachingBlogContent())
+//            }
+//        }
+//    }
 
     fun getBlogTag() = viewModelScope.launch(Dispatchers.Main) {
         val response = withContext(Dispatchers.IO) {
@@ -74,17 +75,18 @@ class BlogViewModel(
             is ResultResponse.Success -> {
                 val allTags = response.data?.tags!!
                 allBlogTag.value = allTags
-                withContext(Dispatchers.IO) {
-                    blogRepository.insertAllTagToRoom(allTags)
-                }
+//                withContext(Dispatchers.IO) {
+//                    blogRepository.insertAllTagToRoom(allTags)
+//                }
             }
             is ResultResponse.Error -> {
                 getTagError.value = Unit
             }
         }
-    }.run {
-        viewModelScope.launch {
-            localBlogTagList.postValue(blogRepository.getCachingTagContent())
-        }
     }
+//        .run {
+//        viewModelScope.launch {
+//            localBlogTagList.postValue(blogRepository.getCachingTagContent())
+//        }
+//    }
 }

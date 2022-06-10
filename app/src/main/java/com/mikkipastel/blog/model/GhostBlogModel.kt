@@ -21,19 +21,20 @@ data class GhostBlogModel(
 @Parcelize
 data class Meta(@SerializedName("pagination") val pagination: Pagination) : Parcelable
 
-@Entity(tableName = blogContentTable)
+//@Entity(tableName = blogContentTable)
 @Parcelize
 data class PostBlog(
         @PrimaryKey(autoGenerate = true) val primaryKey: Int,
         @SerializedName("title") val title: String?,
         @SerializedName("feature_image") val feature_image: String?,
         @SerializedName("custom_excerpt") val custom_excerpt: String?,
-        @Embedded @SerializedName("tags") val tags: ArrayList<TagBlog>?,
+//        @Embedded @SerializedName("tags") val tags: ArrayList<TagBlog>?,
+        @SerializedName("tags") val tags: ArrayList<TagBlog>?,
         @SerializedName("published_at") val published_at: String?,
         @SerializedName("url") val url: String?
 ) : Parcelable
 
-@Entity(tableName = blogTagTable)
+//@Entity(tableName = blogTagTable)
 @Parcelize
 data class TagBlog(
         @PrimaryKey(autoGenerate = true) val primaryKey: Int,

@@ -36,20 +36,22 @@ class MainApplication : Application() {
                 single { HttpManager().getApiService() }
             }
             val blogModule = module {
-                single<BlogRepository> { BlogRepositoryImpl(get(), get(), get()) }
+//                single<BlogRepository> { BlogRepositoryImpl(get(), get(), get()) }
+                single<BlogRepository> { BlogRepositoryImpl(get()) }
                 single(named("io")) { Dispatchers.IO }
                 factory { GetBlogPostUseCase(get(), get(named("io"))) }
                 factory { GetBlogTagUseCase(get(), get(named("io"))) }
                 viewModel { BlogViewModel(get(), get(), get()) }
             }
-            val databaseModule = module {
-                single { Room.databaseBuilder(androidContext(), BlogTagDatabase::class.java, blogTagTable).build() }
-                single { BlogTagDatabase.getBlogTagDatabase(get()).blogTagDao }
-
-                single { Room.databaseBuilder(androidContext(), BlogContentDatabase::class.java, blogContentTable).build() }
-                single { BlogContentDatabase.getBlogContentDatabase(get()).blogContentDao }
-            }
-            modules(listOf(networkModule, blogModule, databaseModule))
+//            val databaseModule = module {
+//                single { Room.databaseBuilder(androidContext(), BlogTagDatabase::class.java, blogTagTable).build() }
+//                single { BlogTagDatabase.getBlogTagDatabase(get()).blogTagDao }
+//
+//                single { Room.databaseBuilder(androidContext(), BlogContentDatabase::class.java, blogContentTable).build() }
+//                single { BlogContentDatabase.getBlogContentDatabase(get()).blogContentDao }
+//            }
+//            modules(listOf(networkModule, blogModule, databaseModule))
+            modules(listOf(networkModule, blogModule))
         }
     }
 
