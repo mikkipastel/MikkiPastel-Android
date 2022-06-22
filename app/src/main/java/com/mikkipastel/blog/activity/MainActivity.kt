@@ -18,6 +18,7 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.mikkipastel.blog.R
+import com.mikkipastel.blog.databinding.ActivityMainBinding
 import com.mikkipastel.blog.fragment.MainFragment
 
 const val MY_REQUEST_CODE = 101
@@ -28,9 +29,13 @@ class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
         AppUpdateManagerFactory.create(this)
     }
 
+    private val binding: ActivityMainBinding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
