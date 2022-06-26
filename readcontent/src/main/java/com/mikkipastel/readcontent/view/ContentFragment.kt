@@ -9,11 +9,13 @@ import android.view.ViewGroup
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebSettingsCompat.FORCE_DARK_OFF
 import androidx.webkit.WebSettingsCompat.FORCE_DARK_ON
 import androidx.webkit.WebViewFeature
+import com.mikkipastel.readcontent.R
 import com.mikkipastel.readcontent.viewmodel.ContentViewModel
 import com.mikkipastel.readcontent.databinding.FragmentContentBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -56,6 +58,21 @@ class ContentFragment: Fragment() {
         observerData()
     }
 
+    private fun setToolbar(blogName: String) {
+        binding.apply {
+            toolbar.apply {
+                title = blogName
+                navigationIcon = ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.ic_baseline_chevron_left_24
+                )
+                setNavigationOnClickListener {
+                    requireActivity().onBackPressed()
+                }
+            }
+        }
+    }
+
     private fun initWebView(htmlText: String) {
         val encodedHtml = Base64.encodeToString(htmlText.toByteArray(), Base64.NO_PADDING)
 
@@ -76,12 +93,14 @@ class ContentFragment: Fragment() {
                     request: WebResourceRequest?
                 ): Boolean {
                     //WebViewActivity.newIntent(view?.context!!, request?.url.toString())
+                    binding.webview.loadUrl(request?.url.toString())
                     return true
                 }
 
                 @Suppress("DEPRECATION")
                 override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                     //WebViewActivity.newIntent(view?.context!!, url)
+                    binding.webview.loadUrl(url!!)
                     return true
                 }
             }
@@ -117,6 +136,7 @@ class ContentFragment: Fragment() {
             getContent(postId)
             contentPost.observe(viewLifecycleOwner) {
                 initWebView(it.html!!)
+                setToolbar(it.title!!)
             }
             getContentError.observe(viewLifecycleOwner) {
                 //
