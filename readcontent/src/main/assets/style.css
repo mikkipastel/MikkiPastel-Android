@@ -1,12 +1,10 @@
 @font-face {
-    font-family: sf_pro_text;
     src: url('font/roboto_regular.ttf') format('TrueType');
     font-weight: normal;
     font-style: normal;
 }
 
 p {
-    font-family: sf_pro_text, serif;
     font-size: 16px;
     font-weight: 300;
     color: #393939;
@@ -16,7 +14,6 @@ p {
 }
 
 h3 {
-    font-family: sf_pro_text, serif;
     font-size: 24px;
     font-weight: 500;
     color: #393939;
@@ -26,7 +23,6 @@ h3 {
 }
 
 h2 {
-    font-family: sf_pro_text, serif;
     font-size: 32px;
     font-weight: 700;
     color: #393939;
@@ -36,7 +32,6 @@ h2 {
 }
 
 body {
-    font-family: sf_pro_text;
     color: #393939;
     font-size: 16px;
 }
