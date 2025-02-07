@@ -52,10 +52,10 @@ class PostListItemViewHolder(
             params.height = (width * 3) / 5
             imageCover.layoutParams = params
 
-            ImageLoader().setBlogCover(root.context, item.feature_image, imageCover)
+            ImageLoader().setBlogCover(root.context, item.featureImage, imageCover)
 
             textPrimaryTopic.text = item.title
-            textSecondary.text = item.custom_excerpt?.replace("\n", "") ?: ""
+            textSecondary.text = item.customExcerpt?.replace("\n", "") ?: ""
 
             chipGroup.removeAllViews()
 

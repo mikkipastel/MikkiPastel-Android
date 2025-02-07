@@ -25,33 +25,33 @@ data class Meta(@SerializedName("pagination") val pagination: Pagination) : Parc
 @Parcelize
 data class PostBlog(
         @PrimaryKey(autoGenerate = true) val primaryKey: Int,
-        @SerializedName("title") val title: String?,
-        @SerializedName("feature_image") val feature_image: String?,
-        @SerializedName("custom_excerpt") val custom_excerpt: String?,
-        @Embedded @SerializedName("tags") val tags: ArrayList<TagBlog>?,
-        @SerializedName("published_at") val published_at: String?,
-        @SerializedName("url") val url: String?
+        @SerializedName("title") val title: String? = null,
+        @SerializedName("feature_image") val featureImage: String? = null,
+        @SerializedName("custom_excerpt") val customExcerpt: String? = null,
+        @Embedded @SerializedName("tags") val tags: ArrayList<TagBlog>? = null,
+        @SerializedName("published_at") val publishedAt: String? = null,
+        @SerializedName("url") val url: String? = null
 ) : Parcelable
 
 @Entity(tableName = blogTagTable)
 @Parcelize
 data class TagBlog(
         @PrimaryKey(autoGenerate = true) val primaryKey: Int,
-        @SerializedName("id") val id: String?,
-        @SerializedName("name") val name: String?,
-        @SerializedName("slug") val slug: String?,
-        @SerializedName("description") val description: String?,
-        @SerializedName("feature_image") val feature_image: String?,
-        @SerializedName("visibility") val visibility: String?,
-        @SerializedName("url") val url: String?
+        @SerializedName("id") val id: String? = null,
+        @SerializedName("name") val name: String? = null,
+        @SerializedName("slug") val slug: String? = null,
+        @SerializedName("description") val description: String? = null,
+        @SerializedName("feature_image") val featureImage: String? = null,
+        @SerializedName("visibility") val visibility: String? = null,
+        @SerializedName("url") val url: String? = null
 ) : Parcelable
 
 @Parcelize
 data class Pagination(
-        @SerializedName("page") val page: Int?,
-        @SerializedName("limit") val limit: Int?,
-        @SerializedName("pages") val pages: Int?,
-        @SerializedName("total") val total: Int?,
-        @SerializedName("next") val next: Int?,
-        @SerializedName("prev") val prev: Int?
+        @SerializedName("page") val page: Int? = null,
+        @SerializedName("limit") val limit: Int? = null,
+        @SerializedName("pages") val pages: Int? = null,
+        @SerializedName("total") val total: Int? = null,
+        @SerializedName("next") val next: Int? = null,
+        @SerializedName("prev") val prev: Int? = null
 ) : Parcelable

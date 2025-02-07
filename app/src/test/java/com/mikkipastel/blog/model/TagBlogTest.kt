@@ -40,7 +40,7 @@ class TagBlogTest {
 
     @Test
     fun parseJsonDataResultForFeatureImage() {
-        Assert.assertEquals("https://images.unsplash.com/photo-1541345023926-55d6e0853f4b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=2000&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ", body?.feature_image)
+        Assert.assertEquals("https://images.unsplash.com/photo-1541345023926-55d6e0853f4b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=2000&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ", body?.featureImage)
     }
 
     @Test

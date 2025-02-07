@@ -25,17 +25,17 @@ class PostBlogTest {
 
     @Test
     fun parseJsonDataResultForFeatureImage() {
-        Assert.assertEquals("https://www.mikkipastel.com/content/images/2020/04/IMG_0166.PNG", body?.feature_image)
+        Assert.assertEquals("https://www.mikkipastel.com/content/images/2020/04/IMG_0166.PNG", body?.featureImage)
     }
 
     @Test
     fun parseJsonDataResultForCustomExcerpt() {
-        Assert.assertEquals("แรกๆที่เราเขียน Android มักจะแยก margin และ padding ไม่ค่อยถูก พอเป็น Android Developer ไปเรื่อยๆก็จะแยกออกหล่ะ แล้วเห็นบล็อกพี่เอกเขียนหัวข้อนี้ แต่ยังไม่ได้อ่าน ก็เลยลองวาดๆเขียนๆดู", body?.custom_excerpt)
+        Assert.assertEquals("แรกๆที่เราเขียน Android มักจะแยก margin และ padding ไม่ค่อยถูก พอเป็น Android Developer ไปเรื่อยๆก็จะแยกออกหล่ะ แล้วเห็นบล็อกพี่เอกเขียนหัวข้อนี้ แต่ยังไม่ได้อ่าน ก็เลยลองวาดๆเขียนๆดู", body?.customExcerpt)
     }
 
     @Test
     fun parseJsonDataResultForPublishedAt() {
-        Assert.assertEquals("2020-05-08T12:10:00.000+07:00", body?.published_at)
+        Assert.assertEquals("2020-05-08T12:10:00.000+07:00", body?.publishedAt)
     }
 
     @Test

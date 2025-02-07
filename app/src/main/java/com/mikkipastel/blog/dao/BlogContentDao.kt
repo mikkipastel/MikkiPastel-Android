@@ -8,7 +8,7 @@ import com.mikkipastel.blog.model.PostBlog
 
 @Dao
 interface BlogContentDao {
-    @Query("SELECT * FROM $blogContentTable ORDER BY published_at DESC")
+    @Query("SELECT * FROM $blogContentTable ORDER BY publishedAt DESC")
     fun getContentBlog() : MutableList<PostBlog>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
