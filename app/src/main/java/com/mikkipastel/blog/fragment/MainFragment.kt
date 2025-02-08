@@ -281,7 +281,7 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
             true -> {
                 ImageLoader().setTagCover(
                     requireContext(),
-                    foundTagList[0].feature_image,
+                    foundTagList[0].featureImage,
                     binding.imageTagCover
                 )
                 setHeaderText(foundTagList[0].name!!, foundTagList[0].description!!)
