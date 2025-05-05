@@ -13,7 +13,6 @@ import com.mikkipastel.blog.repository.BlogRepository
 import kotlinx.coroutines.*
 
 class BlogViewModel(
-    private val blogRepository: BlogRepository,
     private val getBlogPostUseCase: GetBlogPostUseCase,
     private val getBlogTagUseCase: GetBlogTagUseCase
 ) : ViewModel() {
@@ -47,20 +46,9 @@ class BlogViewModel(
                 allBlogPost.value = response.data?.posts!!
                 canLazyLoading.value = response.data.meta?.pagination?.next != null
                 blogPage.value = response.data.meta?.pagination?.page!!
-                withContext(Dispatchers.IO) {
-                    if (hashtag == null && response.data.meta.pagination.page == 1) {
-                        blogRepository.insertAllBlogToRoom(response.data.posts)
-                    }
-                }
             }
             is ResultResponse.Error -> {
                 getBlogError.value = Unit
-            }
-        }
-    }.run {
-        viewModelScope.launch {
-            if (hashtag == null) {
-                localBlogContentList.postValue(blogRepository.getCachingBlogContent())
             }
         }
     }
@@ -74,17 +62,10 @@ class BlogViewModel(
             is ResultResponse.Success -> {
                 val allTags = response.data?.tags!!
                 allBlogTag.value = allTags
-                withContext(Dispatchers.IO) {
-                    blogRepository.insertAllTagToRoom(allTags)
-                }
             }
             is ResultResponse.Error -> {
                 getTagError.value = Unit
             }
-        }
-    }.run {
-        viewModelScope.launch {
-            localBlogTagList.postValue(blogRepository.getCachingTagContent())
         }
     }
 }

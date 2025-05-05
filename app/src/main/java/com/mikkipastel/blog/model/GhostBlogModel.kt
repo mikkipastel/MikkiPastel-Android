@@ -1,13 +1,9 @@
 package com.mikkipastel.blog.model
 
 import android.os.Parcelable
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import com.mikkipastel.blog.dao.blogContentTable
-import com.mikkipastel.blog.dao.blogTagTable
 import kotlinx.parcelize.Parcelize
+import java.util.ArrayList
 
 @Parcelize
 data class GhostTagsModel(@SerializedName("tags") val tags: MutableList<TagBlog>) : Parcelable
@@ -21,22 +17,18 @@ data class GhostBlogModel(
 @Parcelize
 data class Meta(@SerializedName("pagination") val pagination: Pagination) : Parcelable
 
-@Entity(tableName = blogContentTable)
 @Parcelize
 data class PostBlog(
-        @PrimaryKey(autoGenerate = true) val primaryKey: Int,
         @SerializedName("title") val title: String? = null,
         @SerializedName("feature_image") val featureImage: String? = null,
         @SerializedName("custom_excerpt") val customExcerpt: String? = null,
-        @Embedded @SerializedName("tags") val tags: ArrayList<TagBlog>? = null,
+        @SerializedName("tags") val tags: ArrayList<TagBlog>? = null,
         @SerializedName("published_at") val publishedAt: String? = null,
         @SerializedName("url") val url: String? = null
 ) : Parcelable
 
-@Entity(tableName = blogTagTable)
 @Parcelize
 data class TagBlog(
-        @PrimaryKey(autoGenerate = true) val primaryKey: Int,
         @SerializedName("id") val id: String? = null,
         @SerializedName("name") val name: String? = null,
         @SerializedName("slug") val slug: String? = null,
