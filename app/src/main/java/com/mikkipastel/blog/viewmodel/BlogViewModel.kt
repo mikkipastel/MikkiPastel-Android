@@ -36,7 +36,11 @@ class BlogViewModel(
             getBlogPostUseCase.run(
                 GetBlogPostRequest(
                     page,
-                    hashtag
+                    if (hashtag != null) {
+                        "tag:${hashtag}"
+                    } else {
+                        hashtag
+                    }
                 )
             )
         }
