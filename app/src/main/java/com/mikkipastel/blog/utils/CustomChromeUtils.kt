@@ -8,6 +8,7 @@ import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import com.mikkipastel.blog.R
+import androidx.core.net.toUri
 
 class CustomChromeUtils {
 
@@ -23,9 +24,9 @@ class CustomChromeUtils {
             val shareIntent = Intent(Intent.ACTION_SEND).apply {
                 type = "text/plain"
                 putExtra(Intent.EXTRA_TEXT, "$shareMessage $url")
-                putExtra(Intent.EXTRA_REFERRER, Uri.parse("android-app://" + context.packageName))
+                putExtra(Intent.EXTRA_REFERRER, ("android-app://" + context.packageName).toUri())
             }
-            val pendingIntent = PendingIntent.getActivity(context, 0, shareIntent, 0)
+            val pendingIntent = PendingIntent.getActivity(context, 0, shareIntent, PendingIntent.FLAG_IMMUTABLE)
             addMenuItem(context.getString(R.string.title_share_blog), pendingIntent)
 
             // Setting custom enter/exit animations
@@ -33,7 +34,7 @@ class CustomChromeUtils {
             setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
 
             // Open the Custom Tab
-            build().launchUrl(context, Uri.parse(url))
+            build().launchUrl(context, url.toUri())
         }
     }
 }
