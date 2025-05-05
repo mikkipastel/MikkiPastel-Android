@@ -4,7 +4,7 @@
 
     <string name="btn_ok">OK</string>
     <string name="about_me">About Me</string>
-    <string name="msg_offline">Internet unavailable.</string>
+    <string name="msg_offline">Unable to connect</string>
     <string name="action_try_again">Try Again</string>
 
     <string name="title_share_blog">Share Content</string>
@@ -12,6 +12,9 @@
     <string name="header_tag_text">tag</string>
     <string name="default_tag_text">All</string>
 
-    <string name="title_tag_all">MikkiPastel Studio</string>
-    <string name="description_tag_all">Android developer, Programmer and Blogger</string>
+    <string name="title_tag_all" translatable="false">MikkiPastel</string>
+    <string name="description_tag_all" translatable="false">Full-time Android developer | Content Creator | Web2 &amp; Web3 Contributor</string>
+
+    <string name="about_me_title" translatable="false">About MikkiPastel</string>
+    <string name="about_me_url" translatable="false">https://portfolio.mikkipastel.com/</string>
 </resources>
