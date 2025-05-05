@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <SwitchPreferenceCompat
@@ -8,10 +8,6 @@
 
     <Preference
         app:key="pref_app_version"
-        app:summary="1.0.5"
+        app:summary="1.0.6"
         app:title="App Version" />
-
-    <Preference
-        app:key="open_source_menu"
-        app:title="Open Source Licenses" />
 </PreferenceScreen>
