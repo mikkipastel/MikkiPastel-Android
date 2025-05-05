@@ -209,7 +209,7 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
         binding.layoutDropdownList.visibility = View.VISIBLE
 
         mTagItemList.addAll(data)
-        mTagNameList.add("All")
+        mTagNameList.add(getString(R.string.default_tag_text))
 
         mTagItemList.forEach {
             mTagNameList.add((it.name!!))
@@ -321,8 +321,8 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
     private fun aboutMe() {
         CustomChromeUtils().setBlogWebpage(
             requireContext(),
-            "https://mikkipastel.firebaseapp.com/",
-            "About Mikkipastel"
+            getString(R.string.about_me_url),
+            getString(R.string.about_me_title)
         )
     }
 }
