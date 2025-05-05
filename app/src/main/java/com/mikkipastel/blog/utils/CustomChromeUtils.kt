@@ -16,7 +16,7 @@ class CustomChromeUtils {
 
         CustomTabsIntent.Builder().apply {
             // Setting a custom toolbar color, show title, back button
-            setCloseButtonIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_action_arrow_left))
+            setCloseButtonIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_action_arrow_back))
             setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
             setShowTitle(true)
 

@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:hint="@string/header_tag_text"
-            app:startIconDrawable="@drawable/ic_filter_tag"
+            app:startIconDrawable="@drawable/ic_filter_list"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
             <AutoCompleteTextView

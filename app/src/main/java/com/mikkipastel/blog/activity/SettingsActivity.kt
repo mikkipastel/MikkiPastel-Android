@@ -54,7 +54,7 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
         supportToolbar.apply {
             navigationIcon = ContextCompat.getDrawable(
                     this@SettingsActivity,
-                    R.drawable.ic_baseline_chevron_left_24
+                    R.drawable.ic_action_arrow_back
             )
             setNavigationOnClickListener {
                 onBackPressed()
