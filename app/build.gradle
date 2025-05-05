@@ -6,6 +6,7 @@ plugins {
     id 'com.google.android.gms.oss-licenses-plugin'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -37,6 +38,9 @@ android {
         enabled = true
     }
     namespace 'com.mikkipastel.blog'
+    buildFeatures {
+        buildConfig true
+    }
 }
 
 dependencies {

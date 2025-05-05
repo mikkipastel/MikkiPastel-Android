@@ -1,12 +1,13 @@
 package com.mikkipastel.blog.manager
 
+import com.mikkipastel.blog.BuildConfig
 import com.mikkipastel.blog.model.GhostBlogModel
 import com.mikkipastel.blog.model.GhostTagsModel
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-const val ghost_key = "8443fdc53f9772eb7ee10c1bd8"
+const val ghost_key = BuildConfig.GHOST_API_KEY
 
 interface ApiService {
     @GET("posts?key=$ghost_key&include=tags&fields=title,url,feature_image,custom_excerpt,published_at")
