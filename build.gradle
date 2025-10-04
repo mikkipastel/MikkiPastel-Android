@@ -8,7 +8,7 @@ buildscript {
             'target_sdk'           : 35,
             'compile_sdk'          : 35,
             'build_tool'           : '30.0.2',
-            'kotlin'               : '1.6.10',
+            'kotlin'               : '1.6.21',
             'constraint_layout'    : '2.2.1',
             'lifecycle'            : '2.4.1',
             'lifecycle_extensions' : '2.2.0',
@@ -22,7 +22,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:8.6.1"
+        classpath 'com.android.tools.build:gradle:8.13.0'
         classpath 'com.google.gms:google-services:4.4.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
         classpath 'com.google.firebase:firebase-crashlytics-gradle:3.0.3'
