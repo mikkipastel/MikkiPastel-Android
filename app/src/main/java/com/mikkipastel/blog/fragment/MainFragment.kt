@@ -9,6 +9,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import androidx.core.text.color
 import androidx.core.text.scale
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -66,11 +68,13 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setInsets()
         setupView()
-
         setToolbar()
-
-        setHeaderText(getString(R.string.title_tag_all), getString(R.string.description_tag_all))
+        setHeaderText(
+            getString(R.string.title_tag_all),
+            getString(R.string.description_tag_all)
+        )
 
         binding.apply {
             swipeRefreshLayout.setOnRefreshListener {
@@ -124,6 +128,14 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
                     return@setOnMenuItemClickListener false
                 }
             }
+        }
+    }
+
+    private fun setInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.rootview) { view, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(insets.left, insets.top, insets.right, insets.bottom)
+            WindowInsetsCompat.CONSUMED
         }
     }
 
