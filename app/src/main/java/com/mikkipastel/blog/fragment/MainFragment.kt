@@ -132,10 +132,9 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
     }
 
     private fun setInsets() {
-        // Handle AppBarLayout insets to add spacing between status bar and toolbar
-        ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { view, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars())
-            view.setPadding(0, insets.top, 0, 0)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.rootview) { view, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(0, insets.top, 0, insets.bottom)
             WindowInsetsCompat.CONSUMED
         }
     }

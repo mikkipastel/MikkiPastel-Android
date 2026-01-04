@@ -46,13 +46,6 @@ class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
         
         setContentView(R.layout.activity_main)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.rootview) { view, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            // Apply padding to rootview (left, right, bottom only - top handled by statusBarBackgroundView)
-            view.setPadding(insets.left, 0, insets.right, insets.bottom)
-            WindowInsetsCompat.CONSUMED
-        }
-        
         // Update status bar background view height dynamically
         ViewCompat.setOnApplyWindowInsetsListener(binding.statusBarBackgroundView) { view, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars())
@@ -61,6 +54,9 @@ class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
             }
             WindowInsetsCompat.CONSUMED
         }
+
+        WindowCompat.getInsetsController(window, window.decorView)
+            .isAppearanceLightStatusBars = true
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
