@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +29,7 @@ import com.mikkipastel.blog.databinding.ActivityMainBinding
 import com.mikkipastel.blog.fragment.MainFragment
 
 const val MY_REQUEST_CODE = 101
+private const val PREF_KEY_SHORTCUT_ADDED = "shortcut_added_flag"
 
 class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
 
@@ -69,7 +71,7 @@ class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
         val prefs = getSharedPreferences("data_install", MODE_PRIVATE)
         val insertBranch = prefs.getBoolean("install_status", false)
         if (insertBranch) {
-            addShortcut()
+            addShortcutWithDuplicateCheck(this)
         }
 
         getInAppUpdateWithPlayStore()
@@ -193,23 +195,36 @@ class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
         mCustomTabsClient = null
     }
 
-    private fun addShortcut() {
-        // Adding shortcut for MainActivity
-        // on Home screen
+    private fun addShortcutWithDuplicateCheck(context: Context) {
+        val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 
-        val shortcutIntent = Intent(applicationContext, MainActivity::class.java)
+        // Check a flag in SharedPreferences to see if we've added it before.
+        if (prefs.getBoolean(PREF_KEY_SHORTCUT_ADDED, false)) {
+            return // Shortcut already added, do nothing.
+        }
 
-        shortcutIntent.action = Intent.ACTION_MAIN
+        // ... (rest of the code to add the shortcut, using either ShortcutManager or legacy)
 
-        val addIntent = Intent()
-        addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent)
-        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "MikkiPastel")
-        addIntent.putExtra(
-            Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
-            Intent.ShortcutIconResource.fromContext(applicationContext, R.mipmap.ic_launcher)
-        )
+        // After successfully requesting the shortcut, save the flag.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            prefs.edit().putBoolean(PREF_KEY_SHORTCUT_ADDED, true).apply()
+        } else {
+            // For the legacy method, we broadcast and hope for the best.
+            val shortcutIntent = Intent(applicationContext, MainActivity::class.java).apply {
+                action = Intent.ACTION_MAIN
+            }
 
-        addIntent.action = "com.android.launcher.action.INSTALL_SHORTCUT"
-        applicationContext.sendBroadcast(addIntent)
+            val addIntent = Intent().apply {
+                putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent)
+                putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.app_name))
+                putExtra(
+                    Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+                    Intent.ShortcutIconResource.fromContext(applicationContext, R.mipmap.ic_launcher)
+                )
+            }
+            addIntent.action = "com.android.launcher.action.INSTALL_SHORTCUT"
+            applicationContext.sendBroadcast(addIntent)
+            prefs.edit().putBoolean(PREF_KEY_SHORTCUT_ADDED, true).apply()
+        }
     }
 }
