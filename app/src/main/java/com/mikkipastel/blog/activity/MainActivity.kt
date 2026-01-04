@@ -39,6 +39,10 @@ class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
         AppUpdateManagerFactory.create(this)
     }
 
+    private var mCustomTabsServiceConnection: CustomTabsServiceConnection? = null
+    private var mCustomTabsClient: CustomTabsClient? = null
+    private var mCustomTabsSession: CustomTabsSession? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
@@ -109,18 +113,23 @@ class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
     }
 
     private fun initChromeCustomTabService() {
-        var mCustomTabsClient: CustomTabsClient?
-        var mCustomTabsSession: CustomTabsSession
-
-        object : CustomTabsServiceConnection() {
+        mCustomTabsServiceConnection = object : CustomTabsServiceConnection() {
             override fun onCustomTabsServiceConnected(componentName: ComponentName, customTabsClient: CustomTabsClient) {
                 mCustomTabsClient = customTabsClient
                 mCustomTabsClient?.warmup(0L)
-                mCustomTabsSession = mCustomTabsClient?.newSession(null)!!
+                mCustomTabsSession = mCustomTabsClient?.newSession(null)
             }
 
             override fun onServiceDisconnected(name: ComponentName) {
                 mCustomTabsClient = null
+                mCustomTabsSession = null
+            }
+        }
+
+        val packageName = CustomTabsClient.getPackageName(this, null)
+        if (packageName != null && mCustomTabsServiceConnection != null) {
+            mCustomTabsServiceConnection?.let {
+                CustomTabsClient.bindCustomTabsService(this, packageName, it)
             }
         }
     }
@@ -176,6 +185,12 @@ class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
     override fun onDestroy() {
         super.onDestroy()
         appUpdateManager.unregisterListener(this)
+        // Unbind from the service to prevent leaks
+        mCustomTabsServiceConnection?.let {
+            unbindService(it)
+        }
+        mCustomTabsServiceConnection = null
+        mCustomTabsClient = null
     }
 
     private fun addShortcut() {
