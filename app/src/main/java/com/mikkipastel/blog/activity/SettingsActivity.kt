@@ -3,6 +3,7 @@ package com.mikkipastel.blog.activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -33,10 +34,10 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         // Enable edge-to-edge
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        
+
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.rootview) { view, windowInsets ->
@@ -53,9 +54,6 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
             }
             WindowInsetsCompat.CONSUMED
         }
-        
-        WindowCompat.getInsetsController(window, window.decorView)
-            .isAppearanceLightStatusBars = true
 
         PreferenceManager.getDefaultSharedPreferences(this)
                 .registerOnSharedPreferenceChangeListener(this)
@@ -67,6 +65,7 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
         }
 
         setToolbar()
+        setStatusBar()
     }
 
     override fun onDestroy() {
@@ -88,6 +87,12 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
             }
         }
         title = getString(R.string.action_settings)
+    }
+
+    private fun setStatusBar() {
+        val isLightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO
+        WindowCompat.getInsetsController(window, window.decorView)
+            .isAppearanceLightStatusBars = isLightMode
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {

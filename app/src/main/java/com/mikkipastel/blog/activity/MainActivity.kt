@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -55,16 +56,13 @@ class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
             WindowInsetsCompat.CONSUMED
         }
 
-        WindowCompat.getInsetsController(window, window.decorView)
-            .isAppearanceLightStatusBars = true
-
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.contentContainer, MainFragment.newInstance())
                 .commit()
         }
 
-        val prefs = getSharedPreferences("data_install", Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences("data_install", MODE_PRIVATE)
         val insertBranch = prefs.getBoolean("install_status", false)
         if (insertBranch) {
             addShortcut()
@@ -72,6 +70,13 @@ class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
 
         getInAppUpdateWithPlayStore()
         initChromeCustomTabService()
+        setStatusBar()
+    }
+
+    private fun setStatusBar() {
+        val isLightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO
+        WindowCompat.getInsetsController(window, window.decorView)
+            .isAppearanceLightStatusBars = isLightMode
     }
 
     private fun getInAppUpdateWithPlayStore() {

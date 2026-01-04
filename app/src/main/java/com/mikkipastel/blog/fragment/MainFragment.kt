@@ -59,12 +59,6 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        loadPostData(null)
-        loadHashtagData()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -75,6 +69,8 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
             getString(R.string.title_tag_all),
             getString(R.string.description_tag_all)
         )
+        loadPostData(null)
+        loadHashtagData()
 
         binding.apply {
             swipeRefreshLayout.setOnRefreshListener {
