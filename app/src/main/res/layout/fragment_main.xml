@@ -9,6 +9,7 @@
     android:background="@color/colorMainGray">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/shrine_tall_toolbar_height">
 

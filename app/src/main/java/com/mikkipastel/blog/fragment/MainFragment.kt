@@ -132,9 +132,10 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
     }
 
     private fun setInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.rootview) { view, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(insets.left, insets.top, insets.right, insets.bottom)
+        // Handle AppBarLayout insets to add spacing between status bar and toolbar
+        ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { view, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars())
+            view.setPadding(0, insets.top, 0, 0)
             WindowInsetsCompat.CONSUMED
         }
     }
@@ -230,7 +231,7 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
         mTagAdapter = ArrayAdapter(requireContext(), R.layout.item_hashtag, mTagNameList)
         binding.dropdownList.apply {
             setAdapter(mTagAdapter)
-            setOnItemClickListener { adapterView, view, position, id ->
+            setOnItemClickListener { _, _, position, _ ->
                 when (mTagNameList[position] == getString(R.string.default_tag_text)) {
                     true -> setDropdownTextAndReloadData(
                         getString(R.string.default_tag_text),
