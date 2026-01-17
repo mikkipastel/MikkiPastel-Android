@@ -133,9 +133,10 @@
                     app:lottie_loop="true"
                     app:lottie_autoPlay="true"/>
 
-                <include
+                <androidx.compose.ui.platform.ComposeView
                     android:id="@+id/layoutError"
-                    layout="@layout/layout_loading_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:visibility="gone"/>
 
             </FrameLayout>
