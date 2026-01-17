@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.*
 import android.widget.ArrayAdapter
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import androidx.core.text.color
@@ -22,6 +23,7 @@ import com.mikkipastel.blog.model.PostBlog
 import com.mikkipastel.blog.model.TagBlog
 import com.mikkipastel.blog.utils.CustomChromeUtils
 import com.mikkipastel.blog.utils.ImageLoader
+import com.mikkipastel.blog.view.LoadingErrorView
 import com.mikkipastel.blog.viewmodel.BlogViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -181,7 +183,7 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
 
     private fun showBlogContent(list: MutableList<PostBlog>) {
         binding.apply {
-            layoutError.root.visibility = View.GONE
+            layoutError.visibility = View.GONE
             lottieLoading.visibility = View.GONE
             lottieProgress.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
@@ -202,17 +204,20 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
     private fun getBlogErrorView() {
         binding.apply {
             layoutError.apply {
-                root.visibility = View.VISIBLE
-                layoutError.buttonTryAgain.setOnClickListener {
-                    loadHashtagData()
-                    loadPostData(mCurrentTagSlug)
+                visibility = View.VISIBLE
+                setContent {
+                    LoadingErrorView(
+                        onClick = {
+                            loadHashtagData()
+                            loadPostData(mCurrentTagSlug)
+                        }
+                    )
                 }
             }
             lottieLoading.visibility = View.GONE
             lottieProgress.visibility = View.GONE
         }
     }
-
     private fun showTagContent(data: MutableList<TagBlog>) {
         binding.layoutDropdownList.visibility = View.VISIBLE
 
