@@ -111,27 +111,18 @@
                         android:layout_above="@id/lottieProgress"
                         android:overScrollMode="never"/>
 
-                    <com.airbnb.lottie.LottieAnimationView
+                    <androidx.compose.ui.platform.ComposeView
                         android:id="@+id/lottieProgress"
                         android:layout_width="match_parent"
-                        android:layout_height="64dp"
-                        android:adjustViewBounds="true"
-                        android:layout_alignParentBottom="true"
-                        app:lottie_fileName="progress-loading.json"
-                        app:lottie_loop="true"
-                        app:lottie_autoPlay="true"
+                        android:layout_height="wrap_content"
                         android:visibility="gone"/>
 
                 </RelativeLayout>
 
-                <com.airbnb.lottie.LottieAnimationView
+                <androidx.compose.ui.platform.ComposeView
                     android:id="@+id/lottieLoading"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    app:lottie_fileName="dino-loading.json"
-                    app:lottie_loop="true"
-                    app:lottie_autoPlay="true"/>
+                    android:layout_height="match_parent"/>
 
                 <androidx.compose.ui.platform.ComposeView
                     android:id="@+id/layoutError"

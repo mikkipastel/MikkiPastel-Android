@@ -24,7 +24,6 @@ mockwebserver = "2.7.5"
 coil = "3.2.0"
 koin = "3.5.3"
 firebase-bom = "32.7.2"
-lottie = "4.1.0"
 lottie-compose = "6.4.0"
 
 [libraries]
@@ -68,7 +67,6 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 
 # Lottie
-lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie-compose" }
 
 # Koin

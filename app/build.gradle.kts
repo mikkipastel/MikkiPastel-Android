@@ -63,7 +63,7 @@ dependencies {
     implementation(libs.okhttp.logging)
     testImplementation(libs.okhttp.mockwebserver)
 
-    // Compose BOM
+    // Compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.material)
@@ -72,15 +72,13 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network)
     debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.lottie.compose)
 
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
-
-    implementation(libs.lottie)
-    implementation(libs.lottie.compose)
 
     implementation(libs.koin)
 

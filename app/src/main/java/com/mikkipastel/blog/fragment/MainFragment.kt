@@ -24,6 +24,8 @@ import com.mikkipastel.blog.model.TagBlog
 import com.mikkipastel.blog.utils.CustomChromeUtils
 import com.mikkipastel.blog.utils.ImageLoader
 import com.mikkipastel.blog.view.LoadingErrorView
+import com.mikkipastel.blog.view.LottieLoading
+import com.mikkipastel.blog.view.LottieProgress
 import com.mikkipastel.blog.viewmodel.BlogViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -66,6 +68,7 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
 
         setInsets()
         setupView()
+        setupComposeView()
         setToolbar()
         setHeaderText(
             getString(R.string.title_tag_all),
@@ -125,6 +128,25 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
                     }
                     return@setOnMenuItemClickListener false
                 }
+            }
+        }
+    }
+
+    private fun setupComposeView() {
+        binding.apply {
+            lottieProgress.setContent {
+                LottieProgress()
+            }
+            lottieLoading.setContent {
+                LottieLoading()
+            }
+            layoutError.setContent {
+                LoadingErrorView(
+                    onClick = {
+                        loadHashtagData()
+                        loadPostData(mCurrentTagSlug)
+                    }
+                )
             }
         }
     }
@@ -203,17 +225,7 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
 
     private fun getBlogErrorView() {
         binding.apply {
-            layoutError.apply {
-                visibility = View.VISIBLE
-                setContent {
-                    LoadingErrorView(
-                        onClick = {
-                            loadHashtagData()
-                            loadPostData(mCurrentTagSlug)
-                        }
-                    )
-                }
-            }
+            layoutError.visibility = View.VISIBLE
             lottieLoading.visibility = View.GONE
             lottieProgress.visibility = View.GONE
         }

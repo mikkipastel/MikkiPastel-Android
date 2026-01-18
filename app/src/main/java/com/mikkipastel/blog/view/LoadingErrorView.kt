@@ -2,7 +2,6 @@ package com.mikkipastel.blog.view
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -19,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.mikkipastel.blog.R
 
@@ -29,11 +29,13 @@ fun LoadingErrorView(onClick: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val composition by rememberLottieComposition(
-            LottieCompositionSpec.Asset("/loading-error.json")
+            LottieCompositionSpec.Asset("loading-error.json")
         )
         LottieAnimation(
             composition = composition,
-            modifier = Modifier.width(250.dp).height(250.dp)
+            modifier = Modifier.width(250.dp).height(250.dp),
+            iterations = LottieConstants.IterateForever,
+            isPlaying = true
         )
         Text(
             modifier = Modifier.padding(top = 16.dp),
