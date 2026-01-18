@@ -43,20 +43,25 @@ android {
 }
 
 dependencies {
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.androidx.browser)
+    implementation(libs.androidx.preference)
+    implementation(libs.androidx.multidex)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.play.app.update)
+    testImplementation(libs.junit)
 
     // Networking
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.okhttp.logging)
+    testImplementation(libs.okhttp.mockwebserver)
 
     // Compose BOM
     implementation(platform(libs.androidx.compose.bom))
@@ -79,18 +84,5 @@ dependencies {
 
     implementation(libs.koin)
 
-    testImplementation("junit:junit:4.13.2")
-
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("androidx.multidex:multidex:2.0.1")
-
-    implementation("androidx.preference:preference-ktx:1.2.1")
-
     implementation("com.github.bumptech.glide:glide:4.11.0")
-
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:okhttp:4.9.2")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.2")
-    testImplementation("com.squareup.okhttp:mockwebserver:2.7.5")
 }

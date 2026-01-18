@@ -14,9 +14,13 @@ constraintlayout = "2.1.4"
 swiperefreshlayout = "1.1.0"
 lifecycle = "2.7.0"
 browser = "1.7.0"
+preference = "1.2.1"
+multidex = "2.0.1"
 play-app-update = "2.1.0"
+junit = "4.13.2"
 retrofit = "2.9.0"
 okhttp = "4.12.0"
+mockwebserver = "2.7.5"
 coil = "3.2.0"
 koin = "3.5.3"
 firebase-bom = "32.7.2"
@@ -31,7 +35,10 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
+androidx-preference = { group = "androidx.preference", name = "preference-ktx", version.ref = "preference" }
+androidx-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
 androidx-play-app-update = { group = "com.google.android.play", name = "app-update", version.ref = "play-app-update" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 # Lifecycle
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
@@ -41,6 +48,7 @@ androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecyc
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+okhttp-mockwebserver = { group = "com.squareup.okhttp", name = "mockwebserver", version.ref = "mockwebserver" }
 
 # Compose (BOM)
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version = "2024.02.00" }
