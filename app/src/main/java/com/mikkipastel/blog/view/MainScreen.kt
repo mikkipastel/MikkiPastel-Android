@@ -69,7 +69,7 @@ fun LottieLoading() {
 
 @Preview(showBackground = true, backgroundColor = 0xF5F5F5)
 @Composable
-fun PreviewLShowBlogContent() {
+fun PreviewShowBlogContent() {
     ShowBlogContent(
         data = mutableListOf(
             PostBlog(
