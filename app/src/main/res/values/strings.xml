@@ -17,4 +17,6 @@
 
     <string name="about_me_title" translatable="false">About MikkiPastel</string>
     <string name="about_me_url" translatable="false">https://portfolio.mikkipastel.com/</string>
+
+    <string name="total_blog" translatable="false">Total blog: %d</string>
 </resources>

@@ -14,4 +14,5 @@
     <color name="colorMainText">#EEEEEEFF</color>
     <color name="colorMainTextWhite">@android:color/white</color>
     <color name="colorMainTextBlack">@android:color/black</color>
+    <color name="mainTextColor">#1E0000</color>
 </resources>

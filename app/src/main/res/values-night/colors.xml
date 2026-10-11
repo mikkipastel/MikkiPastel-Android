@@ -3,4 +3,5 @@
     <color name="colorMainGray">#1E000000</color>
     <color name="colorMainTextWhite">@android:color/black</color>
     <color name="colorMainTextBlack">@android:color/white</color>
+    <color name="mainTextColor">#EEEEFF</color>
 </resources>

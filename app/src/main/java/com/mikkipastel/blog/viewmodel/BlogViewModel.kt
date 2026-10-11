@@ -17,9 +17,10 @@ class BlogViewModel(
     private val getBlogTagUseCase: GetBlogTagUseCase
 ) : ViewModel() {
 
-    val allBlogPost = MutableLiveData<MutableList<PostBlog>>()
+    val allBlogPost = MutableLiveData<MutableList<PostBlog>?>()
     val canLazyLoading = MutableLiveData<Boolean>()
-    val blogPage = MutableLiveData<Int>()
+    val blogPage = MutableLiveData<Int?>()
+    val quantityBlogs = MutableLiveData<Int?>()
     val getBlogError = MutableLiveData<Unit>()
 
     val allBlogTag = MutableLiveData<MutableList<TagBlog>>()
@@ -47,9 +48,10 @@ class BlogViewModel(
 
         when (response) {
             is ResultResponse.Success -> {
-                allBlogPost.value = response.data?.posts!!
-                canLazyLoading.value = response.data.meta?.pagination?.next != null
-                blogPage.value = response.data.meta?.pagination?.page!!
+                allBlogPost.value = response.data?.posts
+                canLazyLoading.value = response.data?.meta?.pagination?.next != null
+                blogPage.value = response.data?.meta?.pagination?.page
+                quantityBlogs.value = response.data?.meta?.pagination?.total
             }
             is ResultResponse.Error -> {
                 getBlogError.value = Unit

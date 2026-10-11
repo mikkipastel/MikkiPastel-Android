@@ -23,6 +23,7 @@ import com.mikkipastel.blog.model.PostBlog
 import com.mikkipastel.blog.model.TagBlog
 import com.mikkipastel.blog.utils.CustomChromeUtils
 import com.mikkipastel.blog.utils.ImageLoader
+import com.mikkipastel.blog.view.BlogQuantityAnimationText
 import com.mikkipastel.blog.view.LoadingErrorView
 import com.mikkipastel.blog.view.LottieLoading
 import com.mikkipastel.blog.view.LottieProgress
@@ -181,7 +182,7 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
             allBlogPost.observe(
                 viewLifecycleOwner
             ) {
-                showBlogContent(it)
+                it?.let { showBlogContent(it) }
             }
             blogPage.observe(
                 viewLifecycleOwner
@@ -194,6 +195,9 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
                 viewLifecycleOwner
             ) {
                 showTagContent(it)
+            }
+            quantityBlogs.observe(viewLifecycleOwner) {
+                it?.let { setupBlogQuantity(it) }
             }
 
             getBlogError.observe(
@@ -350,6 +354,15 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
             }
         }
         binding.textHeader.text = spannable
+    }
+
+    private fun setupBlogQuantity(blogQuantity: Int) {
+        binding.textTotalBlog.apply {
+            visibility = View.VISIBLE
+            setContent {
+                BlogQuantityAnimationText(blogQuantity)
+            }
+        }
     }
 
     private fun openAppSettingsPage() {
