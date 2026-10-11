@@ -100,24 +100,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <RelativeLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+
+                    <androidx.compose.ui.platform.ComposeView
+                        android:id="@+id/textTotalBlog"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerView"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_above="@id/lottieProgress"
-                        android:overScrollMode="never"/>
+                        android:layout_height="0dp"
+                        android:overScrollMode="never"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/textTotalBlog"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
-                    <androidx.compose.ui.platform.ComposeView
-                        android:id="@+id/lottieProgress"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                </RelativeLayout>
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/lottieProgress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
 
                 <androidx.compose.ui.platform.ComposeView
                     android:id="@+id/lottieLoading"
