@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
     }
 
     private var mCustomTabsServiceConnection: CustomTabsServiceConnection? = null
+    private var isCustomTabsServiceBound = false
     private var mCustomTabsClient: CustomTabsClient? = null
     private var mCustomTabsSession: CustomTabsSession? = null
 
@@ -132,7 +133,7 @@ class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
         val packageName = CustomTabsClient.getPackageName(this, null)
         if (packageName != null && mCustomTabsServiceConnection != null) {
             mCustomTabsServiceConnection?.let {
-                CustomTabsClient.bindCustomTabsService(this, packageName, it)
+                isCustomTabsServiceBound = CustomTabsClient.bindCustomTabsService(this, packageName, it)
             }
         }
     }
@@ -188,12 +189,15 @@ class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
     override fun onDestroy() {
         super.onDestroy()
         appUpdateManager.unregisterListener(this)
-        // Unbind from the service to prevent leaks
-        mCustomTabsServiceConnection?.let {
-            unbindService(it)
+        if (isCustomTabsServiceBound) {
+            mCustomTabsServiceConnection?.let {
+                unbindService(it)
+            }
         }
+        isCustomTabsServiceBound = false
         mCustomTabsServiceConnection = null
         mCustomTabsClient = null
+        mCustomTabsSession = null
     }
 
     private fun addShortcutWithDuplicateCheck(context: Context) {
