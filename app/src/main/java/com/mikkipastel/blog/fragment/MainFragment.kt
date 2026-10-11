@@ -5,12 +5,12 @@ import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.*
 import android.widget.ArrayAdapter
-import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import androidx.core.text.color
 import androidx.core.text.scale
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +28,7 @@ import com.mikkipastel.blog.view.LottieLoading
 import com.mikkipastel.blog.view.LottieProgress
 import com.mikkipastel.blog.viewmodel.BlogViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.math.abs
 
 class MainFragment : Fragment(), PostListAdapter.PostItemListener {
 
@@ -157,6 +158,14 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
             view.setPadding(0, insets.top, 0, insets.bottom)
             WindowInsetsCompat.CONSUMED
         }
+        binding.appBarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val isCollapsed = abs(verticalOffset) >= appBarLayout.totalScrollRange
+            val windowInsetsController = WindowCompat.getInsetsController(
+                requireActivity().window,
+                requireActivity().window.decorView
+            )
+            windowInsetsController.isAppearanceLightStatusBars = !isCollapsed
+        }
     }
 
     private fun loadPostData(hashtag: String?) {
@@ -237,7 +246,11 @@ class MainFragment : Fragment(), PostListAdapter.PostItemListener {
         mTagNameList.add(getString(R.string.default_tag_text))
 
         mTagItemList.forEach {
-            mTagNameList.add((it.name!!))
+            it.name?.let { name ->
+                if (name.isNotEmpty()) {
+                    mTagNameList.add(name)
+                }
+            }
         }
 
         mTagAdapter = ArrayAdapter(requireContext(), R.layout.item_hashtag, mTagNameList)

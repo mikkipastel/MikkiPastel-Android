@@ -81,8 +81,9 @@ class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
 
     private fun setStatusBar() {
         val isLightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO
-        WindowCompat.getInsetsController(window, window.decorView)
-            .isAppearanceLightStatusBars = isLightMode
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.isAppearanceLightStatusBars = isLightMode
+        windowInsetsController.isAppearanceLightNavigationBars = isLightMode
     }
 
     private fun getInAppUpdateWithPlayStore() {

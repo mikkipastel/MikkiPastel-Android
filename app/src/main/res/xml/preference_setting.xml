@@ -8,6 +8,6 @@
 
     <Preference
         app:key="pref_app_version"
-        app:summary="1.0.6"
+        app:summary="1.0.7"
         app:title="App Version" />
 </PreferenceScreen>
